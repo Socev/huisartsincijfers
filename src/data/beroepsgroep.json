@@ -1,0 +1,435 @@
+{
+ "_titel": "De beroepsgroep: aantallen, functies en arbeidsduur",
+ "_jaren": [
+  2012,
+  2013,
+  2014,
+  2015,
+  2016,
+  2017,
+  2018,
+  2019,
+  2020,
+  2021,
+  2022,
+  2023,
+  2024,
+  2025
+ ],
+ "parameters": {
+  "praktijkhouders_2023": {
+   "waarde": 7561,
+   "label": "Zelfstandig gevestigde huisartsen (praktijkhouders), 2023",
+   "eenheid": "personen",
+   "bron": "nivel-pik",
+   "vindplaats": "Beroepenregistraties, herziene reeks",
+   "status": "definitief"
+  },
+  "praktijkhouders_piek": {
+   "waarde": 7920,
+   "label": "Hoogste aantal praktijkhouders in de reeks (2017)",
+   "eenheid": "personen",
+   "bron": "nivel-pik",
+   "vindplaats": "Beroepenregistraties",
+   "status": "definitief"
+  },
+  "hidha_2023": {
+   "waarde": 4341,
+   "label": "Huisartsen in dienst en vaste waarnemers, 2023",
+   "eenheid": "personen",
+   "bron": "nivel-pik",
+   "vindplaats": "Beroepenregistraties",
+   "status": "definitief"
+  },
+  "praktijken_2024": {
+   "waarde": 4837,
+   "label": "Aantal huisartsenpraktijken, 1 januari 2024",
+   "eenheid": "praktijken",
+   "bron": "nivel-pik",
+   "vindplaats": "Beroepenregistraties",
+   "status": "definitief"
+  },
+  "sph_actief_2025": {
+   "waarde": 15959,
+   "label": "Actieve deelnemers pensioenfonds, 2025",
+   "eenheid": "personen",
+   "bron": "sph",
+   "vindplaats": "Jaarverslag 2025",
+   "status": "definitief"
+  },
+  "sph_pensioen_2025": {
+   "waarde": 8089,
+   "label": "Pensioengerechtigden, 2025",
+   "eenheid": "personen",
+   "bron": "sph",
+   "vindplaats": "Jaarverslag 2025",
+   "status": "definitief"
+  },
+  "solo_2024": {
+   "waarde": 0.06,
+   "label": "Aandeel huisartsen in een solopraktijk, 2024",
+   "eenheid": "aandeel",
+   "bron": "nivel-pik",
+   "vindplaats": "figuur 4",
+   "status": "definitief"
+  },
+  "groeps_2024": {
+   "waarde": 0.66,
+   "label": "Aandeel huisartsen in een groepspraktijk, 2024",
+   "eenheid": "aandeel",
+   "bron": "nivel-pik",
+   "vindplaats": "figuur 4",
+   "status": "definitief"
+  }
+ },
+ "reeksen": {
+  "functies": {
+   "label": "Werkzame huisartsen naar functie",
+   "bron": "nivel-pik",
+   "vindplaats": "Beroepenregistraties, herziene reeks januari 2025",
+   "status": "definitief",
+   "eenheid": "personen",
+   "jaren": [
+    2012,
+    2013,
+    2014,
+    2015,
+    2016,
+    2017,
+    2018,
+    2019,
+    2020,
+    2021,
+    2022,
+    2023,
+    2024,
+    2025
+   ],
+   "reeksen": [
+    {
+     "naam": "Praktijkhouders",
+     "waarden": [
+      7856,
+      7860,
+      7872,
+      7888,
+      7906,
+      7920,
+      7903,
+      7873,
+      7602,
+      7588,
+      7585,
+      7561,
+      null,
+      null
+     ]
+    },
+    {
+     "naam": "In dienst en vaste waarnemers",
+     "waarden": [
+      1152,
+      1234,
+      1387,
+      1757,
+      1958,
+      2061,
+      2042,
+      2067,
+      3616,
+      3995,
+      4169,
+      4341,
+      null,
+      null
+     ]
+    },
+    {
+     "naam": "Wisselende waarnemers",
+     "waarden": [
+      2125,
+      2201,
+      2314,
+      2176,
+      2243,
+      2427,
+      2821,
+      2899,
+      2146,
+      1909,
+      2015,
+      2200,
+      null,
+      null
+     ]
+    }
+   ],
+   "breuk": {
+    "na": 2019,
+    "tekst": "Tussen 2019 en 2020 verspringt de reeks in dienst en vaste waarnemers van 2.067 naar 3.616. De bron licht die sprong niet toe. Wij hebben hem niet gladgestreken."
+   }
+  },
+  "totaal": {
+   "label": "Werkzame huisartsen totaal en aantal praktijken",
+   "bron": "nivel-pik",
+   "vindplaats": "Beroepenregistraties",
+   "status": "definitief",
+   "eenheid": "aantal",
+   "jaren": [
+    2012,
+    2013,
+    2014,
+    2015,
+    2016,
+    2017,
+    2018,
+    2019,
+    2020,
+    2021,
+    2022,
+    2023,
+    2024,
+    2025
+   ],
+   "reeksen": [
+    {
+     "naam": "Werkzame huisartsen",
+     "waarden": [
+      11133,
+      11295,
+      11573,
+      11821,
+      12107,
+      12408,
+      12766,
+      12839,
+      13364,
+      13492,
+      13769,
+      14102,
+      null,
+      null
+     ]
+    },
+    {
+     "naam": "Huisartsenpraktijken",
+     "waarden": [
+      4895,
+      5044,
+      5053,
+      5038,
+      5025,
+      5012,
+      4998,
+      4988,
+      4885,
+      4860,
+      4874,
+      4833,
+      4837,
+      null
+     ]
+    }
+   ]
+  },
+  "sph": {
+   "label": "Deelnemers pensioenfonds voor huisartsen",
+   "bron": "sph",
+   "vindplaats": "Jaarverslagen 2014 tot en met 2025",
+   "status": "definitief",
+   "eenheid": "personen",
+   "jaren": [
+    2012,
+    2013,
+    2014,
+    2015,
+    2016,
+    2017,
+    2018,
+    2019,
+    2020,
+    2021,
+    2022,
+    2023,
+    2024,
+    2025
+   ],
+   "reeksen": [
+    {
+     "naam": "Actieve deelnemers",
+     "waarden": [
+      10132,
+      10336,
+      10449,
+      10746,
+      11029,
+      11328,
+      11670,
+      12018,
+      12339,
+      14939,
+      15253,
+      15587,
+      15854,
+      15959
+     ]
+    },
+    {
+     "naam": "Pensioengerechtigden",
+     "waarden": [
+      5983,
+      6176,
+      6470,
+      6624,
+      6786,
+      6961,
+      7095,
+      7227,
+      7435,
+      7779,
+      7728,
+      7809,
+      7936,
+      8089
+     ]
+    }
+   ],
+   "breuk": {
+    "na": 2020,
+    "tekst": "Vanaf 2021 tellen ook huisartsen in opleiding mee: 2.388 aios traden in één keer toe. De sprong van 2020 op 2021 is dus een definitiewijziging, geen groei."
+   }
+  },
+  "praktijkvorm": {
+   "label": "Huisartsen naar praktijkvorm",
+   "bron": "nivel-pik",
+   "vindplaats": "figuur 4 en de registratiereeks",
+   "status": "definitief",
+   "eenheid": "procent",
+   "jaren": [
+    2012,
+    2013,
+    2014,
+    2015,
+    2016,
+    2017,
+    2018,
+    2019,
+    2020,
+    2021,
+    2022,
+    2023,
+    2024,
+    2025
+   ],
+   "reeksen": [
+    {
+     "naam": "Solopraktijk",
+     "waarden": [
+      23.9,
+      25.4,
+      23.4,
+      19.4,
+      17.1,
+      16.7,
+      17.4,
+      17.3,
+      8.4,
+      7.4,
+      7.1,
+      6,
+      6,
+      null
+     ]
+    },
+    {
+     "naam": "Duopraktijk",
+     "waarden": [
+      38.4,
+      38.4,
+      39.9,
+      39.8,
+      40,
+      38.6,
+      38.7,
+      39,
+      34.1,
+      32,
+      31.8,
+      31,
+      28,
+      null
+     ]
+    },
+    {
+     "naam": "Groepspraktijk",
+     "waarden": [
+      37.7,
+      36.2,
+      36.7,
+      40.8,
+      42.9,
+      44.6,
+      43.9,
+      43.7,
+      57.5,
+      60.7,
+      61.1,
+      63,
+      66,
+      null
+     ]
+    }
+   ],
+   "breuk": {
+    "na": 2019,
+    "tekst": "Tussen 2019 en 2020 wijzigt de indeling van praktijkvormen in de bron. De sprong is grotendeels definitie."
+   }
+  },
+  "werkweek": {
+   "label": "Gewerkte uren per week naar functie",
+   "bron": "nivel-werkweek-2024",
+   "vindplaats": "tijdsbestedingsonderzoek 2013, 2018 en 2024",
+   "status": "definitief",
+   "eenheid": "uur/week",
+   "jaren": [
+    2013,
+    2018,
+    2024
+   ],
+   "reeksen": [
+    {
+     "naam": "Praktijkhouders",
+     "waarden": [
+      49.4,
+      49.0,
+      55.7
+     ]
+    },
+    {
+     "naam": "In dienst en vaste waarnemers",
+     "waarden": [
+      32.7,
+      36.1,
+      42.0
+     ]
+    },
+    {
+     "naam": "Wisselende waarnemers",
+     "waarden": [
+      29.9,
+      30.1,
+      44.4
+     ]
+    },
+    {
+     "naam": "Alle huisartsen",
+     "waarden": [
+      44.0,
+      44.1,
+      48.0
+     ]
+    }
+   ]
+  }
+ }
+}

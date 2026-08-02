@@ -7,6 +7,21 @@ import { bronnen } from './data.mjs';
 
 const SERIES = n => `var(--series-${n})`;
 
+/* Tooltip-inhoud is HTML die via innerHTML wordt gezet. Voor het attribuut moet
+   hij volledig geescapet worden, anders breekt een aanhalingsteken in een
+   style-attribuut het data-tip-attribuut open. */
+const tip = html => esc(html);
+
+/* Ronde asverdeling: kiest een stapgrootte uit 1/2/2,5/5 maal een macht van tien,
+   zodat er 0, 2.000, 4.000 op de as staat en niet 2.099, 4.198. */
+function ticks(lo, hi, n = 4) {
+  const ruw = (hi - lo) / n, macht = Math.pow(10, Math.floor(Math.log10(ruw)));
+  const stap = [1, 2, 2.5, 5, 10].map(m => m * macht).find(v => v >= ruw) ?? 10 * macht;
+  const start = Math.ceil(lo / stap) * stap, out = [];
+  for (let v = start; v <= hi + 1e-9; v += stap) out.push(+v.toFixed(10));
+  return out;
+}
+
 /* ---------- bronvermelding ---------- */
 export function bronLabel(param, { badge = true } = {}) {
   const b = bronnen[param.bron];
@@ -53,9 +68,9 @@ export function stackedBar({ id, items, caption, fmt = eur, unit = '' }) {
   const segs = items.map((it, i) => {
     const aandeel = it.waarde / totaal;
     const label = aandeel > 0.16 ? `<span class="inl">${fmt(it.waarde)}</span>` : '';
-    const tip = `<b>${esc(it.naam)}</b><br>${fmt(it.waarde)}${unit} · ${pct(aandeel)}` +
+    const tipHtml = `<b>${esc(it.naam)}</b><br>${fmt(it.waarde)}${unit} · ${pct(aandeel)}` +
                 (it.toelichting ? `<br><span style="color:var(--text-secondary)">${esc(it.toelichting)}</span>` : '');
-    return `<div class="seg" style="width:${(aandeel*100).toFixed(3)}%;background:${SERIES(i+1)}" data-tip="${esc(tip)}">${label}</div>`;
+    return `<div class="seg" style="width:${(aandeel*100).toFixed(3)}%;background:${SERIES(i+1)}" data-tip="${tip(tipHtml)}">${label}</div>`;
   }).join('');
   const leg = items.map((it, i) =>
     `<div class="lg"><span class="sw" style="background:${SERIES(i+1)}"></span>${esc(it.kort ?? it.naam)} <b>${fmt(it.waarde)}</b></div>`).join('');
@@ -81,10 +96,8 @@ export function barChart({ items, caption, fmt = num, hoogte = 260, serie = 1, b
   const bw = Math.min(24, band * 0.55);
   const y = v => mT + (H - mT - mB) * (1 - v / max);
 
-  const grid = [0, .25, .5, .75, 1].map(f => {
-    const v = max * f;
-    return `<line class="grid-l" x1="${mL}" x2="${W-mR}" y1="${y(v).toFixed(1)}" y2="${y(v).toFixed(1)}"/>`;
-  }).join('');
+  const grid = ticks(0, max).map(v =>
+    `<line class="grid-l" x1="${mL}" x2="${W-mR}" y1="${y(v).toFixed(1)}" y2="${y(v).toFixed(1)}"/>`).join('');
 
   const bars = items.map((it, i) => {
     const cx = mL + band * i + band / 2;
@@ -93,7 +106,7 @@ export function barChart({ items, caption, fmt = num, hoogte = 260, serie = 1, b
       <rect x="${(cx-bw/2).toFixed(1)}" y="${yy.toFixed(1)}" width="${bw}" height="${Math.max(h,0).toFixed(1)}"
             rx="4" fill="${SERIES(it.serie ?? serie)}"/>
       <rect class="hit" x="${(cx-band/2).toFixed(1)}" y="${mT}" width="${band.toFixed(1)}" height="${H-mB-mT}"
-            data-tip="<b>${esc(it.label)}</b><br>${fmt(it.waarde)}${it.toelichting?`<br><span style='color:var(--text-secondary)'>${esc(it.toelichting)}</span>`:''}"/>
+            data-tip="${tip(`<b>${esc(it.label)}</b><br>${fmt(it.waarde)}` + (it.toelichting ? `<br><span style="color:var(--text-secondary)">${esc(it.toelichting)}</span>` : ''))}"/>
       <text class="dl" x="${cx.toFixed(1)}" y="${(yy-8).toFixed(1)}" text-anchor="middle">${fmt(it.waarde)}</text>
       <text class="ax" x="${cx.toFixed(1)}" y="${H-mB+18}" text-anchor="middle">${esc(it.label)}</text>
     </g>`;
@@ -124,8 +137,7 @@ export function lineChart({ reeksen, x, caption, fmt = num, hoogte = 300, yNul =
   const px = i => mL + (W - mL - mR) * (x.length === 1 ? .5 : i / (x.length - 1));
   const py = v => mT + (H - mT - mB) * (1 - (v - lo) / (hi - lo));
 
-  const ticks = [0, .25, .5, .75, 1].map(f => lo + (hi - lo) * f);
-  const grid = ticks.map(v => `<line class="grid-l" x1="${mL}" x2="${W-mR}" y1="${py(v).toFixed(1)}" y2="${py(v).toFixed(1)}"/>
+  const grid = ticks(lo, hi).map(v => `<line class="grid-l" x1="${mL}" x2="${W-mR}" y1="${py(v).toFixed(1)}" y2="${py(v).toFixed(1)}"/>
     <text class="ax" x="${mL-8}" y="${(py(v)+4).toFixed(1)}" text-anchor="end">${fmt(v)}</text>`).join('');
   const xlab = x.map((l, i) => `<text class="ax" x="${px(i).toFixed(1)}" y="${H-mB+18}" text-anchor="middle">${esc(l)}</text>`).join('');
 
@@ -145,7 +157,7 @@ export function lineChart({ reeksen, x, caption, fmt = num, hoogte = 300, yNul =
     const rij = reeksen.map(r => r.waarden[i] == null ? null :
       `<span style="color:var(--text-secondary)">${esc(r.naam)}</span> <b>${fmt(r.waarden[i])}</b>`).filter(Boolean).join('<br>');
     return `<rect class="hit" x="${(px(i)-bw/2).toFixed(1)}" y="${mT}" width="${bw.toFixed(1)}" height="${H-mT-mB}"
-             data-tip="<b>${esc(l)}</b><br>${rij}"/>`;
+             data-tip="${tip(`<b>${esc(l)}</b><br>${rij}`)}"/>`;
   }).join('');
 
   const leg = reeksen.length > 1 ? `<div class="legend">` + reeksen.map((r, si) =>
@@ -193,4 +205,19 @@ export function dataTable(tabel, fmts, { toonBron = true } = {}) {
   const b = toonBron ? `<p class="bron" style="margin:10px 0 0">${bronLabel(tabel)}</p>` : '';
   return `<figure><figcaption>${esc(tabel.label)}</figcaption>${t}${b}
     ${tabel.toelichting ? `<p class="bron" style="margin-top:8px">${esc(tabel.toelichting)}</p>` : ''}</figure>`;
+}
+
+/* ---------- reeks uit de datalaag ----------
+   Rendert een reeksdefinitie als lijngrafiek, met de bronvermelding en een
+   eventuele definitiebreuk expliciet eronder. Een breuk wordt nooit
+   weggepoetst: de lezer moet zien waar de reeks niet vergelijkbaar is. */
+export function serieChart(r, { fmt = num, caption, hoogte = 300, yNul = false } = {}) {
+  const chart = lineChart({
+    reeksen: r.reeksen, x: r.jaren.map(String),
+    caption: caption ?? esc(r.label), fmt, hoogte, yNul
+  });
+  const breuk = r.breuk
+    ? `<p class="bron" style="margin-top:10px;color:var(--signal)"><b>Let op — breuk in de reeks na ${r.breuk.na}.</b>
+       <span style="color:var(--text-muted)">${esc(r.breuk.tekst)}</span></p>` : '';
+  return `${chart}<p class="bron" style="margin-top:10px">${bronLabel(r)}</p>${breuk}`;
 }

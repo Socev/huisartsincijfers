@@ -28,9 +28,9 @@ export default function () {
     ${tile({ waarde: uur(w('uren','niet_uitgevraagd')), href:'/uren/',
       label:'per week wordt niet uitgevraagd: bestuur, extern overleg, nascholing en de dienst.',
       bron:'Nivel 2024 · NZa par. 10.4.9' })}
-    ${tile({ waarde: pct(w('uren','boven_cap')/w('uren','eigenaren'),0), href:'/uren/',
+    ${tile({ waarde: pct(w('uren','boven_cap'),0), href:'/uren/',
       label:'van de praktijkhouders geeft meer dan 36 uur op. Die uren tellen niet mee: de fte-factor is afgetopt op 1,0.',
-      bron:'Microdata kostprijsonderzoek' })}
+      bron:'Kostprijsonderzoek 2022' })}
   </div>
 </section>
 
@@ -49,13 +49,15 @@ export default function () {
 
 <section>
   <h2>Waar deze site over gaat</h2>
-  <p class="sub">Vier ingangen. Elk cijfer is herleidbaar tot een gepubliceerde bron; wat wij zelf hebben
+  <p class="sub">Vijf ingangen. Elk cijfer is herleidbaar tot een gepubliceerde bron; wat wij zelf hebben
   afgeleid staat als zodanig gemarkeerd, met de berekening erbij.</p>
   <div class="grid c2">
     ${tile({ waarde:'Arbeidskosten', href:'/arbeidskosten/',
       label:'Wat de NZa normatief inrekent voor de arbeid van de praktijkhouder, en welk deel daarvan door gereguleerde tarieven wordt gedekt.' })}
     ${tile({ waarde:'Uren', href:'/uren/',
       label:'Wat de NZa uitvraagt, wat Nivel meet, en waarom die twee cijfers negen uur uit elkaar liggen.' })}
+    ${tile({ waarde:'Beroepsgroep', href:'/beroepsgroep/',
+      label:'Hoeveel praktijkhouders, huisartsen in dienst en waarnemers er zijn, en hoeveel uur zij werken.' })}
     ${tile({ waarde:'Praktijkkosten', href:'/praktijkkosten/',
       label:'Hoe de kosten van een praktijk zich tussen 2015 en 2022 hebben ontwikkeld, per 1.000 verzekerden.' })}
     ${tile({ waarde:'Omzet en scope', href:'/omzet/',
@@ -64,9 +66,9 @@ export default function () {
 </section>
 
 <section>
-  ${callout(`<strong>Dit is geen actiesite.</strong> De cijfers hieronder komen uit de stukken van de NZa,
-  het Nivel-tijdsbestedingsonderzoek en de microdata van het kostprijsonderzoek. Waar wij een eigen bewerking
-  doen staat dat erbij, met de rekenstap erbij, zodat u het kunt narekenen of weerleggen.
+  ${callout(`<strong>Dit is geen actiesite.</strong> De cijfers komen uit de stukken van de NZa, het
+  tijdsbestedingsonderzoek van het Nivel, de beroepenregistratie en de jaarverslagen van het pensioenfonds.
+  Waar wij een eigen bewerking doen staat dat erbij, met de rekenstap, zodat u het kunt narekenen of weerleggen.
   <a href="/over/">Lees hoe wij werken</a>.`)}
 </section>`;
 

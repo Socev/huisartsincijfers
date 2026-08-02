@@ -6,11 +6,11 @@
   color-scheme:light;
 
   /* Vlakken en lijnen */
-  --surface-0:#f6f6f4;   /* paginaachtergrond */
-  --surface-1:#fcfcfb;   /* kaarten, panelen, grafiekvlak */
-  --surface-2:#eeeeea;   /* ingedrukte vlakken, tabelkoppen */
-  --line:#dedcd5;
-  --line-strong:#c6c4bb;
+  --surface-0:#ffffff;   /* paginaachtergrond */
+  --surface-1:#ffffff;   /* kaarten, panelen, grafiekvlak */
+  --surface-2:#f4f4f1;   /* ingedrukte vlakken, tabelkoppen */
+  --line:#e3e1da;
+  --line-strong:#c4c2b8;
 
   /* Inkt */
   --text-primary:#141413;

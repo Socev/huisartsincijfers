@@ -47,6 +47,10 @@ export default function () {
     en is bij benadering.</li>
     <li>De classificatie van de vrije invulvelden in het kostprijsonderzoek is gedaan op trefwoorden en is
     interpretatie.</li>
+    <li>Een deel van onze bewerkingen berust op de onderliggende gegevens van het kostprijsonderzoek. Die
+    gegevens zijn niet openbaar. Wij publiceren daaruit uitsluitend samengevatte uitkomsten — aandelen en
+    gemiddelden — en geen gegevens die tot een individuele praktijk te herleiden zijn. Waar de NZa hetzelfde
+    getal zelf publiceert, verwijzen wij naar die publicatie.</li>
     <li>Twee NZa-documenten geven verschillende tarieven voor voorcalculatorisch 2025. Wij kiezen daar geen kant
     in tot dat is opgehelderd.</li>
   </ul>

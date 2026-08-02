@@ -38,8 +38,8 @@ export default function () {
 <section>
   <h2>Waaruit bestaat de omzet buiten de honderd procent?</h2>
   <p class="sub">Voor deze omzet wordt een deel van álle kosten geschoond, inclusief de arbeidsvergoeding van de
-  praktijkhouder. Wij hebben de opgaven van de ${num(w('praktijkkosten','steekproef'))} praktijken uitgesplitst,
-  inclusief de vrije invulvelden met de omschrijving die de praktijk zelf gaf.</p>
+  praktijkhouder. Wij hebben de opgaven uit het kostprijsonderzoek uitgesplitst, inclusief de vrije invulvelden
+  met de omschrijving die de praktijk zelf gaf.</p>
   ${panel(stackedBar({
     items:[
       { naam:'Uren wél uitgevraagd — schoning terecht', kort:'Wel uitgevraagd', waarde:wel,
@@ -51,7 +51,7 @@ export default function () {
       { naam:'Geen arbeidsinzet van de praktijkhouder', kort:'Geen arbeid', waarde:geen,
         toelichting:'Verhuur, rente, subsidie' }
     ],
-    fmt: eur0, caption:`Omzet binnen scope maar buiten de honderd procent in de steekproef, totaal ${eur0(tot)}.`
+    fmt: eur0, caption:`Omzet binnen scope maar buiten de honderd procent in de onderzoeksgroep, totaal ${eur0(tot)}.`
   }))}
   ${panel(dataTable(T.buiten_100_samenstelling, [null, eur0, null]))}
 </section>

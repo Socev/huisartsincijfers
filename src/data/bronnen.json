@@ -28,11 +28,11 @@
     "soort": "Tijdsbestedingsonderzoek"
   },
   "pko-microdata": {
-    "titel": "Kostprijsonderzoek huisartsenzorg, onderzoeksjaar 2022 (306 praktijken)",
+    "titel": "Onderliggende gegevens kostprijsonderzoek huisartsenzorg, onderzoeksjaar 2022",
     "uitgever": "Nederlandse Zorgautoriteit en Sira Consulting",
     "datum": "2023",
     "url": null,
-    "soort": "Microdata"
+    "soort": "Niet-openbare brongegevens"
   },
   "cbb-2025": {
     "titel": "Uitspraak tarieven huisartsenzorg, ECLI:NL:CBB:2025:606",
@@ -47,5 +47,19 @@
     "datum": "2026-08-02",
     "url": "https://github.com/Socev/huisartsincijfers",
     "soort": "Afgeleid"
+  },
+  "nivel-pik": {
+    "titel": "Huisartsen en praktijken in kaart; Beroepenregistraties",
+    "uitgever": "Nivel",
+    "datum": "2025-01",
+    "url": "https://www.nivel.nl/nl/zorg-en-ziekte-in-cijfers/cijfers-arbeidsmarkt-huisartsenzorg",
+    "soort": "Beroepenregistratie"
+  },
+  "sph": {
+    "titel": "Jaarverslagen 2014 tot en met 2025",
+    "uitgever": "Stichting Pensioenfonds voor Huisartsen",
+    "datum": "2026",
+    "url": "https://www.huisartsenpensioen.nl/",
+    "soort": "Jaarverslag"
   }
 }
