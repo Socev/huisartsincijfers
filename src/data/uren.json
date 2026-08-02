@@ -1,0 +1,77 @@
+{
+  "_titel": "Gewerkte uren, de urenuitvraag en de fte-definitie",
+  "parameters": {
+    "nivel_werkweek":   {"waarde":55.7,"label":"Werkweek zelfstandig gevestigde huisarts, 2024","eenheid":"uur/week","bron":"nivel-werkweek-2024","vindplaats":"figuur 18","status":"definitief"},
+    "nivel_gemiddeld":  {"waarde":48,"label":"Werkweek alle huisartsen, 2024","eenheid":"uur/week","bron":"nivel-werkweek-2024","vindplaats":"kernbevinding","status":"definitief"},
+    "nivel_2018":       {"waarde":44,"label":"Werkweek alle huisartsen, 2018 en 2013","eenheid":"uur/week","bron":"nivel-werkweek-2024","vindplaats":"vergelijking","status":"definitief"},
+    "anw_dienst":       {"waarde":2.6,"label":"Waarvan dienst op de huisartsenpost","eenheid":"uur/week","bron":"nivel-werkweek-2024","vindplaats":"blz. 20","status":"definitief"},
+    "nivel_deelnemers": {"waarde":884,"label":"Volledige deelnemers Nivel-meting","eenheid":"huisartsen","bron":"nivel-werkweek-2024","vindplaats":"methode","status":"definitief"},
+    "nza_uren_per_fte": {"waarde":46.2,"label":"Opgegeven uren per fte volgens de NZa","eenheid":"uur/week","bron":"nza-qa-2026","vindplaats":"blz. 10","status":"definitief"},
+    "werkweken":        {"waarde":46,"label":"Werkweken per jaar in de fte-formule","eenheid":"weken","bron":"nza-verantwoording-2025","vindplaats":"par. 5.3","status":"definitief"},
+    "fte_uren_norm":    {"waarde":36,"label":"Uren per week voor 1,0 fte praktijkhouder","eenheid":"uur/week","bron":"nza-verantwoording-2025","vindplaats":"par. 5.3","status":"definitief"},
+    "cao_hidha":        {"waarde":2080,"label":"Cao hidha: uren per fte per jaar","eenheid":"uur/jaar","bron":"nza-verantwoording-2025","vindplaats":"par. 10.4.9 — 40 uur maal 52 weken","status":"definitief"},
+    "cao_haz":          {"waarde":1976,"label":"Cao huisartsenzorg: uren per fte per jaar","eenheid":"uur/jaar","bron":"nza-verantwoording-2025","vindplaats":"par. 10.4.9 — 38 uur maal 52 weken","status":"definitief"},
+    "eigenaren":        {"waarde":608,"label":"Huisarts-eigenaren met opgegeven uren","eenheid":"personen","bron":"pko-microdata","vindplaats":"tabblad Inzet huisartseigenaar","status":"definitief"},
+    "praktijken":       {"waarde":301,"label":"Praktijken met een huisarts-eigenaar","eenheid":"praktijken","bron":"pko-microdata","vindplaats":"van 306 in de steekproef","status":"definitief"},
+    "fte_gecapt":       {"waarde":523.29,"label":"Ingerekende fte in de steekproef","eenheid":"fte","bron":"nza-verantwoording-2025","vindplaats":"Tabel 9","status":"definitief"},
+    "fte_ongecapt":     {"waarde":656.68,"label":"Fte zonder aftopping op 1,0","eenheid":"fte","bron":"pko-microdata","vindplaats":"werktijdfactor week maal jaar, ongecapt","status":"afgeleid"},
+    "uren_totaal":      {"waarde":1088161,"label":"Opgegeven uren per jaar in de steekproef","eenheid":"uur","bron":"pko-microdata","vindplaats":"werkweek maal gewerkte weken","status":"definitief"},
+    "uren_per_nac":     {"waarde":2079,"label":"Opgegeven uren per nac per jaar","eenheid":"uur/jaar","bron":"eigen-berekening","vindplaats":"1.088.161 gedeeld door 523,29","status":"afgeleid"},
+    "boven_cap":        {"waarde":432,"label":"Eigenaren die meer dan 36 uur opgeven","eenheid":"personen","bron":"pko-microdata","vindplaats":"71% van 608","status":"afgeleid"},
+    "boven_cap_uren":   {"waarde":11.0,"label":"Gemiddeld boven de aftopping","eenheid":"uur/week","bron":"pko-microdata","vindplaats":"gemiddelde van 432 eigenaren","status":"afgeleid"},
+    "gem_opgave":       {"waarde":41.71,"label":"Gemiddelde urenopgave, alle eigenaren","eenheid":"uur/week","bron":"pko-microdata","vindplaats":"mediaan 41,0","status":"afgeleid"},
+    "gem_opgave_vt":    {"waarde":46.41,"label":"Gemiddelde urenopgave, 36 uur of meer","eenheid":"uur/week","bron":"pko-microdata","vindplaats":"457 eigenaren","status":"afgeleid"},
+    "niet_uitgevraagd": {"waarde":9.7,"label":"Uren per week buiten de uitvraag","eenheid":"uur/week","bron":"eigen-berekening","vindplaats":"Nivel 55,7 minus 46,0 binnen de drie categorieen","status":"afgeleid"}
+  },
+  "tabellen": {
+    "nivel_taken": {
+      "label":"Werkweek praktijkhoudend huisarts naar taakcategorie, 2024",
+      "bron":"nivel-werkweek-2024","vindplaats":"figuur 18 en 19","status":"schatting","eenheid":"uur/week",
+      "toelichting":"De onderverdeling van de niet-patientgebonden tijd is afgelezen uit figuur 19 en is bij benadering.",
+      "kolommen":["Taakcategorie","Uur per week","In de NZa-uitvraag"],
+      "rijen":[
+        ["Direct patientgebonden",26.0,"ja"],
+        ["Indirect patientgebonden",14.0,"ja"],
+        ["Ondernemerschap",6.0,"ja"],
+        ["Bestuurlijke activiteiten",2.0,"nee"],
+        ["Extern overleg",2.0,"nee"],
+        ["Scholing en nascholing",2.0,"nee"],
+        ["Overig, waaronder de dienst",3.7,"nee"]
+      ]
+    },
+    "opgave_verdeling": {
+      "label":"Urenopgave in het kostprijsonderzoek, 608 huisarts-eigenaren",
+      "bron":"pko-microdata","vindplaats":"eigen bewerking","status":"afgeleid","eenheid":"aantal",
+      "kolommen":["Kenmerk","Aantal","Aandeel"],
+      "rijen":[
+        ["Opgave is een heel getal",568,0.934],
+        ["Opgave is een veelvoud van vijf",202,0.332],
+        ["Opgave is precies 40,0 uur",65,0.107],
+        ["Opgave is 36 uur of meer",457,0.752]
+      ]
+    },
+    "maatschappen": {
+      "label":"Identieke urenopgave binnen maatschappen",
+      "bron":"pko-microdata","vindplaats":"eigen bewerking","status":"afgeleid","eenheid":"aantal",
+      "kolommen":["Praktijken met meerdere eigenaren","Aantal","Alle maten identiek","Aandeel"],
+      "rijen":[
+        ["Alle maatschappen",139,47,0.338],
+        ["waarvan twee eigenaren",66,36,0.545],
+        ["waarvan drie eigenaren",27,11,0.407],
+        ["waarvan vier eigenaren",20,0,0],
+        ["waarvan vijf of meer eigenaren",12,0,0]
+      ]
+    },
+    "uren_per_fte": {
+      "label":"Hoeveel uur telt één fte?",
+      "bron":"eigen-berekening","vindplaats":"zie de afzonderlijke parameters","status":"afgeleid","eenheid":"uur/jaar",
+      "kolommen":["Grondslag","Uur per jaar"],
+      "rijen":[
+        ["Praktijkhouder: opgegeven uren per nac",2079],
+        ["Cao hidha: 40 uur maal 52 weken",2080],
+        ["Cao huisartsenzorg: 38 uur maal 52 weken",1976],
+        ["Praktijkhouder: nominaal 36 uur maal 46 weken",1656]
+      ]
+    }
+  }
+}

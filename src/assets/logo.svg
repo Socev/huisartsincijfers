@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 268 28" width="268" height="28" role="img" aria-label="huisartsincijfers.nl">
+  <g transform="translate(0,2)">
+    <rect x="1"  y="13" width="4" height="8"  rx="1.4" fill="#141413"/>
+    <rect x="7"  y="9"  width="4" height="12" rx="1.4" fill="#141413"/>
+    <rect x="13" y="5"  width="4" height="16" rx="1.4" fill="#141413"/>
+    <rect x="19" y="1"  width="4" height="20" rx="1.4" fill="#1c4f8f" opacity=".18"/>
+    <rect x="19" y="14" width="4" height="7"  rx="1.4" fill="#1c4f8f"/>
+  </g>
+  <text x="33" y="20" font-family="ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif"
+        font-size="19" font-weight="700" letter-spacing="-.5" fill="#141413">huisartsincijfers<tspan fill="#7c7a73" font-weight="400">.nl</tspan></text>
+</svg>

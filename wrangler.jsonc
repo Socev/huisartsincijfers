@@ -1,0 +1,12 @@
+{
+  // Statische site. Geen Worker-script: Cloudflare serveert alleen de bestanden
+  // uit dist/. Daardoor kan er aan de serverkant niets stukgaan.
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "huisartsincijfers",
+  "compatibility_date": "2026-08-01",
+  "assets": {
+    "directory": "./dist",
+    "html_handling": "auto-trailing-slash",
+    "not_found_handling": "404-page"
+  }
+}

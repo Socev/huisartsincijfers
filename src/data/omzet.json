@@ -1,0 +1,55 @@
+{
+  "_titel": "Omzet, scope en schoning",
+  "parameters": {
+    "tarief_gereguleerd_2022":{"waarde":0.744,"label":"Tarief gereguleerde omzet binnen 100%, 2022","eenheid":"aandeel","bron":"nza-verantwoording-2025","vindplaats":"Tabel 34","status":"definitief"},
+    "tarief_gereguleerd_2015":{"waarde":0.779,"label":"Tarief gereguleerde omzet binnen 100%, 2015","eenheid":"aandeel","bron":"nza-verantwoording-2025","vindplaats":"Tabel 34, herberekend","status":"definitief"},
+    "buiten_100_steekproef":{"waarde":28876005,"label":"Omzet binnen scope maar buiten 100% in de steekproef","eenheid":"euro","bron":"pko-microdata","vindplaats":"eigen bewerking, 306 praktijken","status":"afgeleid"},
+    "onbekend_aandeel":{"waarde":0.289,"label":"Deel van die omzet dat niet te classificeren is","eenheid":"aandeel","bron":"pko-microdata","vindplaats":"omschrijving in het vrije invulveld te summier","status":"afgeleid"}
+  },
+  "tabellen": {
+    "omzetaandelen": {
+      "label":"Omzetaandelen binnen 100%, 2022 tegenover 2015",
+      "bron":"nza-verantwoording-2025","vindplaats":"Tabel 34","status":"definitief","eenheid":"aandeel",
+      "kolommen":["Categorie","2022","2015"],
+      "rijen":[
+        ["Basistarief inschrijvingen",0.311,0.344],
+        ["Opslagen inschrijvingen",0.107,0.109],
+        ["Basistarief reguliere consulten",0.269,0.264],
+        ["Basistarief passantenconsulten",0.003,0.004],
+        ["Eerstelijnsverblijf en intensieve zorg",0.022,0.000],
+        ["Overige S1-verrichtingen",0.028,0.034],
+        ["Verrichtingen buiten segmenten",0.004,0.024],
+        ["Tarief gereguleerde omzet",0.744,0.779],
+        ["Niet tarief gereguleerde omzet",0.256,0.221]
+      ]
+    },
+    "buiten_100_samenstelling": {
+      "label":"Waaruit bestaat de omzet binnen scope, buiten 100%?",
+      "bron":"pko-microdata","vindplaats":"eigen bewerking op de opgaven van 306 praktijken","status":"afgeleid","eenheid":"euro",
+      "toelichting":"De vrije invulvelden zijn geclassificeerd op trefwoorden in de omschrijving die de praktijk zelf heeft ingevuld. Dat is interpretatie.",
+      "kolommen":["Categorie","Omzet","Uren van de praktijkhouder uitgevraagd"],
+      "rijen":[
+        ["Griepprik",5743006,"ja"],
+        ["Vrije velden: zorgactiviteiten",8914780,"ja"],
+        ["Bevolkingsonderzoek",649182,"ja"],
+        ["Keuringen en controles",464697,"ja"],
+        ["SBOH-opleidingsvergoeding",1228420,"nee"],
+        ["Vrije velden: opleiding en onderwijs",802675,"nee"],
+        ["Vrije velden: bestuur en overleg",707507,"nee"],
+        ["Vrije velden: waarneming en dienst",346042,"nee"],
+        ["Vrije velden: verhuur, rente, subsidie",1679425,"geen arbeidsinzet"],
+        ["Vrije velden: niet te classificeren",8340271,"onbekend"]
+      ]
+    },
+    "scope_model": {
+      "label":"Het scope-model van de NZa",
+      "bron":"nza-verantwoording-2025","vindplaats":"par. 2.2","status":"definitief","eenheid":"tekst",
+      "kolommen":["Categorie","Wordt er voor geschoond?","Voorbeelden"],
+      "rijen":[
+        ["Buiten scope","nee","Vacatiegelden en anw-omzet: aparte bekostiging, inzet niet uitgevraagd"],
+        ["Binnen scope, buiten 100%","ja","Griepprik, bevolkingsonderzoek, SBOH, keuringen, verloskunde"],
+        ["Binnen scope, binnen 100%","niet van toepassing","De prestaties uit de tariefbeschikking zelf"]
+      ]
+    }
+  }
+}

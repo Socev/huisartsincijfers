@@ -1,0 +1,70 @@
+/* ===========================================================================
+   Huisstijl huisartsincijfers.nl — alle ontwerpwaarden staan hier en nergens
+   anders. Wijzig een waarde hier en de hele site volgt. Zie HUISSTIJL.md.
+   =========================================================================== */
+:root{
+  color-scheme:light;
+
+  /* Vlakken en lijnen */
+  --surface-0:#f6f6f4;   /* paginaachtergrond */
+  --surface-1:#fcfcfb;   /* kaarten, panelen, grafiekvlak */
+  --surface-2:#eeeeea;   /* ingedrukte vlakken, tabelkoppen */
+  --line:#dedcd5;
+  --line-strong:#c6c4bb;
+
+  /* Inkt */
+  --text-primary:#141413;
+  --text-secondary:#52514e;
+  --text-muted:#7c7a73;
+  --text-invert:#ffffff;
+
+  /* Merk */
+  --accent:#1c4f8f;      /* links, actieve elementen */
+  --accent-soft:#e8eff8;
+  --signal:#eda100;      /* let op, afgeleid cijfer, prototypebalk */
+
+  /* Datareeksen — gevalideerd palet, vaste volgorde, nooit hergebruikt.
+     Voor stapels en staven; drie reeksen maximaal bij spreidingsvormen. */
+  --series-1:#2a78d6;
+  --series-2:#eb6834;
+  --series-3:#1baf7a;
+  --series-4:#eda100;
+  --series-5:#e87ba4;
+  --series-6:#008300;
+  --series-7:#4a3aa7;
+  --series-8:#e34948;
+
+  /* Typografie */
+  --font-ui:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  --font-mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,monospace;
+
+  /* Maatvoering */
+  --wrap:1080px;
+  --wrap-tekst:70ch;
+  --radius:10px;
+  --radius-sm:6px;
+  --gap:16px;
+}
+
+/* Donkere modus is apart gekozen, geen automatische omkering:
+   dezelfde tinten opnieuw gestapt tegen een donker vlak. */
+@media (prefers-color-scheme:dark){
+  :root:where(:not([data-theme="light"])){
+    color-scheme:dark;
+    --surface-0:#121211; --surface-1:#1a1a19; --surface-2:#242422;
+    --line:#33332f; --line-strong:#4a4a45;
+    --text-primary:#ffffff; --text-secondary:#c3c2b7; --text-muted:#94938a;
+    --accent:#7fb2f0; --accent-soft:#1c2a3a; --signal:#c98500;
+    --series-1:#3987e5; --series-2:#d95926; --series-3:#199e70; --series-4:#c98500;
+    --series-5:#d55181; --series-6:#008300; --series-7:#9085e9; --series-8:#e66767;
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --surface-0:#121211; --surface-1:#1a1a19; --surface-2:#242422;
+  --line:#33332f; --line-strong:#4a4a45;
+  --text-primary:#ffffff; --text-secondary:#c3c2b7; --text-muted:#94938a;
+  --accent:#7fb2f0; --accent-soft:#1c2a3a; --signal:#c98500;
+  --series-1:#3987e5; --series-2:#d95926; --series-3:#199e70; --series-4:#c98500;
+  --series-5:#d55181; --series-6:#008300; --series-7:#9085e9; --series-8:#e66767;
+}

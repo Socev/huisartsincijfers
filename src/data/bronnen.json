@@ -1,0 +1,51 @@
+{
+  "nza-verantwoording-2025": {
+    "titel": "Verantwoordingsdocument tarieven huisartsenzorg 2025 (na herbeoordeling)",
+    "uitgever": "Nederlandse Zorgautoriteit",
+    "datum": "2026-06-30",
+    "url": "https://puc.overheid.nl/nza/",
+    "soort": "Tariefonderbouwing"
+  },
+  "nza-addendum-2026": {
+    "titel": "Addendum bij verantwoording tarieven huisartsenzorg vanaf 2026",
+    "uitgever": "Nederlandse Zorgautoriteit",
+    "datum": "2026-06-30",
+    "url": "https://puc.overheid.nl/nza/",
+    "soort": "Tariefonderbouwing"
+  },
+  "nza-qa-2026": {
+    "titel": "Vraag en antwoord tarieven huisartsenzorg na herbeoordeling",
+    "uitgever": "Nederlandse Zorgautoriteit",
+    "datum": "2026-07-13",
+    "url": "https://puc.overheid.nl/doc/PUC_823040_22",
+    "soort": "Voorlichting"
+  },
+  "nivel-werkweek-2024": {
+    "titel": "De werkweek van de Nederlandse huisarts in 2024",
+    "uitgever": "Nivel",
+    "datum": "2025",
+    "url": "https://www.nivel.nl/nl/publicatie/de-werkweek-van-de-nederlandse-huisarts-2024-en-een-vergelijking-met-2018-en-2013",
+    "soort": "Tijdsbestedingsonderzoek"
+  },
+  "pko-microdata": {
+    "titel": "Kostprijsonderzoek huisartsenzorg, onderzoeksjaar 2022 (306 praktijken)",
+    "uitgever": "Nederlandse Zorgautoriteit en Sira Consulting",
+    "datum": "2023",
+    "url": null,
+    "soort": "Microdata"
+  },
+  "cbb-2025": {
+    "titel": "Uitspraak tarieven huisartsenzorg, ECLI:NL:CBB:2025:606",
+    "uitgever": "College van Beroep voor het bedrijfsleven",
+    "datum": "2025-11-18",
+    "url": "https://uitspraken.rechtspraak.nl/details?id=ECLI:NL:CBB:2025:606",
+    "soort": "Rechtspraak"
+  },
+  "eigen-berekening": {
+    "titel": "Eigen berekening op basis van de genoemde bronnen",
+    "uitgever": "huisartsincijfers.nl",
+    "datum": "2026-08-02",
+    "url": "https://github.com/Socev/huisartsincijfers",
+    "soort": "Afgeleid"
+  }
+}

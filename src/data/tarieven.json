@@ -1,0 +1,44 @@
+{
+  "_titel": "Basistarieven huisartsenzorg",
+  "_let_op": "Twee NZa-documenten geven verschillende bedragen voor voorcalculatorisch 2025. Zie de openstaande vraag op de pagina.",
+  "parameters": {
+    "kostprijs_inschrijving_2022":{"waarde":15.11,"label":"Landelijke kostprijs basisinschrijving, definitief 2022","eenheid":"euro per kwartaal","bron":"nza-verantwoording-2025","vindplaats":"Tabel 27","status":"definitief"},
+    "kostprijs_consult_2022":{"waarde":10.92,"label":"Landelijke kostprijs regulier consult, definitief 2022","eenheid":"euro","bron":"nza-verantwoording-2025","vindplaats":"Tabel 27","status":"definitief"},
+    "kostprijs_passant_2022":{"waarde":27.99,"label":"Landelijke kostprijs passantenconsult, definitief 2022","eenheid":"euro","bron":"nza-verantwoording-2025","vindplaats":"Tabel 27","status":"definitief"},
+    "effect_herbeoordeling":{"waarde":0.022,"label":"Bijstelling kostprijzen door de herbeoordeling","eenheid":"aandeel","bron":"nza-qa-2026","vindplaats":"blz. 8, prijspeil 2022","status":"definitief"},
+    "stijging_2026":{"waarde":0.061,"label":"Maximumtarieven 2026 tegenover 2025","eenheid":"aandeel","bron":"nza-addendum-2026","vindplaats":"beide voorcalculatorisch","status":"definitief"},
+    "nac_stijging":{"waarde":0.119,"label":"Stijging arbeidsvergoeding huisartseigenaren, exclusief indexatie","eenheid":"aandeel","bron":"nza-qa-2026","vindplaats":"blz. 12","status":"definitief"}
+  },
+  "tabellen": {
+    "indexatie_verantwoording": {
+      "label":"Indexatie van de basisprestaties volgens het Verantwoordingsdocument 2025",
+      "bron":"nza-verantwoording-2025","vindplaats":"Tabel 29","status":"definitief","eenheid":"euro",
+      "kolommen":["Prestatie","def 2022","def 2023","def 2024","vc 2025"],
+      "rijen":[
+        ["Basistarief inschrijving",15.11,16.05,16.89,17.51],
+        ["Basistarief consult",10.92,11.60,12.21,12.66],
+        ["Basistarief passantenconsult",27.99,29.73,31.30,32.44]
+      ]
+    },
+    "indexatie_addendum": {
+      "label":"Indexatie van de basisprestaties volgens het Addendum vanaf 2026",
+      "bron":"nza-addendum-2026","vindplaats":"Indexatie van basisprestaties","status":"definitief","eenheid":"euro",
+      "kolommen":["Prestatie","vc 2025","def 2025","vc 2026"],
+      "rijen":[
+        ["Basistarief inschrijving",17.20,17.42,18.25],
+        ["Basistarief consult",12.43,12.58,13.18],
+        ["Basistarief passantenconsult",31.86,32.27,33.80]
+      ]
+    },
+    "indexpercentages": {
+      "label":"Indexeringspercentages per kostencomponent",
+      "bron":"nza-verantwoording-2025","vindplaats":"Tabel 28 en Addendum","status":"definitief","eenheid":"aandeel",
+      "kolommen":["Kostencomponent","def 2023","def 2024","vc 2025","def 2025","vc 2026"],
+      "rijen":[
+        ["Arbeidskosten en personeel (ova)",0.0636,0.0600,0.0418,0.0518,0.0424],
+        ["Materiele kosten",0.0702,0.0310,0.0182,0.0425,0.0210],
+        ["Normatieve huisvestingscomponent",0.025,0.025,0.025,0.025,0.025]
+      ]
+    }
+  }
+}
