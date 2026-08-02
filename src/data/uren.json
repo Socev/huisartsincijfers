@@ -146,11 +146,11 @@
    "status": "afgeleid"
   },
   "niet_uitgevraagd": {
-   "waarde": 9.7,
-   "label": "Uren per week buiten de uitvraag",
+   "waarde": 6.9,
+   "label": "Uren per week die nergens in beeld komen",
    "eenheid": "uur/week",
    "bron": "eigen-berekening",
-   "vindplaats": "Nivel 55,7 minus 46,0 binnen de drie categorieen",
+   "vindplaats": "55,7 minus 46,2 uitgevraagd minus 2,6 dienst",
    "status": "afgeleid"
   }
  },
@@ -289,6 +289,40 @@
     [
      "Praktijkhouder: nominaal 36 uur maal 46 weken",
      1656
+    ]
+   ]
+  },
+  "werkweek_opbouw": {
+   "label": "Waar de werkweek van de praktijkhoudend huisarts heen gaat",
+   "bron": "eigen-berekening",
+   "vindplaats": "Nivel-tijdsbestedingsonderzoek 2024 naast de NZa-uitvraag",
+   "status": "afgeleid",
+   "eenheid": "uur/week",
+   "kolommen": [
+    "Deel van de werkweek",
+    "Uur per week",
+    "Bekostiging"
+   ],
+   "rijen": [
+    [
+     "Uitgevraagd door de NZa",
+     46.2,
+     "Zit in de overdagtarieven"
+    ],
+    [
+     "Dienst op de huisartsenpost",
+     2.6,
+     "Aparte bekostiging, buiten de overdagtarieven"
+    ],
+    [
+     "Bestuur, extern overleg, scholing, overig",
+     6.9,
+     "Nergens"
+    ],
+    [
+     "Totaal gemeten werkweek",
+     55.7,
+     ""
     ]
    ]
   }

@@ -1,6 +1,6 @@
 import { pagina } from '../lib/layout.mjs';
 import { w, p, data } from '../lib/data.mjs';
-import { panel, callout, dataTable, table, tile, barChart, compareBars, bronLabel, stackedBar , anwNoot } from '../lib/components.mjs';
+import { panel, callout, dataTable, table, tile, barChart, compareBars, bronLabel, stackedBar, anwNoot, trechter } from '../lib/components.mjs';
 import { num, pct, uur, eur, esc } from '../lib/format.mjs';
 
 export default function () {
@@ -10,34 +10,55 @@ export default function () {
 
   const body = `
 <section>
-  <div class="grid c3">
-    ${tile({ waarde: num(w('uren','uren_per_nac')), label:'opgegeven uren per jaar tegenover één normatieve arbeidskostencomponent', bron:'Microdata kostprijsonderzoek 2022' })}
-    ${tile({ waarde: num(w('uren','cao_hidha')), label:'uren per jaar rekent de NZa voor één fte volgens de cao hidha', bron:'NZa par. 10.4.9' })}
-    ${tile({ waarde: uur(w('uren','niet_uitgevraagd')), label:'per week valt buiten de drie categorieën waar de NZa naar vraagt', bron:'Nivel 2024 en NZa par. 10.4.9' })}
-  </div>
-  ${callout(`Eén nac koopt ${num(w('uren','uren_per_nac'))} opgegeven uren. De cao hidha rekent
-    ${num(w('uren','cao_hidha'))} uur voor één volledige fte. <strong>De praktijkhouder levert dus een volledig
-    hidha-jaar aan uren die de NZa telt</strong> — en daarbovenop nog eens ${num(w('uren','niet_uitgevraagd'),1)}
-    uur per week waar niet naar gevraagd wordt.`)}
+  <h2>De werkweek, en welk deel ervan de NZa telt</h2>
+  <p class="sub">Het Nivel meet met momentmetingen hoeveel een praktijkhoudend huisarts werkt. De NZa vraagt in
+  het uitvraagformat naar drie dingen: zorg verlenen, praktijk managen en inzet apotheek. Onderstaande balk is
+  de volledige gemeten werkweek; het gekleurde deel is wat de tariefonderbouwing ziet.</p>
+  ${panel(stackedBar({
+    items:[
+      { naam:'Uitgevraagd door de NZa', kort:'Uitgevraagd', waarde:46.2,
+        toelichting:'Zorg verlenen, praktijk managen en inzet apotheek. Zit in de overdagtarieven.' },
+      { naam:'Dienst op de huisartsenpost', kort:'Anw-dienst', waarde:2.6,
+        toelichting:'Aparte bekostiging; bewust buiten de overdagtarieven gehouden.' },
+      { naam:'Bestuur, extern overleg, scholing, overig', kort:'Nergens belegd', waarde:6.9,
+        toelichting:'Valt buiten alle drie de categorieen waar de NZa naar vraagt, en buiten de anw-bekostiging.' }
+    ],
+    fmt: v => num(v,1) + ' u', unit:' per week',
+    caption:'Werkweek van de praktijkhoudend huisarts, uren per week. Totaal 55,7 uur volgens het Nivel.'
+  }))}
+  ${panel(dataTable(T.werkweek_opbouw, [null, v=>num(v,1), null]))}
+  ${anwNoot(w('uren','nivel_werkweek'), w('uren','anw_dienst'))}
+  <p class="small">De NZa publiceert zelf 46,2 uur per fte. Dat cijfer klopt met de eigen vraagstelling; het is
+  geen meting van de werkweek. Wie beide getallen naast elkaar legt zonder dat onderscheid, vergelijkt een
+  volledige werkweek met een uitsnede ervan.</p>
 </section>
 
 <section>
-  <h2>Waarom Nivel 55,7 uur meet en de NZa 46,2 uur opgeeft</h2>
-  <p class="sub">Dat verschil is geen meetfout. De NZa vraagt in het uitvraagformat naar drie dingen:
-  <em>zorg verlenen, praktijk managen en inzet apotheek</em>. Nivel meet met momentmetingen alle tijd die een
-  huisarts aan het vak besteedt. Leg je de twee naast elkaar, dan sluit het vrijwel exact.</p>
-  ${panel(dataTable(T.nivel_taken, [null, v=>num(v,1), null]))}
-  ${panel(compareBars({
-    items:[
-      { label:'Binnen de NZa-uitvraag (26 + 14 + 6)', waarde:inScope, serie:1, toelichting:'De NZa publiceert 46,2 uur per fte' },
-      { label:'Buiten de uitvraag: bestuur, extern overleg, scholing, dienst', waarde:buiten, serie:2, toelichting:'Bestaat niet in de tariefonderbouwing' },
-      { label:'Werkelijke werkweek volgens Nivel', waarde:w('uren','nivel_werkweek'), serie:3, toelichting:'Figuur 18, zelfstandig gevestigde huisartsen' }
-    ], fmt:v=>num(v,1), eenheid:' u', caption:'Werkweek praktijkhoudend huisarts, uren per week.'
+  <h2>Van ruim zevenduizend huisartsen naar zesduizend arbeidskostencomponenten</h2>
+  <p class="sub">Nederland telt ruim zevenduizend praktijkhoudend huisartsen. In de tariefonderbouwing komen daar
+  aanzienlijk minder normatieve arbeidskostencomponenten uit. Onderweg gaat er drie keer iets af: eerst door
+  deeltijd en de aftopping op 1,0 fte, dan door de schoning op omzet, en tot slot doordat maar een deel van de
+  omzet binnen de honderd procent een NZa-maximumtarief kent. De twee registers verschillen overigens al bij de
+  eerste stap: <a href="/beroepsgroep/">het pensioenfonds telt er ruim duizend minder</a>.</p>
+  ${panel(trechter({
+    stappen:[
+      { label:'Praktijkhoudend huisartsen', waarde:7561, serie:1, nadruk:true,
+        toelichting:'Personen. Nivel-beroepenregistratie 2023; het pensioenfonds komt voor 2024 op 6.479' },
+      { label:'Fte in de tariefberekening', waarde:6604, serie:3,
+        toelichting:'Werkelijke bezetting: 1 fte per 2.650 ingeschrevenen',
+        reden:'deeltijd en de aftopping van de werktijdfactor op 1,0' },
+      { label:'Arbeidskostencomponenten binnen 100%', waarde:5888, serie:4,
+        toelichting:'Na schoning buiten 100% en de correctie poh-ggz', reden:'schoning op omzet' },
+      { label:'Gedekt door NZa-maximumtarieven', waarde:4381, serie:2, nadruk:true,
+        toelichting:'De rest moet uit vrij onderhandelbare omzet komen', reden:'74,4% van de omzet is tarief gereguleerd' }
+    ],
+    fmt: num, caption:'Van beroepsgroep naar tariefonderbouwing, cijfers voor 2025.'
   }))}
-  ${anwNoot(w('uren','nivel_werkweek'), w('uren','anw_dienst'))}
-  <p class="small">De onderverdeling van de niet-patiëntgebonden tijd is afgelezen uit figuur 19 van het
-  Nivel-rapport en is bij benadering. De toewijzing wel of niet uitgevraagd is onze interpretatie van de drie
-  categorienamen; de NZa licht de vraagstelling nergens verder toe.</p>
+  ${callout(`De gemiddelde praktijkhouder werkt ${num(w('uren','nivel_werkweek'),1)} uur per week volgens het
+  Nivel en geeft er ${num(w('uren','nza_uren_per_fte'),1)} op in het kostprijsonderzoek. Toch komen ruim
+  zevenduizend van hen samen niet verder dan ${num(4381)} volledig door tarieven gedekte
+  arbeidskostencomponenten. <strong>Het verschil zit niet in te weinig werken, maar in twee rekenregels:
+  de aftopping en de schoning.</strong> <a href="/arbeidskosten/">Die keten staat hier uitgewerkt</a>.`)}
 </section>
 
 <section>

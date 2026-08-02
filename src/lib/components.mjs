@@ -141,15 +141,29 @@ export function lineChart({ reeksen, x, caption, fmt = num, hoogte = 300, yNul =
     <text class="ax" x="${mL-8}" y="${(py(v)+4).toFixed(1)}" text-anchor="end">${fmt(v)}</text>`).join('');
   const xlab = x.map((l, i) => `<text class="ax" x="${px(i).toFixed(1)}" y="${H-mB+18}" text-anchor="middle">${esc(l)}</text>`).join('');
 
-  const lijnen = reeksen.map((r, si) => {
-    const kleur = SERIES(r.serie ?? si + 1);
+  /* Eindlabels mogen elkaar niet overlappen. Reeksen die dicht bij elkaar
+     eindigen worden verticaal uit elkaar geduwd, zodat geen enkel getal
+     onleesbaar wordt. De markering blijft op de werkelijke waarde staan. */
+  const einden = reeksen.map((r, si) => {
     const pts = r.waarden.map((v, i) => v == null ? null : [px(i), py(v)]).filter(Boolean);
+    return { si, r, pts, laatste: pts[pts.length - 1],
+             eind: r.waarden.filter(v => v != null).slice(-1)[0] };
+  });
+  const MIN = 14;
+  const gesorteerd = [...einden].sort((a, b) => a.laatste[1] - b.laatste[1]);
+  gesorteerd.forEach((e, i) => {
+    e.ly = e.laatste[1] + 4;
+    if (i && e.ly - gesorteerd[i-1].ly < MIN) e.ly = gesorteerd[i-1].ly + MIN;
+  });
+
+  const lijnen = einden.map(({ si, r, pts, laatste, eind, ly }) => {
+    const kleur = SERIES(r.serie ?? si + 1);
     const d = pts.map((p, i) => (i ? 'L' : 'M') + p[0].toFixed(1) + ' ' + p[1].toFixed(1)).join(' ');
-    const laatste = pts[pts.length - 1];
-    const eind = r.waarden.filter(v => v != null).slice(-1)[0];
+    const verschoven = Math.abs(ly - laatste[1]) > 1;
     return `<path d="${d}" fill="none" stroke="${kleur}" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
       <circle cx="${laatste[0].toFixed(1)}" cy="${laatste[1].toFixed(1)}" r="4.5" fill="${kleur}" stroke="var(--surface-1)" stroke-width="2"/>
-      <text class="dl" x="${(laatste[0]+10).toFixed(1)}" y="${(laatste[1]+4).toFixed(1)}">${fmt(eind)}</text>`;
+      ${verschoven ? `<line x1="${(laatste[0]+5).toFixed(1)}" y1="${laatste[1].toFixed(1)}" x2="${(laatste[0]+9).toFixed(1)}" y2="${(ly-4).toFixed(1)}" stroke="${kleur}" stroke-width="1"/>` : ''}
+      <text class="dl" x="${(laatste[0]+11).toFixed(1)}" y="${(ly).toFixed(1)}">${fmt(eind)}</text>`;
   }).join('');
 
   const hits = x.map((l, i) => {
@@ -239,4 +253,35 @@ export function anwNoot(bruto, dienst, { kort = false } = {}) {
     zij kent een aparte bekostiging en de opbrengsten vallen buiten scope. Wie de werkweek naast de tarieven
     legt, moet de ${num(dienst,1)} uur dienst er dus afhalen en met <b>${num(netto,1)} uur</b> rekenen.
     Doe je dat niet, dan reken je uren toe aan een tarief dat ze niet vergoedt.</p></div>`;
+}
+
+/* ---------- trechter ----------
+   Horizontale balken die allemaal links beginnen en steeds korter worden, met
+   het verlies per stap ernaast. Voor ketens waarin een grootheid onderweg
+   kleiner wordt en de lezer moet zien waar dat gebeurt. */
+export function trechter({ stappen, caption, fmt = num, eenheid = '' }) {
+  const max = stappen[0].waarde;
+  const rijen = stappen.map((s, i) => {
+    const vorige = i ? stappen[i-1].waarde : null;
+    const verlies = vorige !== null ? s.waarde - vorige : null;
+    return `<div style="margin-bottom:${i === stappen.length-1 ? 4 : 18}px">
+      <div style="display:flex;justify-content:space-between;align-items:baseline;gap:12px;margin-bottom:6px">
+        <span style="font-size:14px;color:var(--text-primary)${s.nadruk ? ';font-weight:600' : ''}">${esc(s.label)}</span>
+        <b class="num" style="font-size:15px;white-space:nowrap">${fmt(s.waarde)}${eenheid}</b>
+      </div>
+      <div style="height:${s.nadruk ? 22 : 18}px;background:var(--surface-2);border-radius:4px;overflow:hidden"
+           data-tip="${tip(`<b>${esc(s.label)}</b><br>${fmt(s.waarde)}${eenheid}` + (s.toelichting ? `<br><span style="color:var(--text-secondary)">${esc(s.toelichting)}</span>` : ''))}">
+        <div style="height:100%;width:${(s.waarde/max*100).toFixed(2)}%;background:${SERIES(s.serie ?? 1)};border-radius:4px"></div>
+      </div>
+      ${s.toelichting ? `<div class="bron" style="margin-top:5px">${esc(s.toelichting)}</div>` : ''}
+      ${verlies !== null ? `<div style="font-size:12.5px;color:var(--series-2);margin-top:7px;padding-left:2px">
+          ${verlies < 0 ? '↓' : '↑'} ${fmt(Math.abs(verlies))}${eenheid}${s.reden ? ' — ' + esc(s.reden) : ''}</div>` : ''}
+    </div>`;
+  }).join('');
+  const tbl = table({
+    cols:[{label:'Stap'},{label:'Waarde',r:true},{label:'Verschil met de vorige stap',r:true}],
+    rows: stappen.map((s,i) => [esc(s.label), fmt(s.waarde)+eenheid,
+      i ? (s.waarde - stappen[i-1].waarde > 0 ? '+' : '−') + fmt(Math.abs(s.waarde - stappen[i-1].waarde)) + eenheid : '—'])
+  });
+  return `<figure>${caption ? `<figcaption>${caption}</figcaption>` : ''}${rijen}${tableDetails('Toon als tabel', tbl)}</figure>`;
 }

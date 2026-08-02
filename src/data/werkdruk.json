@@ -1,0 +1,203 @@
+{
+ "_titel": "Werkdruk, patiëntenstops en verzuim",
+ "parameters": {
+  "stop_2024": {
+   "waarde": 0.6,
+   "label": "Praktijken met een patiëntenstop, 2024",
+   "eenheid": "aandeel",
+   "bron": "nivel-arbeidsmarkt",
+   "vindplaats": "vraag over het afgelopen jaar",
+   "status": "definitief"
+  },
+  "stop_2018": {
+   "waarde": 0.48,
+   "label": "Praktijken met een patiëntenstop, 2018",
+   "eenheid": "aandeel",
+   "bron": "nivel-arbeidsmarkt",
+   "vindplaats": "vraag over de afgelopen vijf jaar",
+   "status": "definitief"
+  },
+  "werkdruk_2024": {
+   "waarde": 78,
+   "label": "Werkdrukscore huisartsen, 2024",
+   "eenheid": "score 0-100",
+   "bron": "nivel-arbeidsmarkt",
+   "vindplaats": "hoger is meer werkdruk",
+   "status": "definitief"
+  },
+  "werkplezier_2024": {
+   "waarde": 76,
+   "label": "Werkplezierscore praktijken, 2024",
+   "eenheid": "score 0-100",
+   "bron": "nivel-arbeidsmarkt",
+   "vindplaats": "hoger is meer werkplezier",
+   "status": "definitief"
+  },
+  "verzuim_2022": {
+   "waarde": 7.9,
+   "label": "Ziekteverzuim in de branche, piekjaar 2022",
+   "eenheid": "procent",
+   "bron": "cbs-azw",
+   "vindplaats": "branche huisartsen en gezondheidscentra",
+   "status": "definitief"
+  },
+  "verzuim_2013": {
+   "waarde": 2.5,
+   "label": "Ziekteverzuim in de branche, 2013",
+   "eenheid": "procent",
+   "bron": "cbs-azw",
+   "vindplaats": "laagste waarde in de reeks",
+   "status": "definitief"
+  }
+ },
+ "reeksen": {
+  "stops": {
+   "label": "Praktijken met een patiëntenstop en verwachte tekorten",
+   "bron": "nivel-arbeidsmarkt",
+   "vindplaats": "arbeidsmarktonderzoek, percentage van de praktijken",
+   "status": "definitief",
+   "eenheid": "procent",
+   "jaren": [
+    2018,
+    2019,
+    2020,
+    2021,
+    2022,
+    2023,
+    2024
+   ],
+   "reeksen": [
+    {
+     "naam": "Patiëntenstop",
+     "waarden": [
+      48,
+      52,
+      54,
+      60,
+      58,
+      60,
+      60
+     ]
+    },
+    {
+     "naam": "Verwacht tekort aan huisartsen",
+     "waarden": [
+      49,
+      45,
+      25,
+      78,
+      95,
+      56,
+      51
+     ]
+    },
+    {
+     "naam": "Verwacht tekort aan doktersassistenten",
+     "waarden": [
+      54,
+      56,
+      48,
+      70,
+      71,
+      47,
+      63
+     ]
+    }
+   ],
+   "breuk": {
+    "na": 2022,
+    "tekst": "Vanaf 2023 is de vraag over de patiëntenstop aangescherpt van de afgelopen vijf jaar naar het afgelopen jaar. De reeks is daardoor niet over de hele periode vergelijkbaar."
+   }
+  },
+  "werkdruk": {
+   "label": "Werkdruk en werkplezier",
+   "bron": "nivel-arbeidsmarkt",
+   "vindplaats": "score van 0 tot 100",
+   "status": "definitief",
+   "eenheid": "score",
+   "jaren": [
+    2021,
+    2022,
+    2023,
+    2024
+   ],
+   "reeksen": [
+    {
+     "naam": "Werkdruk huisartsen",
+     "waarden": [
+      84,
+      82,
+      78,
+      78
+     ]
+    },
+    {
+     "naam": "Werkdruk doktersassistenten",
+     "waarden": [
+      82,
+      77,
+      73,
+      73
+     ]
+    },
+    {
+     "naam": "Werkplezier in de praktijk",
+     "waarden": [
+      75,
+      76,
+      75,
+      76
+     ]
+    }
+   ]
+  },
+  "verzuim": {
+   "label": "Ziekteverzuim in de branche huisartsen en gezondheidscentra",
+   "bron": "cbs-azw",
+   "vindplaats": "AZW StatLine 24015NED",
+   "status": "definitief",
+   "eenheid": "procent",
+   "jaren": [
+    2010,
+    2011,
+    2012,
+    2013,
+    2014,
+    2015,
+    2016,
+    2017,
+    2018,
+    2019,
+    2020,
+    2021,
+    2022,
+    2023,
+    2024,
+    2025
+   ],
+   "reeksen": [
+    {
+     "naam": "Ziekteverzuimpercentage",
+     "waarden": [
+      3.3,
+      3.1,
+      2.8,
+      2.5,
+      3.5,
+      2.5,
+      3.2,
+      3.1,
+      2.8,
+      3.9,
+      5.2,
+      5.7,
+      7.9,
+      6.7,
+      5.7,
+      5.8
+     ]
+    }
+   ]
+  }
+ }
+}

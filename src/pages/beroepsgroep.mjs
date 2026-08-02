@@ -61,15 +61,32 @@ export default function () {
   geen instroom.</p>
   ${panel(dataTable(T.herindeling, [null, num, num, v => (v>0?'+':'') + num(v)]))}
 
-  <h3>Waarom het pensioenfonds dit niet kan beslechten</h3>
-  <p class="sub">Het pensioenfonds telt deelnemers, niet functies. Een uitsplitsing naar praktijkhouder, hidha of
-  waarnemer staat niet in de jaarverslagen. En een restberekening loopt vast: het verschil met de
-  beroepenregistratie is te klein om alle huisartsen in opleiding te kunnen zijn.</p>
-  ${panel(dataTable(T.sph_sluit_niet, [null, num, null]))}
-  ${callout(`<strong>De twee tellingen sluiten sowieso niet op elkaar aan.</strong> Het Praktijkkostenonderzoek
-  komt voor 2022 uit op ongeveer 2.827 fte hidha's en vaste waarnemers samen, terwijl het Nivel er 4.169 personen
-  telt — 0,68 fte per persoon. Voor 2015 is die verhouding juist 1,15. Zo'n omslag is geen reële verandering maar
-  een teken dat de twee bronnen een andere groep afbakenen. Wij rekenen er daarom niet doorheen.`)}
+  <h3>Het pensioenfonds telt ze wél apart</h3>
+  <p class="sub">De jaarverslagen van het pensioenfonds voor huisartsen splitsen het deelnemersbestand uit naar
+  type. Figuur 6 telt de directeur-grootaandeelhouders mee bij de huisartsen in dienstverband; figuur 7 splitst
+  ze apart. Dat onderscheid is wezenlijk: een dga bezit een praktijk en is geen werknemer. Hieronder staan ze
+  daarom los.</p>
+  ${panel(dataTable(T.sph_typen, [null, num, num, num, num, num, v=>pct(v,1)]))}
+  ${panel(serieChart(R.sph_typen, { fmt: num, hoogte: 320, yNul: true }))}
+  ${callout(`Drie bewegingen tegelijk. De vrijgevestigden dalen van ${num(6476)} naar
+  ${num(w('beroepsgroep','sph_vrijgevestigd_2024'))}. De waarnemers stijgen van ${num(4836)} naar
+  ${num(w('beroepsgroep','sph_waarnemend_2024'))} — en zijn daarmee inmiddels de grootste groep werkende
+  huisartsen. De echte huisartsen in dienstverband groeien van ${num(848)} naar
+  ${num(w('beroepsgroep','sph_hidha_2024'))}: reëel, maar bescheiden naast de waarneming.`)}
+  <p class="small">Dit bevestigt onafhankelijk wat het Praktijkkostenonderzoek liet zien: de verschuiving gaat
+  naar waarneming, niet naar loondienst. De ${num(w('beroepsgroep','sph_hidha_2024'))} hidha's van het
+  pensioenfonds liggen bovendien dicht bij de ${num(w('beroepsgroep','hidha_fte_2022'))} fte die uit het
+  kostprijsonderzoek volgt — twee bronnen die elkaar hier wél naderen.</p>
+
+  <h3>Hoeveel praktijkhouders zijn er dan?</h3>
+  <p class="sub">Tel je de dga's bij de vrijgevestigden op, dan komt het pensioenfonds op
+  ${num(w('beroepsgroep','sph_praktijkhouders_2024'))} praktijkhouders in 2024. Het Nivel telde er in 2023
+  ${num(w('beroepsgroep','praktijkhouders_2023'))}. Dat scheelt ruim duizend mensen.</p>
+  ${panel(dataTable(T.praktijkhouders_bronnen, [null, num, num, num]))}
+  ${callout(`<strong>Beide registers zijn gezaghebbend en ze verschillen structureel.</strong> Het pensioenfonds
+  telt wie er premie afdraagt; het Nivel telt wie er als zelfstandig gevestigd staat geregistreerd. Wij kiezen
+  hier geen kant. Wel is relevant dat de twee reeksen dezelfde richting op bewegen: minder praktijkhouderschap,
+  meer waarneming.`)}
 </section>
 
 <section>

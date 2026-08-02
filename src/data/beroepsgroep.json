@@ -112,6 +112,46 @@
    "bron": "eigen-berekening",
    "vindplaats": "landelijk omgerekend uit Tabel 37",
    "status": "afgeleid"
+  },
+  "sph_vrijgevestigd_2024": {
+   "waarde": 5909,
+   "label": "Vrijgevestigd huisartsen bij het pensioenfonds, 2024",
+   "eenheid": "personen",
+   "bron": "sph",
+   "vindplaats": "Jaarverslag 2024, figuur 6",
+   "status": "definitief"
+  },
+  "sph_dga_2024": {
+   "waarde": 570,
+   "label": "Directeur-grootaandeelhouders, 2024",
+   "eenheid": "personen",
+   "bron": "sph",
+   "vindplaats": "Jaarverslag 2024, figuur 7",
+   "status": "definitief"
+  },
+  "sph_hidha_2024": {
+   "waarde": 1012,
+   "label": "Huisartsen in dienstverband exclusief dga's, 2024",
+   "eenheid": "personen",
+   "bron": "sph",
+   "vindplaats": "Jaarverslag 2024, figuur 7",
+   "status": "definitief"
+  },
+  "sph_waarnemend_2024": {
+   "waarde": 6058,
+   "label": "Waarnemend huisartsen, 2024",
+   "eenheid": "personen",
+   "bron": "sph",
+   "vindplaats": "Jaarverslag 2024, figuur 6",
+   "status": "definitief"
+  },
+  "sph_praktijkhouders_2024": {
+   "waarde": 6479,
+   "label": "Praktijkhouders volgens het pensioenfonds, 2024",
+   "eenheid": "personen",
+   "bron": "eigen-berekening",
+   "vindplaats": "vrijgevestigd 5.909 plus 570 dga's",
+   "status": "afgeleid"
   }
  },
  "reeksen": {
@@ -462,6 +502,72 @@
      ]
     }
    ]
+  },
+  "sph_typen": {
+   "label": "Actieve deelnemers pensioenfonds naar type",
+   "bron": "sph",
+   "vindplaats": "Jaarverslag 2024, figuur 6 en 7",
+   "status": "definitief",
+   "eenheid": "personen",
+   "jaren": [
+    2020,
+    2021,
+    2022,
+    2023,
+    2024
+   ],
+   "reeksen": [
+    {
+     "naam": "Waarnemend huisartsen",
+     "waarden": [
+      4836,
+      5134,
+      5392,
+      5746,
+      6058
+     ]
+    },
+    {
+     "naam": "Vrijgevestigd huisartsen",
+     "waarden": [
+      6476,
+      6249,
+      6143,
+      6031,
+      5909
+     ]
+    },
+    {
+     "naam": "Huisartsen in opleiding",
+     "waarden": [
+      null,
+      2388,
+      2481,
+      2527,
+      2440
+     ]
+    },
+    {
+     "naam": "Huisartsen in dienstverband",
+     "waarden": [
+      848,
+      922,
+      905,
+      944,
+      1012
+     ]
+    },
+    {
+     "naam": "Directeur-grootaandeelhouders",
+     "waarden": [
+      333,
+      384,
+      460,
+      510,
+      570
+     ]
+    }
+   ]
   }
  },
  "tabellen": {
@@ -580,6 +686,112 @@
      "Verschil",
      1485,
      "Te klein om alle aios te zijn, dus de twee tellingen overlappen deels"
+    ]
+   ]
+  },
+  "sph_typen": {
+   "label": "Actieve deelnemers pensioenfonds naar type deelnemer",
+   "bron": "sph",
+   "vindplaats": "Jaarverslag 2024, figuur 6 en 7; de dga's zijn daar apart uitgesplitst",
+   "status": "definitief",
+   "eenheid": "personen",
+   "toelichting": "Figuur 6 telt de dga's mee bij huisartsen in dienstverband; figuur 7 splitst ze apart. Hier staan ze los, omdat een dga een praktijk bezit en geen werknemer is.",
+   "kolommen": [
+    "Type deelnemer",
+    "2020",
+    "2021",
+    "2022",
+    "2023",
+    "2024",
+    "Mutatie"
+   ],
+   "rijen": [
+    [
+     "Vrijgevestigd huisartsen",
+     6476,
+     6249,
+     6143,
+     6031,
+     5909,
+     -0.088
+    ],
+    [
+     "Directeur-grootaandeelhouders",
+     333,
+     384,
+     460,
+     510,
+     570,
+     0.712
+    ],
+    [
+     "Huisartsen in dienstverband",
+     848,
+     922,
+     905,
+     944,
+     1012,
+     0.193
+    ],
+    [
+     "Waarnemend huisartsen",
+     4836,
+     5134,
+     5392,
+     5746,
+     6058,
+     0.253
+    ],
+    [
+     "Huisartsen in opleiding",
+     null,
+     2388,
+     2481,
+     2527,
+     2440,
+     null
+    ],
+    [
+     "Totaal actieve deelnemers",
+     12493,
+     15077,
+     15381,
+     15758,
+     15989,
+     null
+    ]
+   ]
+  },
+  "praktijkhouders_bronnen": {
+   "label": "Hoeveel praktijkhouders? Twee registers, twee antwoorden",
+   "bron": "eigen-berekening",
+   "vindplaats": "Nivel-beroepenregistratie naast het SPH-jaarverslag 2024",
+   "status": "afgeleid",
+   "eenheid": "personen",
+   "kolommen": [
+    "Bron en definitie",
+    "2020",
+    "2023",
+    "2024"
+   ],
+   "rijen": [
+    [
+     "Nivel: zelfstandig gevestigde huisartsen",
+     7602,
+     7561,
+     null
+    ],
+    [
+     "Pensioenfonds: vrijgevestigd plus dga",
+     6809,
+     6541,
+     6479
+    ],
+    [
+     "Verschil",
+     793,
+     1020,
+     null
     ]
    ]
   }

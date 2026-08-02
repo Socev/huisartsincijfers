@@ -56,9 +56,9 @@
     "soort": "Beroepenregistratie"
   },
   "sph": {
-    "titel": "Jaarverslagen 2014 tot en met 2025",
+    "titel": "Jaarrapport 2024 en eerdere jaarverslagen",
     "uitgever": "Stichting Pensioenfonds voor Huisartsen",
-    "datum": "2026",
+    "datum": "2025",
     "url": "https://www.huisartsenpensioen.nl/",
     "soort": "Jaarverslag"
   },
@@ -89,5 +89,19 @@
     "datum": "2026",
     "url": "https://puc.overheid.nl/nza/",
     "soort": "Tariefonderbouwing"
+  },
+  "nivel-arbeidsmarkt": {
+    "titel": "De arbeidsmarkt van de Nederlandse huisartsenzorg in 2024",
+    "uitgever": "Nivel",
+    "datum": "2025",
+    "url": "https://www.nivel.nl/nl/zorg-en-ziekte-in-cijfers/cijfers-arbeidsmarkt-huisartsenzorg",
+    "soort": "Arbeidsmarktonderzoek"
+  },
+  "cbs-azw": {
+    "titel": "AZW StatLine 24015NED — Ziekteverzuim; branche huisartsen en gezondheidscentra",
+    "uitgever": "Centraal Bureau voor de Statistiek",
+    "datum": "2026",
+    "url": "https://azwstatline.cbs.nl/",
+    "soort": "Statistiek"
   }
 }
