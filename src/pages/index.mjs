@@ -49,7 +49,7 @@ export default function () {
 
 <section>
   <h2>Waar deze site over gaat</h2>
-  <p class="sub">Vijf ingangen. Elk cijfer is herleidbaar tot een gepubliceerde bron; wat wij zelf hebben
+  <p class="sub">Zes ingangen. Elk cijfer is herleidbaar tot een gepubliceerde bron; wat wij zelf hebben
   afgeleid staat als zodanig gemarkeerd, met de berekening erbij.</p>
   <div class="grid c2">
     ${tile({ waarde:'Arbeidskosten', href:'/arbeidskosten/',
@@ -60,6 +60,8 @@ export default function () {
       label:'Hoeveel praktijkhouders, huisartsen in dienst en waarnemers er zijn, en hoeveel uur zij werken.' })}
     ${tile({ waarde:'Praktijkkosten', href:'/praktijkkosten/',
       label:'Hoe de kosten van een praktijk zich tussen 2015 en 2022 hebben ontwikkeld, per 1.000 verzekerden.' })}
+    ${tile({ waarde:'Inkomen', href:'/inkomen/',
+      label:'Wat huisarts-ondernemers verdienen volgens het CBS, en waarom dat niet hetzelfde is als de norm in het tarief.' })}
     ${tile({ waarde:'Omzet en scope', href:'/omzet/',
       label:'Het scope-model, de schoning, en waaruit de omzet buiten de honderd procent werkelijk bestaat.' })}
   </div>

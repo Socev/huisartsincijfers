@@ -1,0 +1,610 @@
+{
+ "_titel": "Inkomen van de praktijkhouder tegenover de norm in het tarief",
+ "parameters": {
+  "winst_mp_2023": {
+   "waarde": 173600,
+   "label": "Gemiddelde winst uit onderneming, huisarts-ondernemers met personeel, 2023",
+   "eenheid": "euro",
+   "bron": "cbs-84467",
+   "vindplaats": "SBI 8621, voor aftrek belasting",
+   "status": "definitief"
+  },
+  "winst_mp_med_2023": {
+   "waarde": 161300,
+   "label": "Mediane winst uit onderneming, met personeel, 2023",
+   "eenheid": "euro",
+   "bron": "cbs-84467",
+   "vindplaats": "SBI 8621",
+   "status": "definitief"
+  },
+  "winst_alle_2023": {
+   "waarde": 131000,
+   "label": "Gemiddelde winst uit onderneming, alle huisarts-ondernemers, 2023",
+   "eenheid": "euro",
+   "bron": "cbs-84467",
+   "vindplaats": "SBI 8621, inclusief zelfstandige waarnemers",
+   "status": "definitief"
+  },
+  "dga_2023": {
+   "waarde": 96500,
+   "label": "Gemiddeld persoonlijk inkomen van dga's, 2023",
+   "eenheid": "euro",
+   "bron": "cbs-84467",
+   "vindplaats": "loon uit de eigen bv in plaats van winst",
+   "status": "definitief"
+  },
+  "nac_2023": {
+   "waarde": 163846,
+   "label": "Normatieve arbeidskostencomponent in het tarief, 2023",
+   "eenheid": "euro",
+   "bron": "nza-indexatie",
+   "vindplaats": "kostprijsonderzoek 2015, geindexeerd",
+   "status": "definitief"
+  },
+  "ondernemers_2023": {
+   "waarde": 11000,
+   "label": "Zelfstandig ondernemers in huisartsenpraktijken, 2023",
+   "eenheid": "personen",
+   "bron": "cbs-84467",
+   "vindplaats": "voornaamste inkomen uit de praktijk",
+   "status": "definitief"
+  },
+  "ondernemers_mp_2023": {
+   "waarde": 5600,
+   "label": "Waarvan met personeel in dienst, 2023",
+   "eenheid": "personen",
+   "bron": "cbs-84467",
+   "vindplaats": "beste benadering van het praktijkhouderschap",
+   "status": "definitief"
+  },
+  "bedrijven_2026": {
+   "waarde": 15055,
+   "label": "Ingeschreven huisartsbedrijven, 1 januari 2026",
+   "eenheid": "bedrijven",
+   "bron": "cbs-81589",
+   "vindplaats": "SBI 8621, elke zelfstandige telt als bedrijf",
+   "status": "definitief"
+  }
+ },
+ "reeksen": {
+  "inkomen": {
+   "label": "Inkomen van huisarts-ondernemers, nominaal",
+   "bron": "cbs-84467",
+   "vindplaats": "StatLine 84467NED, SBI 8621",
+   "status": "definitief",
+   "eenheid": "euro",
+   "jaren": [
+    2007,
+    2008,
+    2009,
+    2010,
+    2011,
+    2012,
+    2013,
+    2014,
+    2015,
+    2016,
+    2017,
+    2018,
+    2019,
+    2020,
+    2021,
+    2022,
+    2023
+   ],
+   "reeksen": [
+    {
+     "naam": "Winst, met personeel",
+     "waarden": [
+      130000,
+      129700,
+      131300,
+      129900,
+      138600,
+      133400,
+      127900,
+      133000,
+      127800,
+      136800,
+      137200,
+      142600,
+      151400,
+      164700,
+      166800,
+      158600,
+      173600
+     ]
+    },
+    {
+     "naam": "Winst, alle ondernemers",
+     "waarden": [
+      126900,
+      126800,
+      128300,
+      116400,
+      120900,
+      115200,
+      109900,
+      113100,
+      108300,
+      114800,
+      113200,
+      115200,
+      119400,
+      126700,
+      127600,
+      121400,
+      131000
+     ]
+    },
+    {
+     "naam": "Persoonlijk inkomen dga",
+     "waarden": [
+      67300,
+      69900,
+      73000,
+      75200,
+      78900,
+      81000,
+      84400,
+      82300,
+      87000,
+      85600,
+      93500,
+      90200,
+      94600,
+      93800,
+      94900,
+      95700,
+      96500
+     ]
+    }
+   ]
+  },
+  "inkomen_reeel": {
+   "label": "Inkomen van huisarts-ondernemers, prijspeil 2015",
+   "bron": "eigen-berekening",
+   "vindplaats": "gedeflateerd met de consumentenprijsindex van het CBS",
+   "status": "afgeleid",
+   "eenheid": "euro",
+   "jaren": [
+    2007,
+    2008,
+    2009,
+    2010,
+    2011,
+    2012,
+    2013,
+    2014,
+    2015,
+    2016,
+    2017,
+    2018,
+    2019,
+    2020,
+    2021,
+    2022,
+    2023
+   ],
+   "reeksen": [
+    {
+     "naam": "Winst, met personeel",
+     "waarden": [
+      149083,
+      145127,
+      145179,
+      141828,
+      147872,
+      138900,
+      129927,
+      133803,
+      127800,
+      136364,
+      134907,
+      137858,
+      142615,
+      153195,
+      151101,
+      130610,
+      137679
+     ]
+    },
+    {
+     "naam": "Winst, alle ondernemers",
+     "waarden": [
+      145528,
+      141882,
+      141862,
+      127088,
+      128988,
+      119950,
+      111642,
+      113783,
+      108300,
+      114434,
+      111308,
+      111369,
+      112472,
+      117850,
+      115590,
+      99975,
+      103894
+     ]
+    },
+    {
+     "naam": "Persoonlijk inkomen dga",
+     "waarden": [
+      77179,
+      78214,
+      80716,
+      82105,
+      84178,
+      84340,
+      85738,
+      82797,
+      87000,
+      85327,
+      91937,
+      87200,
+      89111,
+      87248,
+      85968,
+      78811,
+      76533
+     ]
+    }
+   ]
+  },
+  "mediaan": {
+   "label": "Gemiddelde tegenover mediaan, winst uit onderneming",
+   "bron": "cbs-84467",
+   "vindplaats": "StatLine 84467NED",
+   "status": "definitief",
+   "eenheid": "euro",
+   "jaren": [
+    2007,
+    2008,
+    2009,
+    2010,
+    2011,
+    2012,
+    2013,
+    2014,
+    2015,
+    2016,
+    2017,
+    2018,
+    2019,
+    2020,
+    2021,
+    2022,
+    2023
+   ],
+   "reeksen": [
+    {
+     "naam": "Met personeel, gemiddelde",
+     "waarden": [
+      130000,
+      129700,
+      131300,
+      129900,
+      138600,
+      133400,
+      127900,
+      133000,
+      127800,
+      136800,
+      137200,
+      142600,
+      151400,
+      164700,
+      166800,
+      158600,
+      173600
+     ]
+    },
+    {
+     "naam": "Met personeel, mediaan",
+     "waarden": [
+      123700,
+      122400,
+      124400,
+      122200,
+      131200,
+      125000,
+      120000,
+      124000,
+      119400,
+      127200,
+      127900,
+      133900,
+      141800,
+      153400,
+      153600,
+      145400,
+      161300
+     ]
+    },
+    {
+     "naam": "Alle ondernemers, gemiddelde",
+     "waarden": [
+      126900,
+      126800,
+      128300,
+      116400,
+      120900,
+      115200,
+      109900,
+      113100,
+      108300,
+      114800,
+      113200,
+      115200,
+      119400,
+      126700,
+      127600,
+      121400,
+      131000
+     ]
+    },
+    {
+     "naam": "Alle ondernemers, mediaan",
+     "waarden": [
+      120600,
+      119600,
+      120800,
+      106300,
+      109300,
+      104800,
+      98600,
+      102100,
+      96400,
+      102100,
+      100000,
+      101400,
+      105000,
+      110300,
+      110400,
+      103000,
+      110800
+     ]
+    }
+   ]
+  },
+  "norm_vs_werkelijk": {
+   "label": "De norm in het tarief tegenover het werkelijke inkomen",
+   "bron": "eigen-berekening",
+   "vindplaats": "NZa-indexatiereeks naast CBS StatLine 84467NED",
+   "status": "afgeleid",
+   "eenheid": "euro",
+   "jaren": [
+    2007,
+    2008,
+    2009,
+    2010,
+    2011,
+    2012,
+    2013,
+    2014,
+    2015,
+    2016,
+    2017,
+    2018,
+    2019,
+    2020,
+    2021,
+    2022,
+    2023,
+    2024,
+    2025,
+    2026
+   ],
+   "reeksen": [
+    {
+     "naam": "Normatieve arbeidskostencomponent",
+     "waarden": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      128311,
+      128876,
+      131505,
+      135397,
+      140028,
+      144621,
+      147528,
+      154048,
+      163846,
+      171940,
+      202476,
+      219479
+     ]
+    },
+    {
+     "naam": "Winst, met personeel",
+     "waarden": [
+      130000,
+      129700,
+      131300,
+      129900,
+      138600,
+      133400,
+      127900,
+      133000,
+      127800,
+      136800,
+      137200,
+      142600,
+      151400,
+      164700,
+      166800,
+      158600,
+      173600,
+      null,
+      null,
+      null
+     ]
+    }
+   ],
+   "breuk": {
+    "na": 2024,
+    "tekst": "Vanaf 2025 gelden de herijkte kostprijzen. De nac springt daardoor omhoog, terwijl het aantal nac's dat in de tarieven wordt ingerekend juist sterk daalt. De sprong is geen loonstijging."
+   }
+  },
+  "ondernemers": {
+   "label": "Zelfstandig ondernemers in huisartsenpraktijken",
+   "bron": "cbs-84467",
+   "vindplaats": "StatLine 84467NED, voornaamste inkomen",
+   "status": "definitief",
+   "eenheid": "personen",
+   "jaren": [
+    2007,
+    2008,
+    2009,
+    2010,
+    2011,
+    2012,
+    2013,
+    2014,
+    2015,
+    2016,
+    2017,
+    2018,
+    2019,
+    2020,
+    2021,
+    2022,
+    2023,
+    2024
+   ],
+   "reeksen": [
+    {
+     "naam": "Alle zelfstandig ondernemers",
+     "waarden": [
+      6600,
+      6800,
+      6600,
+      8200,
+      8900,
+      9000,
+      9100,
+      9500,
+      9600,
+      9600,
+      9900,
+      10100,
+      10500,
+      10700,
+      10700,
+      10800,
+      11000,
+      11100
+     ]
+    },
+    {
+     "naam": "Waarvan met personeel",
+     "waarden": [
+      6000,
+      6200,
+      5900,
+      6100,
+      6300,
+      6200,
+      6200,
+      5900,
+      5900,
+      5800,
+      5800,
+      6100,
+      6000,
+      5900,
+      5800,
+      5700,
+      5600,
+      5700
+     ]
+    }
+   ]
+  }
+ },
+ "tabellen": {
+  "definities": {
+   "label": "Vier getallen die vaak door elkaar worden gehaald",
+   "bron": "eigen-berekening",
+   "vindplaats": "samenvatting van de brondefinities",
+   "status": "afgeleid",
+   "eenheid": "tekst",
+   "kolommen": [
+    "Getal",
+    "Wat het meet",
+    "Waar het niet in zit"
+   ],
+   "rijen": [
+    [
+     "Normatieve arbeidskostencomponent",
+     "Een kostenpost in de tariefonderbouwing voor de arbeid van één voltijd werkende praktijkhouder, inclusief een opslag voor sociale lasten",
+     "Het is geen uitbetaald bedrag; wat een praktijk overhoudt hangt af van haar eigen kosten en omzet"
+    ],
+    [
+     "Winst uit onderneming",
+     "Het fiscale resultaat van de ondernemer, na alle praktijkkosten en vóór inkomstenbelasting",
+     "Pensioen, arbeidsongeschiktheidsdekking en belasting moeten hier nog uit betaald worden"
+    ],
+    [
+     "Persoonlijk inkomen dga",
+     "Het loon dat een huisarts met een bv zichzelf uitkeert",
+     "Winst die in de bv achterblijft telt hier niet mee, dus dit is geen maat voor het totale rendement"
+    ],
+    [
+     "Aantal bedrijven",
+     "Elke inschrijving in het handelsregister onder de code huisartsenpraktijken",
+     "Ook elke zelfstandige waarnemer met een eigen inschrijving telt mee, dus dit is geen aantal praktijken"
+    ]
+   ]
+  },
+  "tellen": {
+   "label": "Hetzelfde tellen, drie antwoorden",
+   "bron": "eigen-berekening",
+   "vindplaats": "Nivel-beroepenregistratie naast CBS StatLine",
+   "status": "afgeleid",
+   "eenheid": "aantal",
+   "kolommen": [
+    "Grootheid",
+    "Aantal",
+    "Bron en jaar"
+   ],
+   "rijen": [
+    [
+     "Huisartsenpraktijken",
+     4837,
+     "Nivel-beroepenregistratie, 1 januari 2024"
+    ],
+    [
+     "Zelfstandig ondernemers met personeel",
+     5700,
+     "CBS StatLine, 2024"
+    ],
+    [
+     "Zelfstandig gevestigde huisartsen",
+     7561,
+     "Nivel-beroepenregistratie, 2023"
+    ],
+    [
+     "Zelfstandig ondernemers totaal",
+     11100,
+     "CBS StatLine, 2024"
+    ],
+    [
+     "Ingeschreven huisartsbedrijven",
+     15055,
+     "CBS handelsregister, 1 januari 2026"
+    ]
+   ]
+  }
+ }
+}

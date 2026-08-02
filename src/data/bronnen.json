@@ -61,5 +61,33 @@
     "datum": "2026",
     "url": "https://www.huisartsenpensioen.nl/",
     "soort": "Jaarverslag"
+  },
+  "cbs-84467": {
+    "titel": "StatLine 84467NED — Zelfstandigen; inkomen, vermogen, bedrijfstak (SBI 8621)",
+    "uitgever": "Centraal Bureau voor de Statistiek",
+    "datum": "2025",
+    "url": "https://opendata.cbs.nl/statline/#/CBS/nl/dataset/84467NED",
+    "soort": "Statistiek"
+  },
+  "cbs-81589": {
+    "titel": "StatLine 81589NED — Bedrijven naar bedrijfstak (SBI 8621 huisartsenpraktijken)",
+    "uitgever": "Centraal Bureau voor de Statistiek",
+    "datum": "2026",
+    "url": "https://opendata.cbs.nl/statline/#/CBS/nl/dataset/81589NED",
+    "soort": "Statistiek"
+  },
+  "cbs-cpi": {
+    "titel": "StatLine 83131NED — Consumentenprijzen; prijsindex 2015 = 100",
+    "uitgever": "Centraal Bureau voor de Statistiek",
+    "datum": "2026",
+    "url": "https://opendata.cbs.nl/statline/#/CBS/nl/dataset/83131NED",
+    "soort": "Statistiek"
+  },
+  "nza-indexatie": {
+    "titel": "Indexatiecijfers en tariefonderbouwing huisartsenzorg",
+    "uitgever": "Nederlandse Zorgautoriteit",
+    "datum": "2026",
+    "url": "https://puc.overheid.nl/nza/",
+    "soort": "Tariefonderbouwing"
   }
 }

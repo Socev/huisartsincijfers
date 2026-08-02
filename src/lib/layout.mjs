@@ -13,6 +13,7 @@ export const NAV = [
   { href: '/arbeidskosten/',       label: 'Arbeidskosten' },
   { href: '/uren/',                label: 'Uren' },
   { href: '/beroepsgroep/',        label: 'Beroepsgroep' },
+  { href: '/inkomen/',             label: 'Inkomen' },
   { href: '/praktijkkosten/',      label: 'Praktijkkosten' },
   { href: '/tarieven/',            label: 'Tarieven' },
   { href: '/omzet/',               label: 'Omzet en scope' },
@@ -77,6 +78,7 @@ ${proto ? `<div class="proto">Deze site is in opbouw. De cijfers zijn gecontrole
       <a href="/arbeidskosten/">Arbeidskosten praktijkhouder</a>
       <a href="/uren/">Gewerkte uren en de fte-definitie</a>
       <a href="/beroepsgroep/">De beroepsgroep in aantallen</a>
+      <a href="/inkomen/">Inkomen tegenover de norm</a>
       <a href="/praktijkkosten/">Praktijkkosten</a>
       <a href="/omzet/">Omzet, scope en schoning</a></div>
     <div><h4>Verantwoording</h4>
