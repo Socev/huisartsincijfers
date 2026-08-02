@@ -80,6 +80,38 @@
    "bron": "nivel-pik",
    "vindplaats": "figuur 4",
    "status": "definitief"
+  },
+  "hidha_fte_2022": {
+   "waarde": 1121,
+   "label": "Huisartsen in dienst bij een huisarts, landelijk in fte, 2022",
+   "eenheid": "fte",
+   "bron": "eigen-berekening",
+   "vindplaats": "Tabel 37 (0,23 fte per praktijk) maal 4.874 praktijken",
+   "status": "afgeleid"
+  },
+  "vaste_waarnemer_fte_2022": {
+   "waarde": 1706,
+   "label": "Vaste waarnemers, landelijk in fte, 2022",
+   "eenheid": "fte",
+   "bron": "eigen-berekening",
+   "vindplaats": "Tabel 37 (0,35 fte per praktijk) maal 4.874 praktijken",
+   "status": "afgeleid"
+  },
+  "hidha_groei": {
+   "waarde": 0.11,
+   "label": "Groei van de hidha-inzet tussen 2015 en 2022",
+   "eenheid": "aandeel",
+   "bron": "eigen-berekening",
+   "vindplaats": "landelijk omgerekend uit Tabel 37",
+   "status": "afgeleid"
+  },
+  "waarnemer_groei": {
+   "waarde": 0.69,
+   "label": "Groei van de inzet van vaste waarnemers tussen 2015 en 2022",
+   "eenheid": "aandeel",
+   "bron": "eigen-berekening",
+   "vindplaats": "landelijk omgerekend uit Tabel 37",
+   "status": "afgeleid"
   }
  },
  "reeksen": {
@@ -429,6 +461,126 @@
       48.0
      ]
     }
+   ]
+  }
+ },
+ "tabellen": {
+  "hidha_split": {
+   "label": "Huisartsen zonder eigen praktijk, uitgesplitst naar functie",
+   "bron": "eigen-berekening",
+   "vindplaats": "NZa Tabel 37 (fte per praktijk) maal het aantal praktijken volgens Nivel",
+   "status": "afgeleid",
+   "eenheid": "fte",
+   "toelichting": "Het Praktijkkostenonderzoek is de enige bron die hidha, vaste waarnemer en incidenteel waarnemer apart telt. Omgerekend naar landelijk niveau met 5.038 praktijken in 2015 en 4.874 in 2022.",
+   "kolommen": [
+    "Functie",
+    "2015",
+    "2022",
+    "Per praktijk 2015",
+    "Per praktijk 2022",
+    "Mutatie"
+   ],
+   "rijen": [
+    [
+     "Huisarts in dienst bij een huisarts",
+     1008,
+     1121,
+     0.2,
+     0.23,
+     0.11
+    ],
+    [
+     "Vaste waarnemer",
+     1008,
+     1706,
+     0.2,
+     0.35,
+     0.69
+    ],
+    [
+     "Incidenteel waarnemer",
+     554,
+     877,
+     0.11,
+     0.18,
+     0.58
+    ],
+    [
+     "Totaal huisartsen zonder eigen praktijk",
+     2569,
+     3704,
+     0.51,
+     0.76,
+     0.44
+    ]
+   ]
+  },
+  "herindeling": {
+   "label": "Wat er tussen 2019 en 2020 in de Nivel-reeks gebeurde",
+   "bron": "nivel-pik",
+   "vindplaats": "Beroepenregistraties; de drie categorieen tellen op tot het totaal",
+   "status": "definitief",
+   "eenheid": "personen",
+   "kolommen": [
+    "Categorie",
+    "2019",
+    "2020",
+    "Verschil"
+   ],
+   "rijen": [
+    [
+     "Praktijkhouders",
+     7873,
+     7602,
+     -271
+    ],
+    [
+     "Hidha's en vaste waarnemers",
+     2067,
+     3616,
+     1549
+    ],
+    [
+     "Wisselende waarnemers",
+     2899,
+     2146,
+     -753
+    ],
+    [
+     "Totaal werkzame huisartsen",
+     12839,
+     13364,
+     525
+    ]
+   ]
+  },
+  "sph_sluit_niet": {
+   "label": "Waarom het pensioenfonds de uitsplitsing niet kan geven",
+   "bron": "eigen-berekening",
+   "vindplaats": "SPH-jaarverslag 2023 naast de Nivel-beroepenregistratie 2023",
+   "status": "afgeleid",
+   "eenheid": "personen",
+   "kolommen": [
+    "Grootheid",
+    "2023",
+    "Toelichting"
+   ],
+   "rijen": [
+    [
+     "Actieve deelnemers pensioenfonds",
+     15587,
+     "Alle huisartsen die pensioen opbouwen, inclusief aios sinds 2021"
+    ],
+    [
+     "Werkzame huisartsen volgens Nivel",
+     14102,
+     "Praktijkhouders, hidha's, vaste en wisselende waarnemers samen"
+    ],
+    [
+     "Verschil",
+     1485,
+     "Te klein om alle aios te zijn, dus de twee tellingen overlappen deels"
+    ]
    ]
   }
  }

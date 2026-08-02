@@ -1,10 +1,10 @@
 import { pagina } from '../lib/layout.mjs';
 import { w, p, data } from '../lib/data.mjs';
-import { panel, tile, callout, serieChart, dataTable, compareBars } from '../lib/components.mjs';
+import { panel, tile, callout, serieChart, dataTable, compareBars , anwNoot } from '../lib/components.mjs';
 import { num, pct } from '../lib/format.mjs';
 
 export default function () {
-  const R = data.beroepsgroep.reeksen;
+  const R = data.beroepsgroep.reeksen, T = data.beroepsgroep.tabellen;
   const ww = R.werkweek.reeksen;
 
   const body = `
@@ -34,6 +34,42 @@ export default function () {
   ${callout(`Deze verschuiving is precies wat de NZa als verklaring noemt voor de gedaalde arbeidskosten van de
   praktijkhouder in de tariefonderbouwing: er zijn gemiddeld minder praktijkhouders per praktijk, en meer
   huisartsen in loondienst of waarneming. <a href="/praktijkkosten/">Wat dat met de kosten deed</a>.`)}
+</section>
+
+<section>
+  <h2>Loondienst of waarneming? Het is vooral waarneming</h2>
+  <p class="sub">De Nivel-reeks telt hidha's en vaste waarnemers in één categorie, waardoor niet te zien is welke
+  van de twee groeit. Het Praktijkkostenonderzoek splitst ze wél. Omgerekend naar landelijk niveau blijkt de
+  groei bijna helemaal uit waarneming te komen, niet uit loondienst.</p>
+  ${panel(dataTable(T.hidha_split, [null, num, num, v=>num(v,2), v=>num(v,2), v=>pct(v,0)]))}
+  ${panel(compareBars({
+    items:[
+      { label:'Huisarts in dienst bij een huisarts', waarde:0.11, serie:1 },
+      { label:'Incidenteel waarnemer', waarde:0.58, serie:3 },
+      { label:'Vaste waarnemer', waarde:0.69, serie:2 }
+    ], fmt:v=>pct(v,0), caption:'Groei van de landelijke inzet tussen 2015 en 2022, in fte.'
+  }))}
+  ${callout(`De hidha-inzet groeide met ${pct(w('beroepsgroep','hidha_groei'),0)}; de inzet van vaste waarnemers
+  met ${pct(w('beroepsgroep','waarnemer_groei'),0)}. Wie zegt dat huisartsen massaal voor loondienst kiezen,
+  zegt dus iets anders dan de cijfers. De verschuiving gaat naar waarneming — een vorm zonder werkgeversband
+  en zonder praktijkverantwoordelijkheid.`)}
+
+  <h3>De sprong van 2019 op 2020</h3>
+  <p class="sub">In de grafiek hierboven springt de categorie hidha's en vaste waarnemers met ruim vijftienhonderd
+  personen omhoog. Tegelijk daalt de categorie wisselende waarnemers met ruim zevenhonderd, terwijl het totaal
+  maar met ruim vijfhonderd toeneemt. Ongeveer de helft van de sprong is dus herindeling tussen twee categorieën,
+  geen instroom.</p>
+  ${panel(dataTable(T.herindeling, [null, num, num, v => (v>0?'+':'') + num(v)]))}
+
+  <h3>Waarom het pensioenfonds dit niet kan beslechten</h3>
+  <p class="sub">Het pensioenfonds telt deelnemers, niet functies. Een uitsplitsing naar praktijkhouder, hidha of
+  waarnemer staat niet in de jaarverslagen. En een restberekening loopt vast: het verschil met de
+  beroepenregistratie is te klein om alle huisartsen in opleiding te kunnen zijn.</p>
+  ${panel(dataTable(T.sph_sluit_niet, [null, num, null]))}
+  ${callout(`<strong>De twee tellingen sluiten sowieso niet op elkaar aan.</strong> Het Praktijkkostenonderzoek
+  komt voor 2022 uit op ongeveer 2.827 fte hidha's en vaste waarnemers samen, terwijl het Nivel er 4.169 personen
+  telt — 0,68 fte per persoon. Voor 2015 is die verhouding juist 1,15. Zo'n omslag is geen reële verandering maar
+  een teken dat de twee bronnen een andere groep afbakenen. Wij rekenen er daarom niet doorheen.`)}
 </section>
 
 <section>
@@ -67,6 +103,7 @@ export default function () {
     fmt: v => num(v,1), eenheid:' u', caption:'Gewerkte uren per week in 2024, met de eerdere metingen in de toelichting.'
   }))}
   ${panel(serieChart(R.werkweek, { fmt: v => num(v,1), hoogte: 280 }))}
+  ${anwNoot(55.7, 2.6, { kort:true })}
   <p class="small" style="margin-top:12px">De werkweek van de praktijkhouder is de noemer onder het uurbedrag
   op de <a href="/arbeidskosten/">pagina over arbeidskosten</a>.</p>
 </section>`;

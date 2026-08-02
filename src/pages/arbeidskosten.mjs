@@ -1,6 +1,6 @@
 import { pagina } from '../lib/layout.mjs';
 import { w, p, data } from '../lib/data.mjs';
-import { stackedBar, table, panel, callout, dataTable, bronLabel, tile, compareBars } from '../lib/components.mjs';
+import { stackedBar, table, panel, callout, dataTable, bronLabel, tile, compareBars , anwNoot } from '../lib/components.mjs';
 import { eur, eur0, num, pct, mln, esc } from '../lib/format.mjs';
 
 /* Fte's krijgen twee decimalen, bedragen geen — anders leest 171.977,00 als onzin. */
@@ -79,6 +79,7 @@ export default function () {
     ],
     fmt: eur, caption:'Volledige normatieve arbeidsvergoeding per uur, prijspeil 2025.'
   }))}
+  ${anwNoot(w('uren','nivel_werkweek'), w('uren','anw_dienst'), { kort:true })}
   ${callout(`<strong>Waarom deze twee verschillen.</strong> De NZa vraagt alleen naar zorg verlenen, praktijk
   managen en apotheek. Bestuurswerk, extern overleg, nascholing en de dienst vallen buiten de vraagstelling —
   samen ${num(w('uren','niet_uitgevraagd'),1)} uur per week. <a href="/uren/">Die aansluiting staat hier uitgewerkt</a>.`)}

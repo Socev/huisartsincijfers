@@ -221,3 +221,22 @@ export function serieChart(r, { fmt = num, caption, hoogte = 300, yNul = false }
        <span style="color:var(--text-muted)">${esc(r.breuk.tekst)}</span></p>` : '';
   return `${chart}<p class="bron" style="margin-top:10px">${bronLabel(r)}</p>${breuk}`;
 }
+
+/* ---------- vaste toelichting bij de gemeten werkweek ----------
+   De werkweek van Nivel is inclusief de dienst op de huisartsenpost. Die zorg
+   kent een aparte bekostiging en valt buiten de overdagtarieven, dus overal waar
+   de gemeten werkweek wordt getoond hoort deze aftrek erbij. Eén plek, zodat de
+   tekst op elke pagina identiek is. */
+export function anwNoot(bruto, dienst, { kort = false } = {}) {
+  const netto = bruto - dienst;
+  if (kort) return `<p class="small"><b>Let op:</b> de gemeten werkweek van ${num(bruto,1)} uur is inclusief
+    ${num(dienst,1)} uur dienst op de huisartsenpost. Die zorg kent een aparte bekostiging en zit niet in de
+    overdagtarieven. Wie met de tarieven rekent, houdt ${num(netto,1)} uur over.
+    <a href="/uren/#anw">Waarom die aftrek nodig is</a>.</p>`;
+  return `<div class="callout" id="anw"><p><strong>De dienst moet eraf.</strong>
+    Het tijdsbestedingsonderzoek meet ${num(bruto,1)} uur per week voor de praktijkhoudend huisarts,
+    <em>inclusief</em> de dienst op de huisartsenpost. De NZa houdt die zorg bewust buiten de overdagtarieven:
+    zij kent een aparte bekostiging en de opbrengsten vallen buiten scope. Wie de werkweek naast de tarieven
+    legt, moet de ${num(dienst,1)} uur dienst er dus afhalen en met <b>${num(netto,1)} uur</b> rekenen.
+    Doe je dat niet, dan reken je uren toe aan een tarief dat ze niet vergoedt.</p></div>`;
+}

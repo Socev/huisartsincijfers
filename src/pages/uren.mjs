@@ -1,6 +1,6 @@
 import { pagina } from '../lib/layout.mjs';
 import { w, p, data } from '../lib/data.mjs';
-import { panel, callout, dataTable, table, tile, barChart, compareBars, bronLabel, stackedBar } from '../lib/components.mjs';
+import { panel, callout, dataTable, table, tile, barChart, compareBars, bronLabel, stackedBar , anwNoot } from '../lib/components.mjs';
 import { num, pct, uur, eur, esc } from '../lib/format.mjs';
 
 export default function () {
@@ -34,6 +34,7 @@ export default function () {
       { label:'Werkelijke werkweek volgens Nivel', waarde:w('uren','nivel_werkweek'), serie:3, toelichting:'Figuur 18, zelfstandig gevestigde huisartsen' }
     ], fmt:v=>num(v,1), eenheid:' u', caption:'Werkweek praktijkhoudend huisarts, uren per week.'
   }))}
+  ${anwNoot(w('uren','nivel_werkweek'), w('uren','anw_dienst'))}
   <p class="small">De onderverdeling van de niet-patiëntgebonden tijd is afgelezen uit figuur 19 van het
   Nivel-rapport en is bij benadering. De toewijzing wel of niet uitgevraagd is onze interpretatie van de drie
   categorienamen; de NZa licht de vraagstelling nergens verder toe.</p>

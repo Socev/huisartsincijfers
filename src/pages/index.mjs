@@ -1,6 +1,6 @@
 import { pagina } from '../lib/layout.mjs';
 import { w, data } from '../lib/data.mjs';
-import { heroNumber, tile, stackedBar, callout, panel } from '../lib/components.mjs';
+import { heroNumber, tile, stackedBar, callout, panel , anwNoot } from '../lib/components.mjs';
 import { eur, num, pct, uur } from '../lib/format.mjs';
 
 export default function () {
@@ -18,7 +18,8 @@ export default function () {
     `per daadwerkelijk gewerkt uur van de praktijkhoudend huisarts is gedekt door NZa-maximumtarieven,
      van de <b>${eur(bruto)}</b> die in totaal normatief wordt ingerekend`)}
 
-  <div class="grid c4" style="margin:38px 0 0">
+  ${anwNoot(w('uren','nivel_werkweek'), w('uren','anw_dienst'), { kort:true })}
+  <div class="grid c4" style="margin:30px 0 0">
     ${tile({ waarde: num(w('uren','uren_per_nac')), href:'/uren/',
       label:'opgegeven uren koopt één normatieve arbeidskostencomponent. De cao hidha rekent 2.080 uur voor één fte.',
       bron:'Kostprijsonderzoek 2022 · cao hidha' })}
