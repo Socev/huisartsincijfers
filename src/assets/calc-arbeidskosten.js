@@ -2,6 +2,7 @@
   var D = JSON.parse(document.getElementById('calcdata').textContent);
   var el = function (id) { return document.getElementById(id); };
   var jaar = '2025';
+  var START = el('i-week').value;
   var nl = function (n, o) { return n.toLocaleString('nl-NL', o); };
   var eur = function (n) { return '€ ' + nl(n, {minimumFractionDigits:2, maximumFractionDigits:2}); };
   var num = function (n) { return nl(n, {maximumFractionDigits:0}); };
@@ -9,14 +10,13 @@
 
   function bereken() {
     var j = D.jaren[jaar];
-    var ph = +el('i-ph').value, wk = +el('i-week').value, anw = +el('i-anw').value, wn = +el('i-wkn').value;
-    var nacFte = j.ing / D.pf;
-    var uren = ph * (wk - anw) * wn;
+    var wk = +el('i-week').value;                 // netto uren per week, dienst er al af
+    var nacFte = j.ing / D.pf;                    // aantal nac's in de tariefonderbouwing
+    var uren = j.ph * wk * D.wkn;                 // alle uren van alle praktijkhouders
     var bruto = nacFte * j.nac / uren;
     return {
-      bruto: bruto, urenPerNac: uren / nacFte,
-      delen: [bruto*D.b100*D.tg, bruto*D.b100*(1-D.tg), bruto*D.sb, bruto*D.sp],
-      wk: wk, anw: anw, wn: wn, ph: ph
+      bruto: bruto, urenPerNac: uren / nacFte, wk: wk, ph: j.ph,
+      delen: [bruto*D.b100*D.tg, bruto*D.b100*(1-D.tg), bruto*D.sb, bruto*D.sp]
     };
   }
 
@@ -44,31 +44,33 @@
   function update() {
     var r = bereken();
     el('v-week').textContent = nl(r.wk, {minimumFractionDigits:1, maximumFractionDigits:1});
-    el('v-anw').textContent  = nl(r.anw, {minimumFractionDigits:1, maximumFractionDigits:1});
-    el('v-wkn').textContent  = r.wn;
     el('v-ph').textContent   = num(r.ph);
     el('o-tot').textContent  = eur(r.bruto);
     el('o-tar').textContent  = eur(r.delen[0]);
     el('o-uur').textContent  = num(r.urenPerNac);
     el('calcmax').textContent = eur(r.bruto);
+    Array.prototype.forEach.call(document.querySelectorAll('.rt button'), function (b) {
+      b.setAttribute('aria-pressed', String(+b.dataset.week === r.wk));
+    });
     teken(r);
   }
 
-  ['i-week','i-anw','i-wkn','i-ph'].forEach(function (id) {
-    el(id).addEventListener('input', update);
+  el('i-week').addEventListener('input', update);
+
+  document.querySelector('.rt').addEventListener('click', function (e) {
+    var b = e.target.closest('button'); if (!b) return;
+    el('i-week').value = b.dataset.week; update();
   });
+
   el('i-jaar').addEventListener('click', function (e) {
     var b = e.target.closest('button'); if (!b) return;
     jaar = b.dataset.jaar;
     Array.prototype.forEach.call(el('i-jaar').children, function (x) {
       x.setAttribute('aria-pressed', String(x === b));
     });
-    el('i-ph').value = D.jaren[jaar].ph;
     update();
   });
-  el('reset').addEventListener('click', function () {
-    el('i-week').value = 55.7; el('i-anw').value = 2.6; el('i-wkn').value = 46;
-    el('i-ph').value = D.jaren[jaar].ph; update();
-  });
+
+  el('reset').addEventListener('click', function () { el('i-week').value = START; update(); });
   update();
 })();

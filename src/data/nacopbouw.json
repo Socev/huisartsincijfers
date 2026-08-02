@@ -1,0 +1,72 @@
+{
+ "_titel": "Opbouw van de normatieve arbeidskostencomponent",
+ "_let_op": "De namen van de drie zorg-cao's waarop de loonlijn is gebaseerd, en de verdeling van de nac over primaire beloning en sociale lasten, staan niet in de openbare documenten. Beide zijn op deze pagina als openstaande vraag gemarkeerd.",
+ "parameters": {
+  "usb_functiehouder": {"waarde":350,"label":"Functiezwaarte van alleen het functiehouderschap","eenheid":"USB-punten","bron":"berenschot-2026","vindplaats":"kolom 1 van de scoretabel","status":"definitief"},
+  "usb_praktijkhouder": {"waarde":285,"label":"Functiezwaarte van alleen het praktijkhouderschap","eenheid":"USB-punten","bron":"berenschot-2026","vindplaats":"kolom 2 van de scoretabel","status":"definitief"},
+  "usb_maatmens": {"waarde":374,"label":"Functiezwaarte van de maatmens praktijkhoudend huisarts","eenheid":"USB-punten","bron":"berenschot-2026","vindplaats":"kolom 3 van de scoretabel","status":"definitief"},
+  "usb_meerwaarde": {"waarde":24,"label":"Punten die het praktijkhouderschap toevoegt aan het functiehouderschap","eenheid":"USB-punten","bron":"eigen-berekening","vindplaats":"374 min 350, uit de scoretabel","status":"afgeleid"},
+
+  "uren_rekeneenheid": {"waarde":1656,"label":"Rekeneenheid voor een volledige nac: 36 uur maal 46 weken","eenheid":"uur/jaar","bron":"nza-verantwoording-2025","vindplaats":"par. 5.3","status":"definitief"},
+  "uren_ingerekend": {"waarde":2125.4,"label":"Uren waarvoor in de kostprijzen al een volledige nac is ingerekend","eenheid":"uur/jaar","bron":"nza-bob-2026","vindplaats":"randnummer 251","status":"definitief"},
+  "uren_voltijd_gemeten": {"waarde":2357.7,"label":"Gemeten jaarinzet van een voltijd werkende praktijkhouder","eenheid":"uur/jaar","bron":"nza-bob-2026","vindplaats":"randnummer 251 en bijlage 6","status":"definitief"},
+  "werkweek_cbb": {"waarde":46.5,"label":"Gemiddelde werkweek praktijkhoudend huisarts volgens het Verantwoordingsdocument","eenheid":"uur/week","bron":"cbb-2025","vindplaats":"r.o. 5.8.3, citaat uit het Verantwoordingsdocument","status":"definitief"},
+
+  "stap_1_datum": {"waarde":2024,"label":"Jaar waarin Berenschot het eerste functiewaarderingsrapport oplevert","eenheid":"jaar","bron":"berenschot-2024","vindplaats":"23 april 2024","status":"definitief"},
+  "aantal_cao": {"waarde":3,"label":"Aantal zorg-cao's in de benchmark voor de primaire beloning","eenheid":"cao's","bron":"nza-verantwoording-2025","vindplaats":"par. 5.1, stap 3","status":"definitief"},
+  "cao_fulltime": {"waarde":36,"label":"Voltijdnorm in de cao's waarop de loonlijn is gebaseerd","eenheid":"uur/week","bron":"nza-bob-2026","vindplaats":"randnummer 424","status":"definitief"}
+ },
+ "tabellen": {
+  "usb_scores": {
+   "label": "Functiewaardering praktijkhoudend huisarts per gezichtspunt, in USB-punten",
+   "bron":"berenschot-2026","vindplaats":"scoretabel functiewaardering","status":"definitief","eenheid":"USB-punten",
+   "kolommen": ["Gezichtspunt","Functiehouderschap","Praktijkhouderschap","Maatmens","Doorslaggevend"],
+   "rijen": [
+    ["Verantwoordelijkheidsbereik — invloed en gevolg", 60, 42, 60, "functiehouderschap"],
+    ["Leidinggeven — hiërarchisch", 0, 21, 21, "praktijkhouderschap"],
+    ["Leidinggeven — operationeel extern", 0, 3, 3, "praktijkhouderschap"],
+    ["Kennis en complexiteit", 96, 78, 96, "functiehouderschap"],
+    ["Probleemoplossing", 102, 90, 102, "functiehouderschap"],
+    ["Communicatie en overleg", 78, 51, 78, "functiehouderschap"],
+    ["Bewegingsvaardigheid en -gevoel", 10, 0, 10, "functiehouderschap"],
+    ["Persoonlijk risico", 4, 0, 4, "functiehouderschap"],
+    ["Totaal", 350, 285, 374, "—"]
+   ],
+   "toelichting": "Kolom 3 is per gezichtspunt de hoogste van de twee voorgaande kolommen. De maatmens is dus geen optelsom van beide rollen, maar het maximum per gezichtspunt."
+  },
+  "stappen": {
+   "label": "De vijf stappen waarmee de nac tot stand komt",
+   "bron":"nza-verantwoording-2025","vindplaats":"par. 5.1","status":"definitief","eenheid":"",
+   "kolommen": ["Stap","Wat er gebeurt","Openbaar controleerbaar"],
+   "rijen": [
+    ["1. Functiebeeld","Berenschot stelt twee functiebeelden op — functiehouderschap en praktijkhouderschap — en voegt ze samen tot de ‘maatmens praktijkhoudend huisarts’.","Ja, in bijlage 4"],
+    ["2. Weging","De zwaarte van die maatmens wordt vastgesteld met het Universeel Systeem Berenschot, verdeeld over acht gezichtspunten.","Ja, scoretabel in bijlage 4"],
+    ["3. Loonlijn","Uit een benchmark met drie zorg-cao's volgt een wiskundig verband tussen functiezwaarte en beloning. Op die lijn wordt de primaire beloning afgelezen.","Nee — cao's en formule niet gepubliceerd"],
+    ["4. Sociale lasten","Op de primaire beloning komen toeslagen voor sociale lasten.","Nee — hoogte niet gepubliceerd"],
+    ["5. Optelling","Primaire beloning plus sociale lasten vormen samen de nac.","Alleen het eindbedrag"]
+   ]
+  },
+  "uren_varianten": {
+   "label": "Hoeveel uur hoort er bij één nac? Vier antwoorden, alle vier van de NZa zelf",
+   "bron":"eigen-berekening","vindplaats":"samengesteld uit de genoemde vindplaatsen","status":"afgeleid","eenheid":"uur/jaar",
+   "kolommen": ["Antwoord","Uren per jaar","Nac 2026 per uur","Waar het staat"],
+   "rijen": [
+    ["De rekeneenheid: 36 uur maal 46 weken", 1656, 132.54, "Verantwoordingsdocument par. 5.3"],
+    ["De uren waarvoor al een volledige nac is ingerekend", 2125.4, 103.26, "Beslissing op bezwaar, rn. 251"],
+    ["De gemeten jaarinzet van een voltijd werkende praktijkhouder", 2357.7, 93.09, "Beslissing op bezwaar, rn. 251"],
+    ["Dezelfde jaarinzet, maar dan inclusief de uren die de NZa niet uitvraagt", null, null, "Niet gemeten — zie de pagina over uren"]
+   ],
+   "toelichting": "De nac 2026 bedraagt € 219.479 per fte. De vierde rij is leeg omdat de urenuitvraag bestuur, extern overleg, nascholing en de dienst op de post niet meet."
+  }
+ },
+ "reeksen": {
+  "nac": {
+   "label": "De normatieve arbeidskostencomponent per fte",
+   "bron":"nza-verantwoording-2025","vindplaats":"par. 5.1 en 5.2, addendum en beslissing op bezwaar","status":"definitief",
+   "jaren": [2022, 2024, 2025, 2026],
+   "reeksen": [
+    {"naam":"Nac per fte praktijkhoudend huisarts","waarden":[172387, 194352, 202476, 219479]}
+   ]
+  }
+ }
+}

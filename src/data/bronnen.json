@@ -1,107 +1,142 @@
 {
-  "nza-verantwoording-2025": {
-    "titel": "Verantwoordingsdocument tarieven huisartsenzorg 2025 (na herbeoordeling)",
-    "uitgever": "Nederlandse Zorgautoriteit",
-    "datum": "2026-06-30",
-    "url": "https://puc.overheid.nl/nza/",
-    "soort": "Tariefonderbouwing"
-  },
-  "nza-addendum-2026": {
-    "titel": "Addendum bij verantwoording tarieven huisartsenzorg vanaf 2026",
-    "uitgever": "Nederlandse Zorgautoriteit",
-    "datum": "2026-06-30",
-    "url": "https://puc.overheid.nl/nza/",
-    "soort": "Tariefonderbouwing"
-  },
-  "nza-qa-2026": {
-    "titel": "Vraag en antwoord tarieven huisartsenzorg na herbeoordeling",
-    "uitgever": "Nederlandse Zorgautoriteit",
-    "datum": "2026-07-13",
-    "url": "https://puc.overheid.nl/doc/PUC_823040_22",
-    "soort": "Voorlichting"
-  },
-  "nivel-werkweek-2024": {
-    "titel": "De werkweek van de Nederlandse huisarts in 2024",
-    "uitgever": "Nivel",
-    "datum": "2025",
-    "url": "https://www.nivel.nl/nl/publicatie/de-werkweek-van-de-nederlandse-huisarts-2024-en-een-vergelijking-met-2018-en-2013",
-    "soort": "Tijdsbestedingsonderzoek"
-  },
-  "pko-microdata": {
-    "titel": "Onderliggende gegevens kostprijsonderzoek huisartsenzorg, onderzoeksjaar 2022",
-    "uitgever": "Nederlandse Zorgautoriteit en Sira Consulting",
-    "datum": "2023",
-    "url": null,
-    "soort": "Niet-openbare brongegevens"
-  },
-  "cbb-2025": {
-    "titel": "Uitspraak tarieven huisartsenzorg, ECLI:NL:CBB:2025:606",
-    "uitgever": "College van Beroep voor het bedrijfsleven",
-    "datum": "2025-11-18",
-    "url": "https://uitspraken.rechtspraak.nl/details?id=ECLI:NL:CBB:2025:606",
-    "soort": "Rechtspraak"
-  },
-  "eigen-berekening": {
-    "titel": "Eigen berekening op basis van de genoemde bronnen",
-    "uitgever": "huisartsincijfers.nl",
-    "datum": "2026-08-02",
-    "url": "https://github.com/Socev/huisartsincijfers",
-    "soort": "Afgeleid"
-  },
-  "nivel-pik": {
-    "titel": "Huisartsen en praktijken in kaart; Beroepenregistraties",
-    "uitgever": "Nivel",
-    "datum": "2025-01",
-    "url": "https://www.nivel.nl/nl/zorg-en-ziekte-in-cijfers/cijfers-arbeidsmarkt-huisartsenzorg",
-    "soort": "Beroepenregistratie"
-  },
-  "sph": {
-    "titel": "Jaarrapport 2024 en eerdere jaarverslagen",
-    "uitgever": "Stichting Pensioenfonds voor Huisartsen",
-    "datum": "2025",
-    "url": "https://www.huisartsenpensioen.nl/",
-    "soort": "Jaarverslag"
-  },
-  "cbs-84467": {
-    "titel": "StatLine 84467NED — Zelfstandigen; inkomen, vermogen, bedrijfstak (SBI 8621)",
-    "uitgever": "Centraal Bureau voor de Statistiek",
-    "datum": "2025",
-    "url": "https://opendata.cbs.nl/statline/#/CBS/nl/dataset/84467NED",
-    "soort": "Statistiek"
-  },
-  "cbs-81589": {
-    "titel": "StatLine 81589NED — Bedrijven naar bedrijfstak (SBI 8621 huisartsenpraktijken)",
-    "uitgever": "Centraal Bureau voor de Statistiek",
-    "datum": "2026",
-    "url": "https://opendata.cbs.nl/statline/#/CBS/nl/dataset/81589NED",
-    "soort": "Statistiek"
-  },
-  "cbs-cpi": {
-    "titel": "StatLine 83131NED — Consumentenprijzen; prijsindex 2015 = 100",
-    "uitgever": "Centraal Bureau voor de Statistiek",
-    "datum": "2026",
-    "url": "https://opendata.cbs.nl/statline/#/CBS/nl/dataset/83131NED",
-    "soort": "Statistiek"
-  },
-  "nza-indexatie": {
-    "titel": "Indexatiecijfers en tariefonderbouwing huisartsenzorg",
-    "uitgever": "Nederlandse Zorgautoriteit",
-    "datum": "2026",
-    "url": "https://puc.overheid.nl/nza/",
-    "soort": "Tariefonderbouwing"
-  },
-  "nivel-arbeidsmarkt": {
-    "titel": "De arbeidsmarkt van de Nederlandse huisartsenzorg in 2024",
-    "uitgever": "Nivel",
-    "datum": "2025",
-    "url": "https://www.nivel.nl/nl/zorg-en-ziekte-in-cijfers/cijfers-arbeidsmarkt-huisartsenzorg",
-    "soort": "Arbeidsmarktonderzoek"
-  },
-  "cbs-azw": {
-    "titel": "AZW StatLine 24015NED — Ziekteverzuim; branche huisartsen en gezondheidscentra",
-    "uitgever": "Centraal Bureau voor de Statistiek",
-    "datum": "2026",
-    "url": "https://azwstatline.cbs.nl/",
-    "soort": "Statistiek"
-  }
+ "nza-verantwoording-2025": {
+  "titel": "Verantwoordingsdocument tarieven huisartsenzorg 2025 (na herbeoordeling)",
+  "uitgever": "Nederlandse Zorgautoriteit",
+  "datum": "2026-06-30",
+  "url": "https://puc.overheid.nl/nza/",
+  "soort": "Tariefonderbouwing"
+ },
+ "nza-addendum-2026": {
+  "titel": "Addendum bij verantwoording tarieven huisartsenzorg vanaf 2026",
+  "uitgever": "Nederlandse Zorgautoriteit",
+  "datum": "2026-06-30",
+  "url": "https://puc.overheid.nl/nza/",
+  "soort": "Tariefonderbouwing"
+ },
+ "nza-qa-2026": {
+  "titel": "Vraag en antwoord tarieven huisartsenzorg na herbeoordeling",
+  "uitgever": "Nederlandse Zorgautoriteit",
+  "datum": "2026-07-13",
+  "url": "https://puc.overheid.nl/doc/PUC_823040_22",
+  "soort": "Voorlichting"
+ },
+ "nivel-werkweek-2024": {
+  "titel": "De werkweek van de Nederlandse huisarts in 2024",
+  "uitgever": "Nivel",
+  "datum": "2025",
+  "url": "https://www.nivel.nl/nl/publicatie/de-werkweek-van-de-nederlandse-huisarts-2024-en-een-vergelijking-met-2018-en-2013",
+  "soort": "Tijdsbestedingsonderzoek"
+ },
+ "pko-microdata": {
+  "titel": "Onderliggende gegevens kostprijsonderzoek huisartsenzorg, onderzoeksjaar 2022",
+  "uitgever": "Nederlandse Zorgautoriteit en Sira Consulting",
+  "datum": "2023",
+  "url": null,
+  "soort": "Niet-openbare brongegevens"
+ },
+ "cbb-2025": {
+  "titel": "Uitspraak tarieven huisartsenzorg, ECLI:NL:CBB:2025:606",
+  "uitgever": "College van Beroep voor het bedrijfsleven",
+  "datum": "2025-11-18",
+  "url": "https://uitspraken.rechtspraak.nl/details?id=ECLI:NL:CBB:2025:606",
+  "soort": "Rechtspraak"
+ },
+ "eigen-berekening": {
+  "titel": "Eigen berekening op basis van de genoemde bronnen",
+  "uitgever": "huisartsincijfers.nl",
+  "datum": "2026-08-02",
+  "url": "https://github.com/Socev/huisartsincijfers",
+  "soort": "Afgeleid"
+ },
+ "nivel-pik": {
+  "titel": "Huisartsen en praktijken in kaart; Beroepenregistraties",
+  "uitgever": "Nivel",
+  "datum": "2025-01",
+  "url": "https://www.nivel.nl/nl/zorg-en-ziekte-in-cijfers/cijfers-arbeidsmarkt-huisartsenzorg",
+  "soort": "Beroepenregistratie"
+ },
+ "sph": {
+  "titel": "Jaarrapport 2024 en eerdere jaarverslagen",
+  "uitgever": "Stichting Pensioenfonds voor Huisartsen",
+  "datum": "2025",
+  "url": "https://www.huisartsenpensioen.nl/",
+  "soort": "Jaarverslag"
+ },
+ "cbs-84467": {
+  "titel": "StatLine 84467NED — Zelfstandigen; inkomen, vermogen, bedrijfstak (SBI 8621)",
+  "uitgever": "Centraal Bureau voor de Statistiek",
+  "datum": "2025",
+  "url": "https://opendata.cbs.nl/statline/#/CBS/nl/dataset/84467NED",
+  "soort": "Statistiek"
+ },
+ "cbs-81589": {
+  "titel": "StatLine 81589NED — Bedrijven naar bedrijfstak (SBI 8621 huisartsenpraktijken)",
+  "uitgever": "Centraal Bureau voor de Statistiek",
+  "datum": "2026",
+  "url": "https://opendata.cbs.nl/statline/#/CBS/nl/dataset/81589NED",
+  "soort": "Statistiek"
+ },
+ "cbs-cpi": {
+  "titel": "StatLine 83131NED — Consumentenprijzen; prijsindex 2015 = 100",
+  "uitgever": "Centraal Bureau voor de Statistiek",
+  "datum": "2026",
+  "url": "https://opendata.cbs.nl/statline/#/CBS/nl/dataset/83131NED",
+  "soort": "Statistiek"
+ },
+ "nza-indexatie": {
+  "titel": "Indexatiecijfers en tariefonderbouwing huisartsenzorg",
+  "uitgever": "Nederlandse Zorgautoriteit",
+  "datum": "2026",
+  "url": "https://puc.overheid.nl/nza/",
+  "soort": "Tariefonderbouwing"
+ },
+ "nivel-arbeidsmarkt": {
+  "titel": "De arbeidsmarkt van de Nederlandse huisartsenzorg in 2024",
+  "uitgever": "Nivel",
+  "datum": "2025",
+  "url": "https://www.nivel.nl/nl/zorg-en-ziekte-in-cijfers/cijfers-arbeidsmarkt-huisartsenzorg",
+  "soort": "Arbeidsmarktonderzoek"
+ },
+ "cbs-azw": {
+  "titel": "AZW StatLine 24015NED — Ziekteverzuim; branche huisartsen en gezondheidscentra",
+  "uitgever": "Centraal Bureau voor de Statistiek",
+  "datum": "2026",
+  "url": "https://azwstatline.cbs.nl/",
+  "soort": "Statistiek"
+ },
+ "berenschot-2024": {
+  "titel": "Naar functiezwaarte belonen — herijking arbeidskosten praktijkhouders",
+  "uitgever": "Berenschot, in opdracht van de Nederlandse Zorgautoriteit",
+  "datum": "2024-04-23",
+  "url": "https://puc.overheid.nl/nza/",
+  "soort": "Functiewaarderingsonderzoek"
+ },
+ "berenschot-2026": {
+  "titel": "Functiezwaarte huisartsenzorg (bijlage 4 bij het verantwoordingsdocument)",
+  "uitgever": "Berenschot, in opdracht van de Nederlandse Zorgautoriteit",
+  "datum": "2026-05-12",
+  "url": "https://puc.overheid.nl/nza/",
+  "soort": "Functiewaarderingsonderzoek"
+ },
+ "nza-bob-2026": {
+  "titel": "(Herziene) Beslissing op bezwaar huisartsenzorg 2023, 2024, 2025 en 2026",
+  "uitgever": "Nederlandse Zorgautoriteit",
+  "datum": "2026-06-30",
+  "url": "https://puc.overheid.nl/nza/",
+  "soort": "Besluit"
+ },
+ "nza-tb-2026": {
+  "titel": "Tariefbeschikking huisartsenzorg en multidisciplinaire zorg 2026, TB/REG-26611-02",
+  "uitgever": "Nederlandse Zorgautoriteit",
+  "datum": "2026-06-30",
+  "url": "https://puc.overheid.nl/nza/",
+  "soort": "Tariefbeschikking"
+ },
+ "cao-hidha": {
+  "titel": "Cao Huisarts in dienst bij een huisarts 2022-2024",
+  "uitgever": "LHV, LAD en InEen",
+  "datum": "2022",
+  "url": "https://www.lhv.nl/",
+  "soort": "Collectieve arbeidsovereenkomst"
+ }
 }

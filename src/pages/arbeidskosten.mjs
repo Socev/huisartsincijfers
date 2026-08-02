@@ -1,6 +1,6 @@
 import { pagina } from '../lib/layout.mjs';
 import { w, p, data } from '../lib/data.mjs';
-import { stackedBar, table, panel, callout, dataTable, bronLabel, tile, compareBars , anwNoot } from '../lib/components.mjs';
+import { stackedBar, table, panel, callout, dataTable, bronLabel, tile, compareBars, anwNoot, heroNumber } from '../lib/components.mjs';
 import { eur, eur0, num, pct, mln, esc } from '../lib/format.mjs';
 
 /* Fte's krijgen twee decimalen, bedragen geen — anders leest 171.977,00 als onzin. */
@@ -17,9 +17,34 @@ export default function () {
     return { bruto:n, afB:n*sb, afP:n*sp, binnen:n*b100, tg:n*b100*tg, vrij:n*b100*(1-tg), nac:J[jr].nac };
   };
   const c25 = cascade(2025), c26 = cascade(2026);
+  /* De urenslider loopt van de NZa-uitvraag tot de Nivel-werkweek min de dienst. */
+  const nzaU = w('uren','nza_uren_per_fte'),
+        netU = +(w('uren','nivel_werkweek') - w('uren','anw_dienst')).toFixed(1);
   const rij = (lbl, k, extra='') => [lbl, num(c25[k],0), num(c26[k],0), mln(c25[k]*c25.nac), mln(c26[k]*c26.nac), extra];
 
+  const nJaar = netU * w('uren','werkweken');            // Nivel-werkweek exclusief dienst, maal 46 weken
+  const zJaar = nzaU * w('uren','werkweken');            // de urenopgaaf van de NZa, maal dezelfde 46 weken
+
   const body = `
+<section>
+  <h2>Ruim zevenduizend mensen, minder dan zesduizend vergoedingen</h2>
+  ${heroNumber(num(c25.binnen/J[2025].ph, 2),
+    `nac in de tariefonderbouwing per praktijkhoudend huisarts. Niet per fte — per persoon.`)}
+  <p class="sub" style="margin-top:20px">Nederland telt ongeveer ${num(J[2025].ph)} praktijkhoudend
+  huisartsen. Zij werken gemiddeld ${num(netU,1)} uur per week, de dienst op de post er al vanaf. Tegenover
+  die hele groep staan in de tariefonderbouwing ${num(c25.bruto,0)} nac’s, en na schoning blijven er
+  ${num(c25.binnen,0)} over die de gereguleerde tarieven moeten dekken. Ruim zevenduizend mensen die stuk
+  voor stuk fors boven voltijd werken, komen samen uit op minder dan zesduizend volledige
+  arbeidsvergoedingen. Hoe kan dat?</p>
+  ${callout(`<strong>Drie mechanismen, alle drie legitiem op zichzelf.</strong>
+  <b>Eén:</b> het aantal nac’s volgt niet uit het aantal huisartsen maar uit het aantal patiënten, gedeeld
+  door ${num(pf)}. <b>Twee:</b> een werktijdfactor is afgetopt op 1,0, zodat wie ${num(netU,1)} uur werkt
+  precies evenveel telt als wie er ${num(36)} maakt — de uren daarboven verdwijnen uit de telling.
+  <b>Drie:</b> ${pct(1-b100,1)} van de uitkomst wordt geschoond, omdat die arbeid volgens de NZa elders
+  wordt betaald. Samen verklaren ze het verschil precies. De vraag is niet of de rekensom klopt, maar of de
+  uitkomst is wat je wilt.`)}
+</section>
+
 <section>
   <h2>Van werkelijke bezetting naar dekkingsbron</h2>
   <p class="sub">De NZa bepaalt het aantal fte praktijkhoudend huisarts uit de opgegeven uren, vermenigvuldigt dat
@@ -58,10 +83,15 @@ export default function () {
   <p class="sub">De nac is een normbedrag voor een voltijd werkende praktijkhoudend huisarts. Het bedrag zelf staat
   niet ter discussie op deze pagina; wat opvalt is hoeveel uren er tegenover staan.</p>
   <div class="grid c3">
-    ${tile({ waarde: eur0(w('nac','nac_2026')), label:'normatieve arbeidskostencomponent per fte, prijspeil 2026', bron:'NZa, vraag en antwoord 13 juli 2026' })}
-    ${tile({ waarde: num(w('nac','usb_punten')), label:'USB-punten functiezwaarte, ongewijzigd na de herbeoordeling van november 2025', bron:'NZa Tabel 8' })}
-    ${tile({ waarde: num(w('uren','uren_per_nac')), label:'opgegeven uren per jaar tegenover één nac', bron:'Microdata kostprijsonderzoek', href:'/uren/' })}
+    ${tile({ waarde: eur0(w('nac','nac_2026')), label:'normatieve arbeidskostencomponent per fte, prijspeil 2026', bron:'NZa, vraag en antwoord 13 juli 2026', href:'/nac/' })}
+    ${tile({ waarde: num(nJaar,0), label:`uur per jaar werkt een praktijkhoudend huisarts volgens het Nivel — ${num(netU,1)} uur per week, exclusief dienst, maal ${num(w('uren','werkweken'))} weken`, bron:'Nivel, De werkweek van de Nederlandse huisarts in 2024', href:'/uren/' })}
+    ${tile({ waarde: num(zJaar,0), label:`uur per jaar rekent de NZa als één volledige nac — ${num(nzaU,1)} uur per week uit het kostprijsonderzoek 2022`, bron:'NZa, vraag en antwoord 13 juli 2026', href:'/nac/#uren' })}
   </div>
+  ${callout(`<strong>Het verschil is ${num(nJaar-zJaar,0)} uur per jaar.</strong> Dat is ${pct(nJaar/zJaar-1,1)}
+  meer werk dan waarvoor één volledige arbeidsvergoeding in de kostprijs zit — en beide getallen gaan over
+  dezelfde ${num(w('uren','werkweken'))} werkweken. Het verschil is geen meetfout: de NZa vraagt bewust niet
+  naar bestuurswerk, extern overleg en nascholing. <a href="/uren/">Wat er precies buiten de vraagstelling
+  valt</a>.`)}
 </section>
 
 <section>
@@ -87,21 +117,22 @@ export default function () {
 
 <section id="rekentool">
   <h2>Reken zelf mee</h2>
-  <p class="sub">Alle aannames staan open. Verschuif ze en kijk welke conclusies overeind blijven.</p>
+  <p class="sub">Eén knop die er werkelijk toe doet: hoeveel uur per week rekenen we mee. De ondergrens is de
+  urenopgaaf die de NZa zelf uitvraagt, de bovengrens is de gemeten werkweek van de zelfstandig gevestigde
+  huisarts ná aftrek van de dienst op de post. Daartussen ligt precies de tijd die niet wordt uitgevraagd.</p>
   ${panel(`<div class="calc">
     <div>
       <div class="ctrl"><label>Prijspeil</label>
         <div class="segbtn" id="i-jaar">
           <button type="button" data-jaar="2025" aria-pressed="true">2025</button>
           <button type="button" data-jaar="2026" aria-pressed="false">2026</button></div></div>
-      <div class="ctrl"><label for="i-week">Werkweek praktijkhouder <b><span id="v-week"></span> u</b></label>
-        <input type="range" id="i-week" min="40" max="65" step="0.1" value="${w('uren','nivel_werkweek')}"></div>
-      <div class="ctrl"><label for="i-anw">Af: dienst op de post <b><span id="v-anw"></span> u</b></label>
-        <input type="range" id="i-anw" min="0" max="10" step="0.1" value="${w('uren','anw_dienst')}"></div>
-      <div class="ctrl"><label for="i-wkn">Werkweken per jaar <b><span id="v-wkn"></span></b></label>
-        <input type="range" id="i-wkn" min="40" max="52" step="1" value="${w('uren','werkweken')}"></div>
-      <div class="ctrl"><label for="i-ph">Aantal praktijkhouders <b><span id="v-ph"></span></b></label>
-        <input type="range" id="i-ph" min="6800" max="8200" step="1" value="${J[2025].ph}"></div>
+      <div class="ctrl">
+        <label for="i-week">Werkweek, exclusief dienst <b><span id="v-week"></span> u</b></label>
+        <input type="range" id="i-week" min="${nzaU}" max="${netU.toFixed(1)}" step="0.1" value="${netU.toFixed(1)}">
+        <div class="rt"><button type="button" data-week="${nzaU}">${num(nzaU,1)} u<i>uitvraag NZa</i></button><button type="button" data-week="${netU.toFixed(1)}">${num(netU,1)} u<i>Nivel, excl. dienst</i></button></div>
+      </div>
+      <p class="vast">Vast gehouden: <b>${num(w('uren','werkweken'))} werkweken</b> per jaar, zoals in de
+      fte-formule van de NZa, en <b><span id="v-ph"></span> praktijkhouders</b> in het gekozen jaar.</p>
       <button class="linkbtn" type="button" id="reset">Terug naar de brongegevens</button>
     </div>
     <div>
@@ -115,11 +146,13 @@ export default function () {
       <div class="legend" id="calcleg"></div>
     </div>
   </div>`)}
-  <p class="small" style="margin-top:14px">Deze rekentool gebruikt dezelfde datalaag als de cijfers hierboven.</p>
+  <p class="small" style="margin-top:14px">Deze rekentool gebruikt dezelfde datalaag als de cijfers hierboven.
+  Het aantal nac's volgt uit de ingeschreven verzekerden gedeeld door ${num(pf)}; de verdeling over
+  dekkingsbronnen is de schoning uit de tabel bovenaan deze pagina.</p>
 </section>
 
 <script id="calcdata" type="application/json">${JSON.stringify({
-  jaren:J, pf, sb, sp, b100, tg, bronnen:data.nac.dekkingsbronnen
+  jaren:J, pf, sb, sp, b100, tg, wkn:w('uren','werkweken'), bronnen:data.nac.dekkingsbronnen
 })}</script>
 <script src="/calc-arbeidskosten.js" defer></script>`;
 

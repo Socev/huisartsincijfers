@@ -66,27 +66,39 @@ export default function () {
   type. Figuur 6 telt de directeur-grootaandeelhouders mee bij de huisartsen in dienstverband; figuur 7 splitst
   ze apart. Dat onderscheid is wezenlijk: een dga bezit een praktijk en is geen werknemer. Hieronder staan ze
   daarom los.</p>
+  ${panel(serieChart(R.sph_typen_index, { fmt: v => num(v,0), hoogte: 330 }))}
+  ${callout(`<strong>Waarom deze grafiek geindexeerd is.</strong> In absolute aantallen overheersen de twee
+  grote groepen en zie je de kleine groepen niet bewegen. Juist daar gebeurt het meeste: de
+  directeur-grootaandeelhouders groeien met ${pct(w('beroepsgroep','sph_dga_groei'),1)} in vier jaar en de
+  huisartsen in dienstverband met ${pct(w('beroepsgroep','sph_hidha_groei'),1)}. Dat is relevant voor de
+  kosten van een praktijk, want een hidha is duurder dan een waarnemer die per uur wordt ingehuurd — hij
+  brengt vakantie, scholing, doorbetaling bij ziekte en werkgeverslasten mee.
+  <a href="/praktijkkosten/">Wat dat doet met de personeelskosten</a>.`)}
   ${panel(dataTable(T.sph_typen, [null, num, num, num, num, num, v=>pct(v,1)]))}
-  ${panel(serieChart(R.sph_typen, { fmt: num, hoogte: 320, yNul: true }))}
-  ${callout(`Drie bewegingen tegelijk. De vrijgevestigden dalen van ${num(6476)} naar
-  ${num(w('beroepsgroep','sph_vrijgevestigd_2024'))}. De waarnemers stijgen van ${num(4836)} naar
-  ${num(w('beroepsgroep','sph_waarnemend_2024'))} — en zijn daarmee inmiddels de grootste groep werkende
-  huisartsen. De echte huisartsen in dienstverband groeien van ${num(848)} naar
-  ${num(w('beroepsgroep','sph_hidha_2024'))}: reëel, maar bescheiden naast de waarneming.`)}
-  <p class="small">Dit bevestigt onafhankelijk wat het Praktijkkostenonderzoek liet zien: de verschuiving gaat
-  naar waarneming, niet naar loondienst. De ${num(w('beroepsgroep','sph_hidha_2024'))} hidha's van het
-  pensioenfonds liggen bovendien dicht bij de ${num(w('beroepsgroep','hidha_fte_2022'))} fte die uit het
-  kostprijsonderzoek volgt — twee bronnen die elkaar hier wél naderen.</p>
+  <p class="small">Vier bewegingen tegelijk, alle vier in dezelfde richting: weg van het klassieke
+  praktijkhouderschap. De vrijgevestigden dalen met ${pct(Math.abs(w('beroepsgroep','sph_vrijgevestigd_daling')),1)},
+  de waarnemers stijgen met ${pct(w('beroepsgroep','sph_waarnemend_groei'),1)} en zijn inmiddels de grootste
+  groep werkende huisartsen, de hidha's met ${pct(w('beroepsgroep','sph_hidha_groei'),1)} en de dga's met
+  ${pct(w('beroepsgroep','sph_dga_groei'),1)}. Dat bevestigt onafhankelijk wat het Praktijkkostenonderzoek
+  liet zien: de verschuiving gaat vooral naar waarneming.</p>
 
   <h3>Hoeveel praktijkhouders zijn er dan?</h3>
-  <p class="sub">Tel je de dga's bij de vrijgevestigden op, dan komt het pensioenfonds op
-  ${num(w('beroepsgroep','sph_praktijkhouders_2024'))} praktijkhouders in 2024. Het Nivel telde er in 2023
-  ${num(w('beroepsgroep','praktijkhouders_2023'))}. Dat scheelt ruim duizend mensen.</p>
+  <p class="sub">Deelname aan het pensioenfonds is voor praktijkhoudende huisartsen verplicht. Toch telt het
+  fonds er duidelijk minder dan het Nivel. Tel je de dga's bij de vrijgevestigden op, dan komt het fonds in
+  2023 op ${num(6541)} praktijkhouders, tegenover ${num(w('beroepsgroep','praktijkhouders_2023'))} bij het
+  Nivel. Dat scheelt ruim duizend mensen, en dat verschil is niet triviaal: het is de noemer onder bijna elke
+  berekening op deze site.</p>
+  ${panel(dataTable(T.telling_praktijkhouders, [null, num, null]))}
   ${panel(dataTable(T.praktijkhouders_bronnen, [null, num, num, num]))}
-  ${callout(`<strong>Beide registers zijn gezaghebbend en ze verschillen structureel.</strong> Het pensioenfonds
-  telt wie er premie afdraagt; het Nivel telt wie er als zelfstandig gevestigd staat geregistreerd. Wij kiezen
-  hier geen kant. Wel is relevant dat de twee reeksen dezelfde richting op bewegen: minder praktijkhouderschap,
-  meer waarneming.`)}
+  ${callout(`<strong>Wat het verschil kán verklaren — en wat wij nog niet weten.</strong>
+  <b>Eén:</b> de rechtsvorm. Wie zijn praktijk via een bv voert, zit bij het fonds in de dga-regeling en niet
+  bij de vrijgevestigden; die groep groeide met ${pct(w('beroepsgroep','sph_dga_groei'),1)} en zit hierboven
+  al meegeteld. <b>Twee:</b> het eigendom zelf. Een praktijk kan eigendom zijn van een rechtspersoon of van
+  iemand die niet als huisarts meetelt; het Nivel registreert dan nog steeds een praktijkhoudend huisarts aan
+  die praktijk. <b>Drie:</b> deelnemers die in meer dan één regeling zitten, telt het fonds in het totaal maar
+  één keer mee. <b>Vier:</b> de peildata en de definitie van ‘verbonden aan een praktijk’ verschillen.
+  Welk deel van de ruim duizend door welke oorzaak komt, kunnen wij op dit moment niet vaststellen. Wij tonen
+  daarom beide tellingen en gebruiken de Nivel-reeks alleen waar die expliciet als noemer is bedoeld.`)}
 </section>
 
 <section>

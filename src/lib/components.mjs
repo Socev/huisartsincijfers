@@ -210,7 +210,10 @@ export function compareBars({ items, caption, fmt = num, eenheid = '' }) {
    fmts is een rij formatteerfuncties, één per kolom. null-waarden worden
    weergegeven als liggend streepje, zodat "niet gemeten" niet leest als nul. */
 export function dataTable(tabel, fmts, { toonBron = true } = {}) {
-  const cols = tabel.kolommen.map((k, i) => ({ label: k, r: i > 0 }));
+  /* Een kolom staat alleen rechts als er ook echt getallen in staan. Tekstkolommen
+     rechts uitlijnen leest als een fout, ook als de tabel verder klopt. */
+  const getallig = i => tabel.rijen.some(r => typeof r[i] === 'number');
+  const cols = tabel.kolommen.map((k, i) => ({ label: k, r: i > 0 && getallig(i) }));
   const rows = tabel.rijen.map(r => r.map((v, i) =>
     v === null || v === undefined ? '—'
       : typeof v === 'number' ? (fmts?.[i] ? fmts[i](v) : num(v))

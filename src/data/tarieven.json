@@ -1,44 +1,303 @@
 {
-  "_titel": "Basistarieven huisartsenzorg",
-  "_let_op": "Twee NZa-documenten geven verschillende bedragen voor voorcalculatorisch 2025. Zie de openstaande vraag op de pagina.",
-  "parameters": {
-    "kostprijs_inschrijving_2022":{"waarde":15.11,"label":"Landelijke kostprijs basisinschrijving, definitief 2022","eenheid":"euro per kwartaal","bron":"nza-verantwoording-2025","vindplaats":"Tabel 27","status":"definitief"},
-    "kostprijs_consult_2022":{"waarde":10.92,"label":"Landelijke kostprijs regulier consult, definitief 2022","eenheid":"euro","bron":"nza-verantwoording-2025","vindplaats":"Tabel 27","status":"definitief"},
-    "kostprijs_passant_2022":{"waarde":27.99,"label":"Landelijke kostprijs passantenconsult, definitief 2022","eenheid":"euro","bron":"nza-verantwoording-2025","vindplaats":"Tabel 27","status":"definitief"},
-    "effect_herbeoordeling":{"waarde":0.022,"label":"Bijstelling kostprijzen door de herbeoordeling","eenheid":"aandeel","bron":"nza-qa-2026","vindplaats":"blz. 8, prijspeil 2022","status":"definitief"},
-    "stijging_2026":{"waarde":0.061,"label":"Maximumtarieven 2026 tegenover 2025","eenheid":"aandeel","bron":"nza-addendum-2026","vindplaats":"beide voorcalculatorisch","status":"definitief"},
-    "nac_stijging":{"waarde":0.119,"label":"Stijging arbeidsvergoeding huisartseigenaren, exclusief indexatie","eenheid":"aandeel","bron":"nza-qa-2026","vindplaats":"blz. 12","status":"definitief"}
+ "_titel": "Basistarieven huisartsenzorg",
+ "_let_op": "De NZa noemt +2,2% als effect van de herbeoordeling. Dat percentage geldt op prijspeil 2022. Op de tarieven van 2026 werkt het door als +1,6 a +1,7%, en op een aantal prestaties helemaal niet.",
+ "parameters": {
+  "kostprijs_inschrijving_2022": {
+   "waarde": 15.11,
+   "label": "Landelijke kostprijs basisinschrijving, definitief 2022",
+   "eenheid": "euro per kwartaal",
+   "bron": "nza-verantwoording-2025",
+   "vindplaats": "Tabel 27",
+   "status": "definitief"
   },
-  "tabellen": {
-    "indexatie_verantwoording": {
-      "label":"Indexatie van de basisprestaties volgens het Verantwoordingsdocument 2025",
-      "bron":"nza-verantwoording-2025","vindplaats":"Tabel 29","status":"definitief","eenheid":"euro",
-      "kolommen":["Prestatie","def 2022","def 2023","def 2024","vc 2025"],
-      "rijen":[
-        ["Basistarief inschrijving",15.11,16.05,16.89,17.51],
-        ["Basistarief consult",10.92,11.60,12.21,12.66],
-        ["Basistarief passantenconsult",27.99,29.73,31.30,32.44]
-      ]
-    },
-    "indexatie_addendum": {
-      "label":"Indexatie van de basisprestaties volgens het Addendum vanaf 2026",
-      "bron":"nza-addendum-2026","vindplaats":"Indexatie van basisprestaties","status":"definitief","eenheid":"euro",
-      "kolommen":["Prestatie","vc 2025","def 2025","vc 2026"],
-      "rijen":[
-        ["Basistarief inschrijving",17.20,17.42,18.25],
-        ["Basistarief consult",12.43,12.58,13.18],
-        ["Basistarief passantenconsult",31.86,32.27,33.80]
-      ]
-    },
-    "indexpercentages": {
-      "label":"Indexeringspercentages per kostencomponent",
-      "bron":"nza-verantwoording-2025","vindplaats":"Tabel 28 en Addendum","status":"definitief","eenheid":"aandeel",
-      "kolommen":["Kostencomponent","def 2023","def 2024","vc 2025","def 2025","vc 2026"],
-      "rijen":[
-        ["Arbeidskosten en personeel (ova)",0.0636,0.0600,0.0418,0.0518,0.0424],
-        ["Materiele kosten",0.0702,0.0310,0.0182,0.0425,0.0210],
-        ["Normatieve huisvestingscomponent",0.025,0.025,0.025,0.025,0.025]
-      ]
-    }
+  "kostprijs_consult_2022": {
+   "waarde": 10.92,
+   "label": "Landelijke kostprijs regulier consult, definitief 2022",
+   "eenheid": "euro",
+   "bron": "nza-verantwoording-2025",
+   "vindplaats": "Tabel 27",
+   "status": "definitief"
+  },
+  "kostprijs_passant_2022": {
+   "waarde": 27.99,
+   "label": "Landelijke kostprijs passantenconsult, definitief 2022",
+   "eenheid": "euro",
+   "bron": "nza-verantwoording-2025",
+   "vindplaats": "Tabel 27",
+   "status": "definitief"
+  },
+  "effect_herbeoordeling": {
+   "waarde": 0.022,
+   "label": "Bijstelling kostprijzen door de herbeoordeling, prijspeil 2022",
+   "eenheid": "aandeel",
+   "bron": "nza-qa-2026",
+   "vindplaats": "blz. 8",
+   "status": "definitief"
+  },
+  "stijging_2026": {
+   "waarde": 0.061,
+   "label": "Maximumtarieven 2026 tegenover 2025",
+   "eenheid": "aandeel",
+   "bron": "nza-addendum-2026",
+   "vindplaats": "beide voorcalculatorisch",
+   "status": "definitief"
+  },
+  "nac_stijging": {
+   "waarde": 0.119,
+   "label": "Stijging arbeidsvergoeding huisartseigenaren, exclusief indexatie",
+   "eenheid": "aandeel",
+   "bron": "nza-qa-2026",
+   "vindplaats": "blz. 12",
+   "status": "definitief"
+  },
+  "effect_2026_inschrijving": {
+   "waarde": 0.0162,
+   "label": "Effect van de herbeoordeling op het inschrijftarief 2026",
+   "eenheid": "aandeel",
+   "bron": "eigen-berekening",
+   "vindplaats": "addendum tegenover TB/REG-26611-02",
+   "status": "afgeleid"
+  },
+  "effect_2026_consult": {
+   "waarde": 0.0167,
+   "label": "Effect van de herbeoordeling op het consulttarief 2026",
+   "eenheid": "aandeel",
+   "bron": "eigen-berekening",
+   "vindplaats": "addendum tegenover TB/REG-26611-02",
+   "status": "afgeleid"
+  },
+  "effect_2026_passant": {
+   "waarde": 0.0169,
+   "label": "Effect van de herbeoordeling op het passantenconsult 2026",
+   "eenheid": "aandeel",
+   "bron": "eigen-berekening",
+   "vindplaats": "addendum tegenover TB/REG-26611-02",
+   "status": "afgeleid"
+  },
+  "effect_2025_inschrijving": {
+   "waarde": 0.018,
+   "label": "Effect van de herbeoordeling op het basistarief inschrijving 2025",
+   "eenheid": "aandeel",
+   "bron": "eigen-berekening",
+   "vindplaats": "addendum 17,20 tegenover verantwoordingsdocument 17,51",
+   "status": "afgeleid"
   }
+ },
+ "tabellen": {
+  "indexatie_verantwoording": {
+   "label": "Indexatie van de basisprestaties volgens het Verantwoordingsdocument 2025",
+   "bron": "nza-verantwoording-2025",
+   "vindplaats": "Tabel 29",
+   "status": "definitief",
+   "eenheid": "euro",
+   "kolommen": [
+    "Prestatie",
+    "def 2022",
+    "def 2023",
+    "def 2024",
+    "vc 2025"
+   ],
+   "rijen": [
+    [
+     "Basistarief inschrijving",
+     15.11,
+     16.05,
+     16.89,
+     17.51
+    ],
+    [
+     "Basistarief consult",
+     10.92,
+     11.6,
+     12.21,
+     12.66
+    ],
+    [
+     "Basistarief passantenconsult",
+     27.99,
+     29.73,
+     31.3,
+     32.44
+    ]
+   ]
+  },
+  "indexatie_addendum": {
+   "label": "Indexatie van de basisprestaties volgens het Addendum vanaf 2026",
+   "bron": "nza-addendum-2026",
+   "vindplaats": "Indexatie van basisprestaties",
+   "status": "definitief",
+   "eenheid": "euro",
+   "kolommen": [
+    "Prestatie",
+    "vc 2025",
+    "def 2025",
+    "vc 2026"
+   ],
+   "rijen": [
+    [
+     "Basistarief inschrijving",
+     17.2,
+     17.42,
+     18.25
+    ],
+    [
+     "Basistarief consult",
+     12.43,
+     12.58,
+     13.18
+    ],
+    [
+     "Basistarief passantenconsult",
+     31.86,
+     32.27,
+     33.8
+    ]
+   ]
+  },
+  "indexpercentages": {
+   "label": "Indexeringspercentages per kostencomponent",
+   "bron": "nza-verantwoording-2025",
+   "vindplaats": "Tabel 28 en Addendum",
+   "status": "definitief",
+   "eenheid": "aandeel",
+   "kolommen": [
+    "Kostencomponent",
+    "def 2023",
+    "def 2024",
+    "vc 2025",
+    "def 2025",
+    "vc 2026"
+   ],
+   "rijen": [
+    [
+     "Arbeidskosten en personeel (ova)",
+     0.0636,
+     0.06,
+     0.0418,
+     0.0518,
+     0.0424
+    ],
+    [
+     "Materiele kosten",
+     0.0702,
+     0.031,
+     0.0182,
+     0.0425,
+     0.021
+    ],
+    [
+     "Normatieve huisvestingscomponent",
+     0.025,
+     0.025,
+     0.025,
+     0.025,
+     0.025
+    ]
+   ]
+  },
+  "herbeoordeling_2026": {
+   "label": "Wat de herbeoordeling doet met de maximumtarieven van 2026",
+   "bron": "eigen-berekening",
+   "vindplaats": "Addendum (voor) tegenover tariefbeschikking TB/REG-26611-02 (na)",
+   "status": "afgeleid",
+   "eenheid": "euro",
+   "kolommen": [
+    "Prestatie",
+    "Vc 2026 voor de herbeoordeling",
+    "Vc 2026 na de herbeoordeling",
+    "Verschil"
+   ],
+   "rijen": [
+    [
+     "Inschrijving verzekerde tot 65 jaar, per kwartaal",
+     21.59,
+     21.94,
+     0.0162
+    ],
+    [
+     "Inschrijving 65 tot 75 jaar, per kwartaal",
+     25.4,
+     25.82,
+     0.0165
+    ],
+    [
+     "Inschrijving 75 tot 85 jaar, per kwartaal",
+     38.25,
+     38.88,
+     0.0165
+    ],
+    [
+     "Inschrijving 85 jaar en ouder, per kwartaal",
+     60.15,
+     61.14,
+     0.0165
+    ],
+    [
+     "Opslag inschrijving opslagwijk, per kwartaal",
+     6.83,
+     6.94,
+     0.0161
+    ],
+    [
+     "Consult korter dan 5 minuten",
+     6.59,
+     6.7,
+     0.0167
+    ],
+    [
+     "Consult 5 tot 20 minuten",
+     13.18,
+     13.4,
+     0.0167
+    ],
+    [
+     "Consult 20 minuten en langer",
+     26.36,
+     26.81,
+     0.0171
+    ],
+    [
+     "Passantenconsult 5 tot 20 minuten",
+     33.8,
+     34.37,
+     0.0169
+    ]
+   ],
+   "toelichting": "De kolom voor de herbeoordeling is het basistarief uit het Addendum vermenigvuldigd met de vastgestelde factor; de kolom erna staat zo in de tariefbeschikking van 30 juni 2026. Alle negen tarieven leiden terug op dezelfde drie basistarieven, wat de reeks intern controleerbaar maakt."
+  },
+  "niet_meegestegen": {
+   "label": "Prestaties die niet in de bijstelling delen",
+   "bron": "nza-bob-2026",
+   "vindplaats": "randnummers 450 tot en met 453, en de tariefbeschikking",
+   "status": "definitief",
+   "eenheid": "",
+   "kolommen": [
+    "Prestatie",
+    "Wat er in 2026 gebeurt",
+    "Waarom"
+   ],
+   "rijen": [
+    [
+     "ANW-consulten en -visites buiten de huisartsenpost",
+     "Alleen de reguliere indexatie",
+     "De kostprijs van de anw-tarieven is gelijk gebleven; de herijkte nac wordt er bewust niet in doorgevoerd"
+    ],
+    [
+     "Dienstuurtarieven huisartsenpost: avond, weekend, nacht en feestdag",
+     "Alleen de reguliere indexatie",
+     "Vastgelegd als vaste norm sinds de herijking van 2023; geen koppeling meer aan de nac"
+    ],
+    [
+     "Meer tijd voor de patient",
+     "Geen bijstelling",
+     "Moduletarief, niet afgeleid van de drie basistarieven"
+    ],
+    [
+     "Module poh-ggz per kwartaal",
+     "Daalt licht",
+     "Aparte onderbouwing; de correctie poh-ggz loopt via de arbeidskosten van de praktijkhouder"
+    ]
+   ]
+  }
+ }
 }

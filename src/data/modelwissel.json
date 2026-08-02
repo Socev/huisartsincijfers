@@ -1,0 +1,456 @@
+{
+ "_titel": "De overgang van het kostprijsmodel 2015 naar het kostprijsmodel 2022",
+ "_let_op": "De reeksen 2018-2024 horen bij het oude model met een normpraktijk van 2.095 ingeschrevenen; 2025 en 2026 bij het herziene model op onderzoeksjaar 2022. Over de breuk heen optellen of vergelijken kan alleen als je weet dat de definities verschillen.",
+ "parameters": {
+  "normpraktijk_2015": {
+   "waarde": 2095,
+   "label": "Normpraktijk in het kostprijsmodel 2015",
+   "eenheid": "ingeschrevenen",
+   "bron": "nza-indexatie",
+   "vindplaats": "tariefonderbouwing tot en met 2024",
+   "status": "definitief"
+  },
+  "normpraktijk_2022": {
+   "waarde": 2972,
+   "label": "Ingeschrevenen per volledig vergoede nac in het herziene model",
+   "eenheid": "ingeschrevenen",
+   "bron": "eigen-berekening",
+   "vindplaats": "Bijlage 1c: 3.672 ingeschrevenen per praktijk gedeeld door 1,2354 vergoede nac",
+   "status": "afgeleid"
+  },
+  "fte_p1000_2015": {
+   "waarde": 0.4773,
+   "label": "Vergoede fte praktijkhouder per 1.000 ingeschrevenen, model 2015",
+   "eenheid": "fte",
+   "bron": "eigen-berekening",
+   "vindplaats": "1.000 gedeeld door 2.095",
+   "status": "afgeleid"
+  },
+  "fte_p1000_2022": {
+   "waarde": 0.3363,
+   "label": "Vergoede fte praktijkhouder per 1.000 ingeschrevenen, model 2022 na schoning",
+   "eenheid": "fte",
+   "bron": "eigen-berekening",
+   "vindplaats": "0,3772 voor schoning, maal 89,16%",
+   "status": "afgeleid"
+  },
+  "nac_uur_2024": {
+   "waarde": 73.71,
+   "label": "Arbeidsvergoeding in de tarieven per gewerkt uur praktijkhouder, 2024",
+   "eenheid": "euro",
+   "bron": "eigen-berekening",
+   "vindplaats": "nac-bedrag in de tarieven gedeeld door de ureninzet",
+   "status": "afgeleid"
+  },
+  "nac_uur_2025": {
+   "waarde": 61.7,
+   "label": "Idem 2025, na de modelwissel",
+   "eenheid": "euro",
+   "bron": "eigen-berekening",
+   "vindplaats": "nac-bedrag in de tarieven gedeeld door de ureninzet",
+   "status": "afgeleid"
+  },
+  "nac_uur_2026": {
+   "waarde": 67.42,
+   "label": "Idem 2026",
+   "eenheid": "euro",
+   "bron": "eigen-berekening",
+   "vindplaats": "nac-bedrag in de tarieven gedeeld door de ureninzet",
+   "status": "afgeleid"
+  },
+  "nac_mln_2024": {
+   "waarde": 1428.0,
+   "label": "Arbeidsvergoeding praktijkhouders in de tarieven, 2024",
+   "eenheid": "miljoen euro",
+   "bron": "eigen-berekening",
+   "vindplaats": "8.305 nac maal 171.940",
+   "status": "afgeleid"
+  },
+  "nac_mln_2025": {
+   "waarde": 1191.6,
+   "label": "Idem 2025",
+   "eenheid": "miljoen euro",
+   "bron": "eigen-berekening",
+   "vindplaats": "5.885 nac maal 202.476",
+   "status": "afgeleid"
+  },
+  "werkweken": {
+   "waarde": 46,
+   "label": "Werkweken per jaar in deze berekening",
+   "eenheid": "weken",
+   "bron": "nza-verantwoording-2025",
+   "vindplaats": "par. 5.3",
+   "status": "definitief"
+  }
+ },
+ "tabellen": {
+  "dekking_p1000": {
+   "label": "Wat er per 1.000 ingeschreven verzekerden in de tarieven zit, per kostenpost",
+   "bron": "eigen-berekening",
+   "vindplaats": "Cijfer-Meester, tariefketen PKO 2015 en PKO 2022 herzien",
+   "status": "afgeleid",
+   "eenheid": "euro",
+   "kolommen": [
+    "Kostenpost",
+    "2018",
+    "2022",
+    "2024",
+    "2025",
+    "2026"
+   ],
+   "rijen": [
+    [
+     "Arbeidskosten praktijkhouder (nac)",
+     64629,
+     73531,
+     82071,
+     68098,
+     73816
+    ],
+    [
+     "Personeel en inhuur",
+     57475,
+     65392,
+     72987,
+     103360,
+     108776
+    ],
+    [
+     "Overige praktijkkosten",
+     34429,
+     40006,
+     43889,
+     33704,
+     35233
+    ],
+    [
+     "Normatieve huisvesting (nhc)",
+     null,
+     null,
+     null,
+     17198,
+     17628
+    ],
+    [
+     "Gederfd rendement eigen vermogen (vgrev)",
+     null,
+     null,
+     null,
+     1262,
+     1319
+    ],
+    [
+     "Totaal",
+     156533,
+     178929,
+     198947,
+     223621,
+     236772
+    ]
+   ],
+   "toelichting": "Tot en met 2024 zat de huisvesting in de overige praktijkkosten; vanaf 2025 staat zij apart als normatieve huisvestingscomponent. Tot en met 2024 was het personeelsdeel een norm op prijspeil 2015; vanaf 2025 zijn het de gemeten kosten uit het kostprijsonderzoek 2022."
+  },
+  "verschuiving": {
+   "label": "De modelwissel per kostenpost: 2024 tegenover 2025, per 1.000 ingeschrevenen",
+   "bron": "eigen-berekening",
+   "vindplaats": "dezelfde reeks, jaar op jaar",
+   "status": "afgeleid",
+   "eenheid": "euro",
+   "kolommen": [
+    "Kostenpost",
+    "2024",
+    "2025",
+    "Verschil",
+    "Verschil in procenten"
+   ],
+   "rijen": [
+    [
+     "Arbeidskosten praktijkhouder (nac)",
+     82071,
+     68098,
+     -13973,
+     -0.1702
+    ],
+    [
+     "Personeel en inhuur",
+     72987,
+     103360,
+     30373,
+     0.4162
+    ],
+    [
+     "Huisvesting en overige praktijkkosten",
+     43889,
+     50902,
+     7013,
+     0.1598
+    ],
+    [
+     "Gederfd rendement eigen vermogen (vgrev)",
+     0,
+     1262,
+     1262,
+     null
+    ],
+    [
+     "Totaal",
+     198947,
+     223621,
+     24674,
+     0.124
+    ]
+   ],
+   "toelichting": "Voor 2024 zijn huisvesting en overige praktijkkosten samengeteld, zodat de twee jaren vergelijkbaar zijn. Van de 12,4% totale stijging is ongeveer 4 tot 5 procentpunt reguliere indexatie; de rest is de wissel van norm naar gemeten kosten."
+  },
+  "uurreeks": {
+   "label": "Arbeidsvergoeding in de tarieven per gewerkt uur praktijkhouder, 2018-2026",
+   "bron": "eigen-berekening",
+   "vindplaats": "Cijfer-Meester, 2 augustus 2026; uren Nivel, nac-reeks afgeleid uit de NZa-verantwoordingen",
+   "status": "afgeleid",
+   "eenheid": "euro",
+   "kolommen": [
+    "Jaar",
+    "Praktijkhouders",
+    "Werkweek in uren",
+    "Nac's in de tarieven",
+    "Bedrag in miljoenen",
+    "Per gewerkt uur",
+    "Op prijspeil 2015"
+   ],
+   "rijen": [
+    [
+     2018,
+     7860,
+     49.0,
+     8052,
+     1090.2,
+     61.54,
+     59.49
+    ],
+    [
+     2019,
+     7784,
+     50.1,
+     8107,
+     1135.2,
+     63.26,
+     59.59
+    ],
+    [
+     2020,
+     7292,
+     51.2,
+     8133,
+     1176.2,
+     68.44,
+     63.66
+    ],
+    [
+     2021,
+     6800,
+     52.4,
+     8179,
+     1206.6,
+     73.69,
+     66.75
+    ],
+    [
+     2022,
+     7193,
+     53.5,
+     8221,
+     1266.4,
+     71.59,
+     58.96
+    ],
+    [
+     2023,
+     7585,
+     54.6,
+     8272,
+     1355.3,
+     71.17,
+     56.44
+    ],
+    [
+     2024,
+     7561,
+     55.7,
+     8305,
+     1428.0,
+     73.71,
+     56.56
+    ],
+    [
+     2025,
+     7538,
+     55.7,
+     5885,
+     1191.6,
+     61.7,
+     45.85
+    ],
+    [
+     2026,
+     7514,
+     55.7,
+     5914,
+     1298.0,
+     67.42,
+     null
+    ]
+   ],
+   "toelichting": "De werkweek is op drie momenten gemeten (2013, 2018 en 2024); de tussenliggende jaren zijn lineair geinterpoleerd en 2025 en 2026 zijn constant gehouden. Het aantal praktijkhouders is voor 2020 tot en met 2024 een Nivel-schatting en voor 2025 en 2026 een extrapolatie. De uren zijn inclusief de dienst op de huisartsenpost."
+  },
+  "normbedrag": {
+   "label": "Het normbedrag per fte tegenover het aantal fte dat wordt vergoed",
+   "bron": "eigen-berekening",
+   "vindplaats": "nac-reeks uit de NZa-verantwoordingen",
+   "status": "afgeleid",
+   "eenheid": "",
+   "kolommen": [
+    "Jaar",
+    "Normbedrag per fte",
+    "Nac's in de tarieven",
+    "Totaal in miljoenen"
+   ],
+   "rijen": [
+    [
+     2018,
+     135395,
+     8052,
+     1090.2
+    ],
+    [
+     2022,
+     154043,
+     8221,
+     1266.4
+    ],
+    [
+     2024,
+     171940,
+     8305,
+     1428.0
+    ],
+    [
+     2025,
+     202476,
+     5885,
+     1191.6
+    ],
+    [
+     2026,
+     219479,
+     5914,
+     1298.0
+    ]
+   ],
+   "toelichting": "Tot en met 2024 is het normbedrag het oude normatieve inkomen uit het kostprijsmodel 2015; vanaf 2025 is het de nac uit het onderzoek van Berenschot. Dat zijn twee verschillende grootheden met dezelfde functie in de tariefberekening."
+  }
+ },
+ "reeksen": {
+  "uurbedrag": {
+   "label": "Arbeidsvergoeding in de tarieven per gewerkt uur praktijkhouder",
+   "bron": "eigen-berekening",
+   "vindplaats": "Cijfer-Meester, 2 augustus 2026",
+   "status": "afgeleid",
+   "jaren": [
+    2018,
+    2019,
+    2020,
+    2021,
+    2022,
+    2023,
+    2024,
+    2025,
+    2026
+   ],
+   "breuk": {
+    "na": 2024,
+    "tekst": "Vanaf 2025 geldt het herziene kostprijsmodel 2022. Het aantal nac's in de tarieven daalt daardoor met 29 procent; het normbedrag per fte stijgt tegelijk."
+   },
+   "reeksen": [
+    {
+     "naam": "Nominaal",
+     "waarden": [
+      61.54,
+      63.26,
+      68.44,
+      73.69,
+      71.59,
+      71.17,
+      73.71,
+      61.7,
+      67.42
+     ]
+    },
+    {
+     "naam": "Op prijspeil 2015",
+     "waarden": [
+      59.49,
+      59.59,
+      63.66,
+      66.75,
+      58.96,
+      56.44,
+      56.56,
+      45.85,
+      null
+     ]
+    }
+   ]
+  },
+  "nacs": {
+   "label": "Aantal nac's dat landelijk in de gereguleerde tarieven is verwerkt",
+   "bron": "eigen-berekening",
+   "vindplaats": "afgeleid uit de NZa-verantwoordingen; 2025 en 2026 geschat",
+   "status": "afgeleid",
+   "jaren": [
+    2018,
+    2019,
+    2020,
+    2021,
+    2022,
+    2023,
+    2024,
+    2025,
+    2026
+   ],
+   "breuk": {
+    "na": 2024,
+    "tekst": "De daling is de overgang van een normpraktijk van 2.095 ingeschrevenen naar het herziene model, niet een daling van de bekostiging als geheel."
+   },
+   "reeksen": [
+    {
+     "naam": "Nac's in de tarieven",
+     "waarden": [
+      8052,
+      8107,
+      8133,
+      8179,
+      8221,
+      8272,
+      8305,
+      5885,
+      5914
+     ]
+    },
+    {
+     "naam": "Ureninzet praktijkhouders, omgerekend naar fte van 36 uur",
+     "waarden": [
+      10698,
+      10836,
+      10378,
+      9888,
+      10690,
+      11500,
+      11699,
+      11663,
+      11626
+     ]
+    }
+   ]
+  }
+ }
+}

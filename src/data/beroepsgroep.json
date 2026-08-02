@@ -152,6 +152,38 @@
    "bron": "eigen-berekening",
    "vindplaats": "vrijgevestigd 5.909 plus 570 dga's",
    "status": "afgeleid"
+  },
+  "sph_dga_groei": {
+   "waarde": 0.712,
+   "label": "Groei van het aantal directeur-grootaandeelhouders tussen 2020 en 2024",
+   "eenheid": "aandeel",
+   "bron": "eigen-berekening",
+   "vindplaats": "570 gedeeld door 333",
+   "status": "afgeleid"
+  },
+  "sph_hidha_groei": {
+   "waarde": 0.193,
+   "label": "Groei van het aantal huisartsen in dienstverband tussen 2020 en 2024",
+   "eenheid": "aandeel",
+   "bron": "eigen-berekening",
+   "vindplaats": "1.012 gedeeld door 848",
+   "status": "afgeleid"
+  },
+  "sph_waarnemend_groei": {
+   "waarde": 0.253,
+   "label": "Groei van het aantal waarnemend huisartsen tussen 2020 en 2024",
+   "eenheid": "aandeel",
+   "bron": "eigen-berekening",
+   "vindplaats": "6.058 gedeeld door 4.836",
+   "status": "afgeleid"
+  },
+  "sph_vrijgevestigd_daling": {
+   "waarde": -0.088,
+   "label": "Daling van het aantal vrijgevestigd huisartsen tussen 2020 en 2024",
+   "eenheid": "aandeel",
+   "bron": "eigen-berekening",
+   "vindplaats": "5.909 gedeeld door 6.476",
+   "status": "afgeleid"
   }
  },
  "reeksen": {
@@ -568,6 +600,62 @@
      ]
     }
    ]
+  },
+  "sph_typen_index": {
+   "label": "Actieve deelnemers pensioenfonds naar type, geindexeerd (2020 = 100)",
+   "bron": "sph",
+   "vindplaats": "Jaarverslag 2024, figuur 6 en 7",
+   "status": "afgeleid",
+   "jaren": [
+    2020,
+    2021,
+    2022,
+    2023,
+    2024
+   ],
+   "reeksen": [
+    {
+     "naam": "Waarnemend huisartsen",
+     "waarden": [
+      100.0,
+      106.2,
+      111.5,
+      118.8,
+      125.3
+     ]
+    },
+    {
+     "naam": "Vrijgevestigd huisartsen",
+     "waarden": [
+      100.0,
+      96.5,
+      94.9,
+      93.1,
+      91.2
+     ]
+    },
+    {
+     "naam": "Huisartsen in dienstverband",
+     "waarden": [
+      100.0,
+      108.7,
+      106.7,
+      111.3,
+      119.3
+     ]
+    },
+    {
+     "naam": "Directeur-grootaandeelhouders",
+     "waarden": [
+      100.0,
+      115.3,
+      138.1,
+      153.2,
+      171.2
+     ]
+    }
+   ],
+   "toelichting": "Huisartsen in opleiding staan er niet bij: die reeks begint pas in 2021 en heeft dus geen basisjaar 2020."
   }
  },
  "tabellen": {
@@ -794,6 +882,46 @@
      null
     ]
    ]
+  },
+  "telling_praktijkhouders": {
+   "label": "Twee tellingen van het praktijkhouderschap, peiljaar 2023",
+   "bron": "eigen-berekening",
+   "vindplaats": "Nivel beroepenregistraties tegenover SPH jaarverslag",
+   "status": "afgeleid",
+   "eenheid": "personen",
+   "kolommen": [
+    "Telling",
+    "Aantal",
+    "Wat er wordt geteld"
+   ],
+   "rijen": [
+    [
+     "Nivel: zelfstandig gevestigde huisartsen",
+     7561,
+     "Registratie van huisartsen die als praktijkhouder aan een praktijk verbonden zijn"
+    ],
+    [
+     "SPH: vrijgevestigd huisartsen",
+     6031,
+     "Deelnemers in de pensioenregeling voor vrijgevestigden"
+    ],
+    [
+     "SPH: directeur-grootaandeelhouders",
+     510,
+     "Praktijkhouders die hun praktijk via een bv voeren; aparte regeling"
+    ],
+    [
+     "SPH: samen",
+     6541,
+     "De twee categorieen die een praktijk bezitten"
+    ],
+    [
+     "Verschil met het Nivel",
+     -1020,
+     "13,5% van de Nivel-telling"
+    ]
+   ],
+   "toelichting": "Voor 2024 heeft het Nivel nog geen cijfer gepubliceerd; het pensioenfonds komt dat jaar uit op 5.909 vrijgevestigden en 570 dga's, samen 6.479."
   }
  }
 }

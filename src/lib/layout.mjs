@@ -10,8 +10,11 @@ export const SITE = {
 
 export const NAV = [
   { href: '/',                     label: 'Kerncijfers' },
+  { href: '/nac/',                 label: 'De nac' },
   { href: '/arbeidskosten/',       label: 'Arbeidskosten' },
   { href: '/uren/',                label: 'Uren' },
+  { href: '/uurtarief/',           label: 'Uurtarief' },
+  { href: '/modelwissel/',         label: 'Modelwissel' },
   { href: '/beroepsgroep/',        label: 'Beroepsgroep' },
   { href: '/inkomen/',             label: 'Inkomen' },
   { href: '/werkdruk/',            label: 'Werkdruk' },
@@ -76,8 +79,11 @@ ${proto ? `<div class="proto">Deze site is in opbouw. De cijfers zijn gecontrole
 <footer class="site"><div class="wrap">
   <div class="cols">
     <div><h4>Onderwerpen</h4>
+      <a href="/nac/">Opbouw van de normatieve arbeidskostencomponent</a>
       <a href="/arbeidskosten/">Arbeidskosten praktijkhouder</a>
       <a href="/uren/">Gewerkte uren en de fte-definitie</a>
+      <a href="/uurtarief/">Arbeidsvergoeding per gewerkt uur</a>
+      <a href="/modelwissel/">De modelwissel van 2025</a>
       <a href="/beroepsgroep/">De beroepsgroep in aantallen</a>
       <a href="/inkomen/">Inkomen tegenover de norm</a>
       <a href="/werkdruk/">Werkdruk en capaciteit</a>

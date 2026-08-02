@@ -1,6 +1,8 @@
 /* Nederlandse notatie. Alle getallen op de site lopen hierlangs, zodat
    duizendtallen, decimalen en euro's overal identiek worden weergegeven. */
-const nl = (n, o) => n.toLocaleString('nl-NL', o);
+/* Het echte minteken (U+2212) in plaats van een koppelteken: even breed als een
+   cijfer, zodat kolommen met negatieve waarden netjes uitlijnen. */
+const nl = (n, o) => n.toLocaleString('nl-NL', o).replace(/^-/, '−');
 
 export const num   = (n, d = 0) => nl(n, {minimumFractionDigits:d, maximumFractionDigits:d});
 export const eur   = (n, d = 2) => '€ ' + nl(n, {minimumFractionDigits:d, maximumFractionDigits:d});
