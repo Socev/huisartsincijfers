@@ -1,6 +1,8 @@
 import { pagina } from '../lib/layout.mjs';
 import { w, p, data } from '../lib/data.mjs';
-import { stackedBar, table, panel, callout, dataTable, bronLabel, tile, compareBars, anwNoot, heroNumber } from '../lib/components.mjs';
+import { stackedBar, table, panel, callout, dataTable, bronLabel, tile, compareBars, anwNoot,
+         heroNumber, statContrast, causalChain, evidenceCard, begrippenBalk } from '../lib/components.mjs';
+import { nacKeten, werkweek } from '../lib/metrics.mjs';
 import { eur, eur0, num, pct, mln, esc } from '../lib/format.mjs';
 
 /* Fte's krijgen twee decimalen, bedragen geen — anders leest 171.977,00 als onzin. */
@@ -17,6 +19,7 @@ export default function () {
     return { bruto:n, afB:n*sb, afP:n*sp, binnen:n*b100, tg:n*b100*tg, vrij:n*b100*(1-tg), nac:J[jr].nac };
   };
   const c25 = cascade(2025), c26 = cascade(2026);
+  const k = nacKeten(2025), u = werkweek();
   /* De urenslider loopt van de NZa-uitvraag tot de Nivel-werkweek min de dienst. */
   const nzaU = w('uren','nza_uren_per_fte'),
         netU = +(w('uren','nivel_werkweek') - w('uren','anw_dienst')).toFixed(1);
@@ -26,26 +29,67 @@ export default function () {
   const zJaar = nzaU * w('uren','werkweken');            // de urenopgaaf van de NZa, maal dezelfde 46 weken
 
   const body = `
-<section>
-  <h2>Ruim zevenduizend mensen, minder dan zesduizend vergoedingen</h2>
-  ${heroNumber(num(c25.binnen/J[2025].ph, 2),
-    `nac in de tariefonderbouwing per praktijkhoudend huisarts. Niet per fte — per persoon.`)}
-  <p class="sub" style="margin-top:20px">Nederland telt ongeveer ${num(J[2025].ph)} praktijkhoudend
-  huisartsen. Zij werken gemiddeld ${num(netU,1)} uur per week, de dienst op de post er al vanaf. Tegenover
-  die hele groep staan in de tariefonderbouwing ${num(c25.bruto,0)} nac’s, en na schoning blijven er
-  ${num(c25.binnen,0)} over die de gereguleerde tarieven moeten dekken. Ruim zevenduizend mensen die stuk
-  voor stuk fors boven voltijd werken, komen samen uit op minder dan zesduizend volledige
-  arbeidsvergoedingen. Hoe kan dat?</p>
-  ${callout(`<strong>Drie mechanismen, alle drie legitiem op zichzelf.</strong>
-  <b>Eén:</b> het aantal nac’s volgt niet uit het aantal huisartsen maar uit het aantal patiënten, gedeeld
-  door ${num(pf)}. <b>Twee:</b> een werktijdfactor is afgetopt op 1,0, zodat wie ${num(netU,1)} uur werkt
-  precies evenveel telt als wie er ${num(36)} maakt — de uren daarboven verdwijnen uit de telling.
-  <b>Drie:</b> ${pct(1-b100,1)} van de uitkomst wordt geschoond, omdat die arbeid volgens de NZa elders
-  wordt betaald. Samen verklaren ze het verschil precies. De vraag is niet of de rekensom klopt, maar of de
-  uitkomst is wat je wilt.`)}
+<section id="contrast">
+  ${statContrast({
+    links:  { waarde: num(k.personen), label: 'praktijkhoudend huisartsen',
+              eenheid: `mensen · gemiddeld ${num(u.netto,1)} uur per week, exclusief dienst`,
+              status: k.status.personen },
+    rechts: { waarde: num(k.binnen100), label: `nac's binnen de 100%`,
+              eenheid: 'toegerekende rekeneenheden, geen uitbetalingen',
+              status: k.status.binnen100 },
+    ratio: `Ofwel <b>${num(k.nacPerPersoon,2)}</b> nac per praktijkhouder. Het verschil ontstaat niet doordat
+      praktijkhouders gemiddeld te weinig werken, maar doordat uren boven de grens niet extra meetellen en er
+      na de fte-telling nog kosten worden geschoond of elders belegd.`
+  })}
 </section>
 
-<section>
+<section id="keten">
+  <h2>De vier stappen, met de rekenregel per stap</h2>
+  <p class="sub">Let op de eenheden: alleen de eerste stap telt mensen. Alles daarna zijn rekeneenheden in een
+  kostprijsmodel. Bij elke pijl staat de regel die de stap veroorzaakt, en de reden waarom die regel bestaat.</p>
+
+  ${begrippenBalk([
+    { term: 'Personen',            uitleg: 'mensen' },
+    { term: `Nac's vóór schoning`, uitleg: 'rekeneenheden' },
+    { term: 'Binnen 100%',         uitleg: 'na kostentoerekening' },
+    { term: 'Maximumtarieven',     uitleg: 'wettelijk gereguleerd deel' }
+  ])}
+
+  ${panel(causalChain({ stappen: k.stappen, fmt: v => num(v, 0) }))}
+
+  ${callout(`Een nac is geen salaris en geen uitbetaling. Het is een normatieve kostenpost die per berekende
+    fte praktijkhoudend huisarts in de kostprijs wordt toegerekend, met de werktijdfactor gemaximeerd op 1,0
+    per persoon. Wat een praktijkhouder feitelijk overhoudt hangt af van praktijkomvang, productie,
+    contractafspraken en bedrijfsvoering. <a href="/inkomen/">Wat daarover bekend is</a>.`, 'letop')}
+</section>
+
+<section id="oorzaken">
+  <h2>Drie rekenregels</h2>
+  <p class="sub">Alle drie op zichzelf verdedigbaar. Samen verklaren ze het verschil precies. De vraag is niet
+  of de rekensom klopt, maar of de uitkomst is wat je wilt.</p>
+  <div class="grid c3">
+    ${evidenceCard({
+      claim: 'A · Patiëntengrondslag',
+      kern: num(k.brutoNac, 0),
+      bewijs: `nac's vóór schoning. Het aantal volgt niet uit het aantal huisartsen maar uit het aantal
+        verzekerden: ${num(k.ingeschrevenen)} gedeeld door ${num(k.perFte)} per fte.`,
+      status: k.status.brutoNac, href: '#personen-naar-fte', hrefLabel: 'Naar de uitleg' })}
+    ${evidenceCard({
+      claim: 'B · Aftopping op 1,0',
+      kern: num(u.cap) + ' uur',
+      bewijs: `De werktijdfactor is uren gedeeld door ${num(u.cap)}, maar nooit hoger dan 1,0 per persoon.
+        Wie ${num(u.netto,1)} uur werkt telt precies even zwaar als wie er ${num(u.cap)} maakt.`,
+      status: 'definitief', href: '/uren/#grenzen', hrefLabel: 'Naar de urengrenzen' })}
+    ${evidenceCard({
+      claim: 'C · Schoning',
+      kern: pct(b100, 2),
+      bewijs: `van de uitkomst blijft binnen de honderd procent; daarvan is ${pct(tg, 1)} tariefgereguleerd.
+        De rest wordt verondersteld elders te worden verdiend.`,
+      status: 'afgeleid', href: '#schoning', hrefLabel: 'Naar de schoning' })}
+  </div>
+</section>
+
+<section id="personen-naar-fte">
   <h2>Van werkelijke bezetting naar dekkingsbron</h2>
   <p class="sub">De NZa bepaalt het aantal fte praktijkhoudend huisarts uit de opgegeven uren, vermenigvuldigt dat
   met de normatieve arbeidskostencomponent, en schoont het resultaat vervolgens naar rato van omzet. Wat overblijft
@@ -69,7 +113,7 @@ export default function () {
   <p class="bron" style="margin-top:12px">${bronLabel(p('nac','patienten_per_fte'))} · ${bronLabel(p('nac','binnen_100'))}</p>
 </section>
 
-<section>
+<section id="schoning">
   <h2>Hoe de schoning is afgeleid</h2>
   <p class="sub">De NZa publiceert geen landelijk schoningspercentage. Het volgt uit Tabel 19, gewogen met de
   landelijke verdeling van praktijken uit Tabel 3. Die weging reproduceert ook de 1,39 fte per praktijk en de
@@ -94,7 +138,7 @@ export default function () {
   valt</a>.`)}
 </section>
 
-<section>
+<section id="maximumtarieven">
   <h2>De nac per gewerkt uur</h2>
   <p class="sub">Twee noemers zijn verdedigbaar en ze geven een verschillende uitkomst. Wij tonen ze allebei,
   omdat het verschil zelf het punt is: het is precies de tijd die de NZa niet uitvraagt.</p>
@@ -116,7 +160,7 @@ export default function () {
 </section>
 
 <section id="rekentool">
-  <h2>Reken zelf mee</h2>
+  <h2>Wat gebeurt er als meer van de werkweek wordt meegeteld?</h2>
   <p class="sub">Eén knop die er werkelijk toe doet: hoeveel uur per week rekenen we mee. De ondergrens is de
   urenopgaaf die de NZa zelf uitvraagt, de bovengrens is de gemeten werkweek van de zelfstandig gevestigde
   huisarts ná aftrek van de dienst op de post. Daartussen ligt precies de tijd die niet wordt uitgevraagd.</p>
@@ -146,7 +190,9 @@ export default function () {
       <div class="legend" id="calcleg"></div>
     </div>
   </div>`)}
-  <p class="small" style="margin-top:14px">Deze rekentool gebruikt dezelfde datalaag als de cijfers hierboven.
+  <p class="small" style="margin-top:14px">Verschuif alleen de meegetelde werkweek; alle andere landelijke
+  grondslagen blijven gelijk. Zo wordt zichtbaar hoeveel de uitkomst verandert door de gekozen urenscope — en
+  niet door een andere aanname elders. Deze rekentool gebruikt dezelfde datalaag als de cijfers hierboven.
   Het aantal nac's volgt uit de ingeschreven verzekerden gedeeld door ${num(pf)}; de verdeling over
   dekkingsbronnen is de schoning uit de tabel bovenaan deze pagina.</p>
 </section>
@@ -158,11 +204,13 @@ export default function () {
 
   return { pad:'/arbeidskosten/', html: pagina({
     pad:'/arbeidskosten/', titel:'Arbeidskosten praktijkhoudend huisarts',
-    eyebrow:'Normatieve arbeidskostencomponent',
-    h1:'Wat de tarieven inrekenen voor de arbeid van de praktijkhouder',
+    eyebrow:'Van beroepsgroep naar tariefonderbouwing',
+    h1:`${num(k.personen)} praktijkhouders worden ${num(k.binnen100)} nac's binnen de 100%`,
+    status:[`Prijspeil ${k.jaar}`, `praktijkhouders: ${k.status.personen}`,
+            `keten: ${k.status.binnen100}`],
     omschrijving:'De keten van werkelijke bezetting naar het deel dat door NZa-maximumtarieven wordt gedekt.',
-    lede:`De nac is het normbedrag dat de NZa in de kostprijs opneemt voor de arbeid van een voltijd werkende
-      praktijkhoudend huisarts. Hier staat wat daarvan overblijft nadat de schoning is toegepast, en wie de rest
-      volgens de NZa moet dekken.`,
+    lede:`De beroepsgroep werkt gemiddeld ruim boven voltijd. Toch komt de landelijke tariefonderbouwing
+      binnen de honderd procent uit op ongeveer ${num(k.nacPerPersoon,2)} nac per praktijkhouder. Dat verschil
+      ontstaat door de fte-systematiek, de aftopping op 1,0 en de schoning die daarna volgt.`,
     body })};
 }
