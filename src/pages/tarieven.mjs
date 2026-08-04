@@ -92,9 +92,14 @@ export default function () {
 
   return { pad:'/tarieven/', html: pagina({
     pad:'/tarieven/', titel:'Basistarieven', eyebrow:'Van kostprijs naar maximumtarief',
-    h1:'De basistarieven en hoe ze tot stand komen',
-    omschrijving:'Kostprijzen 2022, indexatie per kostencomponent, en een onverklaard verschil tussen twee NZa-documenten.',
-    lede:`Drie basisprestaties dragen de onderbouwing: de inschrijving, het consult en het passantenconsult.
-      Alle andere gereguleerde tarieven zijn daarvan afgeleid of apart onderbouwd.`,
+    h1:`Waarom ${pct(w('tarieven','effect_herbeoordeling'),1)} in de kostprijs geen ${pct(w('tarieven','effect_herbeoordeling'),1)} in het tarief is`,
+    status:[`Kostprijsbijstelling op prijspeil 2022`, `tariefeffect 2025 en 2026`,
+            `effecten: ${p('tarieven','effect_2026_inschrijving').status}`],
+    omschrijving:'De kostprijsbijstelling van 2,2%, het kleinere effect op de tarieven van 2025 en 2026, en de prestaties die niet meebewegen.',
+    lede:`De NZa communiceert een bijstelling van de kostprijzen met
+      ${pct(w('tarieven','effect_herbeoordeling'),1)} op prijspeil 2022. Door verschillende indexatiereeksen
+      is het effect op de tarieven van 2025 en 2026 kleiner — circa
+      ${pct(w('tarieven','effect_2026_inschrijving'),1)} op het inschrijftarief — en bij prestaties die niet
+      aan de basisprestaties zijn gekoppeld nul.`,
     body })};
 }

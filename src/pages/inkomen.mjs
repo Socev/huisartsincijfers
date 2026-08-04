@@ -98,10 +98,13 @@ export default function () {
 
   return { pad:'/inkomen/', html: pagina({
     pad:'/inkomen/', titel:'Inkomen en de norm', eyebrow:'Norm tegenover uitkomst',
-    h1:'Wat een praktijkhouder verdient, en wat het tarief daarvoor inrekent',
+    h1:`Wat huisarts-ondernemers overhouden — en waarom dat niet hetzelfde is als de nac`,
+    status:[`CBS-peiljaar 2023`, `huisarts-ondernemers met personeel als benadering`,
+            `nac: normatief, geen uitkomst`],
     omschrijving:'Winst uit onderneming volgens het CBS, naast de normatieve arbeidskostencomponent van de NZa — met de definities die de twee onvergelijkbaar maken.',
-    lede:`Over huisartseninkomens circuleren veel getallen die elkaar tegenspreken. Meestal komt dat doordat ze
-      iets anders meten. Deze pagina zet ze naast elkaar, mét de definities, zodat duidelijk is wat je wel en
-      niet mag concluderen.`,
+    lede:`De nac is een normatieve kostenpost per berekende fte. De CBS-winst is het gerealiseerde resultaat
+      per ondernemer, ná de werkelijke praktijkkosten en vóór eigen pensioen, arbeidsongeschiktheidsdekking en
+      belasting. De vergelijking is informatief, maar niet één op één — en waar de bron
+      huisarts-ondernemers mét personeel gebruikt als benadering van de praktijkhouder, staat dat erbij.`,
     body })};
 }

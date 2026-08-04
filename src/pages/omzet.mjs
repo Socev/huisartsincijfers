@@ -79,9 +79,11 @@ export default function () {
 
   return { pad:'/omzet/', html: pagina({
     pad:'/omzet/', titel:'Omzet, scope en schoning', eyebrow:'Verdeelsleutel van de kostentoerekening',
-    h1:'Waarom niet alle kosten in de tarieven terechtkomen',
+    h1:'De uren worden smal uitgevraagd; de schoning wordt breder toegepast',
+    status:[`Kostprijsonderzoek 2022`, `eigen classificatie`, `bandbreedte, geen puntschatting`],
     omschrijving:'Het scope-model van de NZa, de omzetaandelen, en waaruit de omzet buiten de honderd procent werkelijk bestaat.',
-    lede:`De NZa gebruikt omzet als verdeelsleutel: kosten worden toegerekend naar rato van waar de opbrengsten
-      vandaan komen. Dat klinkt neutraal, maar de indeling bepaalt hoeveel er in het tarief overblijft.`,
+    lede:`Bestuur, opleiding en extern overleg vallen buiten de urenuitvraag. Opbrengsten uit zulke
+      activiteiten kunnen via de omzetverdeling wél leiden tot schoning van de arbeidskostencomponent.
+      Daardoor worden tijd en kosten niet op dezelfde grondslag behandeld.`,
     body })};
 }

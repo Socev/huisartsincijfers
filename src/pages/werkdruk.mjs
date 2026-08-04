@@ -27,7 +27,7 @@ export default function () {
 </section>
 
 <section>
-  <h2>Werkdruk daalt licht, werkplezier blijft gelijk</h2>
+  <h2>Werkdruk blijft hoog; de score daalde sinds 2021 met zes punten</h2>
   <p class="sub">De werkdrukscore van huisartsen zakte tussen 2021 en 2024 van 84 naar 78. Het werkplezier bleef
   in diezelfde periode vrijwel onveranderd rond de 75.</p>
   ${panel(serieChart(R.werkdruk, { fmt: num, hoogte: 300 }))}
@@ -54,9 +54,13 @@ export default function () {
 
   return { pad:'/werkdruk/', html: pagina({
     pad:'/werkdruk/', titel:'Werkdruk en capaciteit', eyebrow:'Arbeidsmarkt en belasting',
-    h1:'Patiëntenstops, werkdruk en verzuim',
+    h1:`Zes op de tien praktijken had in 2024 een patiëntenstop`,
+    status:[`Nivel-arbeidsmarktonderzoek 2024`, `enquête onder praktijken`,
+            `vraagstelling gewijzigd na 2022`],
     omschrijving:'Het aandeel praktijken met een patiëntenstop, de werkdruk- en werkplezierscores en het ziekteverzuim in de branche.',
-    lede:`Cijfers over hoe de huisartsenzorg ervoor staat als werkplek. Minder hard dan de tariefcijfers —
-      het zijn deels enquêtes en verwachtingen — en dat staat er per reeks bij.`,
+    lede:`Het aandeel praktijken dat geen nieuwe patiënten kon aannemen liep op van
+      ${pct(w('werkdruk','stop_2018'),0)} in 2018 naar ${pct(w('werkdruk','stop_2024'),0)} in 2024. De
+      werkdruk blijft hoog terwijl het werkplezier stabiel is. Deze reeksen meten niet hetzelfde en worden
+      daarom apart getoond.`,
     body })};
 }
