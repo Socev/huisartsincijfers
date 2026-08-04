@@ -1,7 +1,8 @@
 import { pagina } from '../lib/layout.mjs';
 import { w, p, data } from '../lib/data.mjs';
-import { normbedragTabel } from '../lib/metrics.mjs';
-import { panel, tile, callout, dataTable, heroNumber, compareBars, bronLabel } from '../lib/components.mjs';
+import { normbedragTabel, uurbedrag } from '../lib/metrics.mjs';
+import { panel, tile, callout, dataTable, heroNumber, compareBars, bronLabel,
+         statContrast, methodDisclosure } from '../lib/components.mjs';
 import { eur, eur0, num, pct } from '../lib/format.mjs';
 
 export default function () {
@@ -10,18 +11,27 @@ export default function () {
   const nac24 = D[0][3], nac25 = D[0][4], tot24 = D[5][3], tot25 = D[5][4];
   const pers24 = D[1][3], pers25 = D[1][4];
   const np15 = w('modelwissel','normpraktijk_2015'), np22 = w('modelwissel','normpraktijk_2022');
+  const fte15 = w('modelwissel','fte_p1000_2015'), fte22 = w('modelwissel','fte_p1000_2022');
+  const norm24 = uurbedrag(2024).normbedrag, norm25 = uurbedrag(2025).normbedrag;
 
   const body = `
-<section>
-  <h2>Alles omhoog, en toch bleef het tarief staan</h2>
-  ${heroNumber(pct(nac25/nac24-1,1),
-    `verandering in wat de tarieven per 1.000 patiënten inrekenen voor de arbeid van de praktijkhouder —
-     terwijl het totaal in datzelfde jaar met ${pct(tot25/tot24-1,1)} steeg.`)}
-  <p class="sub" style="margin-top:20px">Het kostprijsonderzoek 2022 corrigeerde de vergoeding voor personeel
-  fors omhoog, verving de gemeten huisvesting door een normatieve component, en verhoogde het normbedrag per
-  fte praktijkhouder van ${eur0(171940)} naar ${eur0(202476)}. Alle bewegingen wezen dezelfde kant op. Toch
-  veranderde het inschrijftarief nauwelijks, en ging de arbeidsvergoeding van de praktijkhouder per patiënt
-  omláág. Deze pagina laat zien waar het geld heen ging.</p>
+<section id="tegenstelling">
+  ${statContrast({
+    pijl: 'tegenover',
+    links:  { waarde: '+' + pct(norm25/norm24 - 1, 1), label: 'normbedrag per fte praktijkhouder',
+              eenheid: `${eur0(norm24)} → ${eur0(norm25)} · per rekeneenheid`,
+              status: 'definitief' },
+    rechts: { waarde: '−' + pct(1 - fte22/fte15, 1), label: 'vergoede fte per 1.000 patiënten',
+              eenheid: `${num(fte15,4)} → ${num(fte22,4)} · per patiënt`,
+              status: p('modelwissel','fte_p1000_2022').status },
+    ratio: `Twee bewegingen in tegengestelde richting, in hetzelfde jaar. Netto komt wat de tarieven per
+      1.000 patiënten inrekenen voor de arbeid van de praktijkhouder <b>${pct(nac25/nac24-1,1)}</b> uit —
+      terwijl de totale kostenbasis per 1.000 patiënten in datzelfde jaar met
+      <b>${pct(tot25/tot24-1,1)}</b> steeg.`
+  })}
+  <p class="small" style="margin-top:18px">Een hoger normbedrag per fte compenseert niet automatisch een lager
+  aantal toegerekende fte. Welke van de twee zwaarder weegt, bepaalt de uitkomst per patiënt — en dat is hier
+  de tweede.</p>
 </section>
 
 <section>
@@ -34,10 +44,10 @@ export default function () {
     items:[
       { label:`Model 2015: één volledige arbeidsvergoeding per ${num(np15)} ingeschrevenen`,
         waarde: w('modelwissel','fte_p1000_2015'), serie:1,
-        toelichting:'0,4773 vergoede fte per 1.000 ingeschrevenen' },
+        toelichting:`${num(fte15,4)} vergoede fte per 1.000 ingeschrevenen` },
       { label:`Model 2022 herzien: één volledige arbeidsvergoeding per ${num(np22)} ingeschrevenen`,
         waarde: w('modelwissel','fte_p1000_2022'), serie:2,
-        toelichting:'0,3363 vergoede fte per 1.000, na schoning buiten de 100%' }
+        toelichting:`${num(fte22,4)} vergoede fte per 1.000, na schoning buiten de honderd procent` }
     ], fmt: v=>num(v,4), eenheid:' fte', caption:'Vergoede fte praktijkhouder per 1.000 ingeschreven verzekerden.'
   }))}
   ${callout(`<strong>Dit is de kern van de wissel.</strong> Per 1.000 patiënten wordt ${pct(1-w('modelwissel','fte_p1000_2022')/w('modelwissel','fte_p1000_2015'),1)}
@@ -53,11 +63,13 @@ export default function () {
   populatiemix. Het totaal loopt door de jaren heen netjes op. De verdeling erbinnen verspringt in 2025.</p>
   ${panel(dataTable(T.dekking_p1000, [null, eur0, eur0, eur0, eur0, eur0]))}
   ${panel(dataTable(T.verschuiving, [null, eur0, eur0, v => (v>0?'+':'−')+eur0(Math.abs(v)), v => v===null?'—':(v>0?'+':'−')+pct(Math.abs(v),1)]))}
-  ${callout(`<strong>Het geld ging naar de praktijk, niet naar de praktijkhouder.</strong> Per 1.000 patiënten
-  kwam er ${eur0(V[1][3])} bij voor personeel en inhuur en ${eur0(V[2][3])} voor huisvesting en overige
-  kosten. Tegelijk ging er ${eur0(Math.abs(V[0][3]))} áf bij de arbeidskosten van de eigenaar. Dat is
-  verdedigbaar zodra je gelooft dat de oude personeelsnorm te laag was — maar het betekent wel dat de
-  correctie van de ene onderschatting is gefinancierd uit de post die de eigenaar zelf overhoudt.`)}
+  ${callout(`Binnen het nieuwe kostprijsmodel verschoof het relatieve gewicht van de arbeidskosten van de
+  praktijkhouder naar personeel, inhuur, huisvesting en overige praktijkkosten. Per 1.000 patiënten kwam er
+  ${eur0(V[1][3])} bij voor personeel en inhuur en ${eur0(V[2][3])} voor huisvesting en overige kosten;
+  tegelijk ging er ${eur0(Math.abs(V[0][3]))} áf bij de arbeidskosten van de eigenaar.`, 'inzicht')}
+  ${callout(`<b>Dit is onze lezing, geen bronfeit.</b> De correctie van de praktijkkosten ging niet gepaard
+  met een evenredige groei van de arbeidsvergoeding voor de praktijkhouder. Of dat een probleem is, hangt af
+  van wat je vindt dat een tarief hoort te dekken — die vraag beantwoordt de tabel niet.`, 'methode')}
 </section>
 
 <section>
@@ -66,8 +78,8 @@ export default function () {
   verklaren ze waarom een forse verhoging van de arbeidsvergoeding per fte niet in het tarief te zien is.</p>
   ${panel(dataTable(normbedragTabel(), [null, eur0, num, v => '€ ' + num(v,1) + ' mln']))}
   ${callout(`<strong>Rekenen met de uitersten.</strong> Het normbedrag per fte steeg tussen 2024 en 2025 met
-  ${pct(202476/171940-1,1)}. Het aantal fte dat ermee wordt vermenigvuldigd daalde met
-  ${pct(1-5885/8305,1)}. Wat er landelijk aan arbeidsvergoeding voor praktijkhouders in de tarieven zit,
+  ${pct(norm25/norm24-1,1)}. Het aantal fte dat ermee wordt vermenigvuldigd daalde met
+  ${pct(1-uurbedrag(2025).nacs/uurbedrag(2024).nacs,1)}. Wat er landelijk aan arbeidsvergoeding voor praktijkhouders in de tarieven zit,
   daalde daardoor van ${eur0(1428)} miljoen naar ${eur0(1191.6)} miljoen — ruim
   ${eur0(1428-1191.6)} miljoen minder, in het jaar waarin de nac fors omhoog ging.
   <a href="/uurtarief/">Wat dat per gewerkt uur betekent</a>.`)}
@@ -98,10 +110,13 @@ export default function () {
 
   return { pad:'/modelwissel/', html: pagina({
     pad:'/modelwissel/', titel:'De modelwissel', eyebrow:'Kostprijsmodel 2015 tegenover 2022',
-    h1:'Alles ging omhoog, en toch bleef het tarief vrijwel gelijk',
+    h1:'De nac per fte steeg. De vergoede fte per patiënt daalde harder.',
+    status:[`Kostprijsmodel 2015 tegenover 2022`, `overgang per 2025`,
+            `fte per 1.000: ${p('modelwissel','fte_p1000_2022').status}`],
     omschrijving:'Wat er per 1.000 ingeschreven verzekerden in de tarieven zit, per kostenpost, van 2018 tot 2026 — en wat er in 2025 verschoof.',
-    lede:`Het kostprijsonderzoek 2022 corrigeerde de personeelskosten fors omhoog en verhoogde het normbedrag
-      voor de arbeid van de praktijkhouder. Toch veranderde het inschrijftarief nauwelijks. Deze pagina zet de
-      kostenposten per 1.000 patiënten naast elkaar en laat zien waar het verschil zit.`,
+    lede:`Vanaf 2025 verdween de oude normpraktijk als rekeneenheid. Het nieuwe model rekent met gemeten
+      praktijkkosten en een afgetopte fte-telling. Daardoor daalde de hoeveelheid praktijkhouder-fte per
+      1.000 patiënten met ${pct(1-fte22/fte15,1)}, ondanks een normbedrag per fte dat juist
+      ${pct(norm25/norm24-1,1)} hoger uitkwam.`,
     body })};
 }

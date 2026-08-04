@@ -98,10 +98,11 @@ export default function () {
 
   return { pad:'/uurtarief/', html: pagina({
     pad:'/uurtarief/', titel:'Arbeidsvergoeding per gewerkt uur', eyebrow:'Reeks 2018-2026',
-    h1:'Wat er per gewerkt uur voor de praktijkhouder in de tarieven zat',
+    h1:`In 2025 verdween circa ${eur(Math.abs(knik.verschil))} arbeidsvergoeding per gewerkt uur uit de tarieven`,
+    status:[`Reeks 2018-2026`, `noemer: gewerkte uren exclusief dienst`, `eigen berekening`],
     omschrijving:'De arbeidsvergoeding voor praktijkhouders in de gereguleerde tarieven, gedeeld door de gewerkte uren van de beroepsgroep, van 2018 tot 2026.',
-    lede:`Discussies over de nac lopen vast op de vraag wat een fte is. Deze pagina omzeilt dat: zij deelt het
-      landelijke arbeidskostenbedrag in de tarieven door de uren die praktijkhouders werkelijk maken. Dan
-      wordt zichtbaar wat de overgang naar het nieuwe kostprijsmodel per uur betekende.`,
+    lede:`Dit is geen uitbetaald uurloon. Het is het landelijke bedrag aan arbeidskostenvergoeding voor
+      praktijkhouders in de tariefonderbouwing, gedeeld door de uren die praktijkhouders gezamenlijk werken —
+      de dienst op de huisartsenpost er al vanaf. Die maat omzeilt de discussie over wat een fte is.`,
     body })};
 }
