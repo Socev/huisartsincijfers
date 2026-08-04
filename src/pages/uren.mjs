@@ -1,36 +1,71 @@
 import { pagina } from '../lib/layout.mjs';
 import { w, p, data } from '../lib/data.mjs';
-import { panel, callout, dataTable, table, tile, barChart, compareBars, bronLabel, stackedBar, anwNoot, trechter } from '../lib/components.mjs';
+import { panel, callout, dataTable, table, tile, barChart, compareBars, bronLabel, stackedBar,
+         anwNoot, trechter, meetlat, methodDisclosure, begrippenBalk } from '../lib/components.mjs';
+import { nacKeten, werkweek } from '../lib/metrics.mjs';
 import { num, pct, uur, eur, esc } from '../lib/format.mjs';
 
 export default function () {
   const T = data.uren.tabellen;
+  const u = werkweek();
+  const k = nacKeten(2025);
   const inScope = T.nivel_taken.rijen.filter(r => r[2] === 'ja').reduce((s,r)=>s+r[1],0);
   const buiten  = T.nivel_taken.rijen.filter(r => r[2] === 'nee').reduce((s,r)=>s+r[1],0);
 
   const body = `
-<section>
+<section id="grenzen">
+  <h2>Vier grenzen, en ze meten niet hetzelfde</h2>
+  <p class="sub">Dezelfde eenheid — uren per week — maar vier verschillende dingen. Ze staan hier op één
+  schaal omdat het verschil ertussen de boodschap is; ze tellen niet bij elkaar op.</p>
+  ${panel(meetlat({
+    max: u.bruto,
+    eenheid: ' uur',
+    fmt: v => num(v, 1),
+    punten: [
+      { waarde: u.cap, serie: 2, label: 'Fte-plafond',
+        toelichting: 'Boven deze grens stijgt de werktijdfactor niet verder; 1,0 fte is bereikt.' },
+      { waarde: u.uitgevraagd, serie: 4, label: 'NZa-uitgevraagde categorieën',
+        toelichting: 'Gemiddelde urenopgave binnen de categorieën waar de NZa naar vraagt. Geen meting van de werkweek.' },
+      { waarde: u.netto, serie: 3, label: 'Werkweek exclusief dienst',
+        toelichting: 'De gemeten werkweek minus de apart bekostigde dienst op de huisartsenpost.' },
+      { waarde: u.bruto, serie: 1, label: 'Volledige Nivel-werkweek',
+        toelichting: 'Tijdsbestedingsonderzoek 2024, inclusief de dienst op de huisartsenpost.' }
+    ],
+    caption: `Vier urengrenzen voor de praktijkhoudend huisarts, uren per week.`
+  }))}
+
+  ${callout(`<strong>${pct(u.bovenCapAandeel, 0)} van de eigenaren geeft meer dan ${num(u.cap)} uur per week
+    op.</strong> Voor die groep ligt de opgave gemiddeld ${num(u.bovenCapUren, 1)} uur boven de grens, maar de
+    werktijdfactor blijft 1,0. Die uren tellen dus niet mee in de tariefonderbouwing.`, 'inzicht')}
+
+  <p class="small">Het verschil tussen ${num(u.netto,1)} en ${num(u.uitgevraagd,1)} uur is
+  <b>${num(u.nietUitgevraagd,1)} uur per week</b> die nergens in beeld komt: bestuur, extern overleg, scholing
+  en een deel van het overige werk. Dat is geen meetfout — het is het gevolg van waar de uitvraag naar vraagt.</p>
+</section>
+
+<section id="scope">
   <h2>De werkweek, en welk deel ervan de NZa telt</h2>
   <p class="sub">Het Nivel meet met momentmetingen hoeveel een praktijkhoudend huisarts werkt. De NZa vraagt in
   het uitvraagformat naar drie dingen: zorg verlenen, praktijk managen en inzet apotheek. Onderstaande balk is
   de volledige gemeten werkweek; het gekleurde deel is wat de tariefonderbouwing ziet.</p>
   ${panel(stackedBar({
     items:[
-      { naam:'Uitgevraagd door de NZa', kort:'Uitgevraagd', waarde:46.2,
+      { naam:'Uitgevraagd door de NZa', kort:'Uitgevraagd', waarde:u.uitgevraagd,
         toelichting:'Zorg verlenen, praktijk managen en inzet apotheek. Zit in de overdagtarieven.' },
-      { naam:'Dienst op de huisartsenpost', kort:'Anw-dienst', waarde:2.6,
+      { naam:'Dienst op de huisartsenpost', kort:'Anw-dienst', waarde:u.anw,
         toelichting:'Aparte bekostiging; bewust buiten de overdagtarieven gehouden.' },
-      { naam:'Bestuur, extern overleg, scholing, overig', kort:'Nergens belegd', waarde:6.9,
+      { naam:'Bestuur, extern overleg, scholing, overig', kort:'Nergens belegd', waarde:u.nietUitgevraagd,
         toelichting:'Valt buiten alle drie de categorieen waar de NZa naar vraagt, en buiten de anw-bekostiging.' }
     ],
     fmt: v => num(v,1) + ' u', unit:' per week',
-    caption:'Werkweek van de praktijkhoudend huisarts, uren per week. Totaal 55,7 uur volgens het Nivel.'
+    caption:`Werkweek van de praktijkhoudend huisarts, uren per week. Totaal ${num(u.bruto,1)} uur volgens het Nivel.`
   }))}
   ${panel(dataTable(T.werkweek_opbouw, [null, v=>num(v,1), null]))}
-  ${anwNoot(w('uren','nivel_werkweek'), w('uren','anw_dienst'))}
-  <p class="small">De NZa publiceert zelf 46,2 uur per fte. Dat cijfer klopt met de eigen vraagstelling; het is
-  geen meting van de werkweek. Wie beide getallen naast elkaar legt zonder dat onderscheid, vergelijkt een
-  volledige werkweek met een uitsnede ervan.</p>
+  ${anwNoot(u.bruto, u.anw)}
+  <p class="small">De NZa publiceert zelf ${num(u.uitgevraagd,1)} uur per fte. Dat is de gemiddelde urenopgave
+  binnen de uitgevraagde categorieën, en klopt met de eigen vraagstelling; het is geen meting van de werkweek.
+  Wie beide getallen naast elkaar legt zonder dat onderscheid, vergelijkt een volledige werkweek met een
+  uitsnede ervan.</p>
 </section>
 
 <section>
@@ -42,21 +77,23 @@ export default function () {
   eerste stap: <a href="/beroepsgroep/">het pensioenfonds telt er ruim duizend minder</a>.</p>
   ${panel(trechter({
     stappen:[
-      { label:'Praktijkhoudend huisartsen', waarde:7561, serie:1, nadruk:true,
-        toelichting:'Personen. Nivel-beroepenregistratie 2023; het pensioenfonds komt voor 2024 op 6.479' },
-      { label:'Fte in de tariefberekening', waarde:6604, serie:3,
-        toelichting:'Werkelijke bezetting: 1 fte per 2.650 ingeschrevenen',
+      { label:'Praktijkhoudend huisartsen (personen)', waarde:k.personen, serie:1, nadruk:true,
+        toelichting:'Mensen, geen rekeneenheden. Het pensioenfonds telt er ruim duizend minder.' },
+      { label:`Nac's vóór schoning (rekeneenheden)`, waarde:k.brutoNac, serie:3,
+        toelichting:`Ingeschreven verzekerden gedeeld door ${num(k.perFte)} per fte`,
         reden:'deeltijd en de aftopping van de werktijdfactor op 1,0' },
-      { label:'Arbeidskostencomponenten binnen 100%', waarde:5888, serie:4,
-        toelichting:'Na schoning buiten 100% en de correctie poh-ggz', reden:'schoning op omzet' },
-      { label:'Gedekt door NZa-maximumtarieven', waarde:4381, serie:2, nadruk:true,
-        toelichting:'De rest moet uit vrij onderhandelbare omzet komen', reden:'74,4% van de omzet is tarief gereguleerd' }
+      { label:`Nac's binnen de 100%`, waarde:k.binnen100, serie:4,
+        toelichting:'Na schoning buiten de honderd procent en de correctie poh-ggz', reden:'schoning op omzet' },
+      { label:'Gedekt door NZa-maximumtarieven', waarde:k.maxTarief, serie:2, nadruk:true,
+        toelichting:'De rest wordt verondersteld uit vrij onderhandelbare omzet te komen',
+        reden:`${pct(w('nac','tarief_gereguleerd'),1)} van de omzet is tarief gereguleerd` }
     ],
-    fmt: num, caption:'Van beroepsgroep naar tariefonderbouwing, cijfers voor 2025.'
+    fmt: v => num(v, 0), caption:`Van beroepsgroep naar tariefonderbouwing, cijfers voor ${k.jaar}.
+      Let op de eenheden: de eerste stap telt mensen, de rest rekeneenheden.`
   }))}
-  ${callout(`De gemiddelde praktijkhouder werkt ${num(w('uren','nivel_werkweek'),1)} uur per week volgens het
-  Nivel en geeft er ${num(w('uren','nza_uren_per_fte'),1)} op in het kostprijsonderzoek. Toch komen ruim
-  zevenduizend van hen samen niet verder dan ${num(4381)} volledig door tarieven gedekte
+  ${callout(`De gemiddelde praktijkhouder werkt ${num(u.bruto,1)} uur per week volgens het
+  Nivel en geeft er ${num(u.uitgevraagd,1)} op in het kostprijsonderzoek. Toch komen ruim
+  zevenduizend van hen samen niet verder dan ${num(k.maxTarief,0)} volledig door tarieven gedekte
   arbeidskostencomponenten. <strong>Het verschil zit niet in te weinig werken, maar in twee rekenregels:
   de aftopping en de schoning.</strong> <a href="/arbeidskosten/">Die keten staat hier uitgewerkt</a>.`)}
 </section>
@@ -108,10 +145,13 @@ export default function () {
 </section>`;
 
   return { pad:'/uren/', html: pagina({
-    pad:'/uren/', titel:'Uren en de fte-definitie', eyebrow:'Arbeidsduur praktijkhoudend huisarts',
-    h1:'Wat telt als een fte, en wat telt helemaal niet mee',
+    pad:'/uren/', titel:'Uren en de fte-definitie', eyebrow:'Werkweek, uitvraag en fte-grens',
+    h1:`${num(u.netto,1)} uur gewerkt. ${num(u.uitgevraagd,1)} uur in beeld. Boven ${num(u.cap)} uur telt niet extra mee.`,
+    status:[`Werkweek gemeten in 2024`, `uitvraag: kostprijsonderzoek 2022`, `aftopping: ${p('uren','fte_uren_norm').status}`],
     omschrijving:'Waarom de NZa 46,2 uur per fte opgeeft terwijl Nivel 55,7 uur meet, en wat de aftopping op 1,0 fte betekent.',
-    lede:`De NZa bepaalt het aantal fte praktijkhoudend huisarts uit zelf opgegeven uren, gedeeld door 36 en
-      afgetopt op 1,0. Hier staat wat er in die opgave zit, wat er buiten valt, en wat dat betekent.`,
+    lede:`Het Nivel meet voor praktijkhouders ${num(u.bruto,1)} uur per week. Na aftrek van ${num(u.anw,1)} uur
+      apart bekostigde dienst op de huisartsenpost resteert ${num(u.netto,1)} uur. De NZa rapporteert gemiddeld
+      ${num(u.uitgevraagd,1)} uur binnen haar uitgevraagde categorieën, en begrenst de werktijdfactor op 1,0
+      vanaf ${num(u.cap)} uur.`,
     body })};
 }

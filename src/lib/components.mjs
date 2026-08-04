@@ -287,7 +287,7 @@ export function trechter({ stappen, caption, fmt = num, eenheid = '' }) {
         <div style="height:100%;width:${(s.waarde/max*100).toFixed(2)}%;background:${SERIES(s.serie ?? 1)};border-radius:4px"></div>
       </div>
       ${s.toelichting ? `<div class="bron" style="margin-top:5px">${esc(s.toelichting)}</div>` : ''}
-      ${verlies !== null ? `<div style="font-size:12.5px;color:var(--series-2);margin-top:7px;padding-left:2px">
+      ${verlies !== null ? `<div style="font-size:12.5px;color:var(--text-secondary);margin-top:7px;padding-left:2px">
           ${verlies < 0 ? '↓' : '↑'} ${fmt(Math.abs(verlies))}${eenheid}${s.reden ? ' — ' + esc(s.reden) : ''}</div>` : ''}
     </div>`;
   }).join('');
@@ -387,3 +387,34 @@ export const methodDisclosure = (titel, html) =>
 export const begrippenBalk = (items) =>
   `<div class="begrippen">` + items.map(i =>
     `<div><b>${esc(i.term)}</b><span>${esc(i.uitleg)}</span></div>`).join('') + `</div>`;
+
+/* ---------- meetlat ----------
+   Eén horizontale schaal met gemarkeerde grenzen. Voor grootheden die in
+   dezelfde eenheid worden uitgedrukt maar uit verschillende bronnen komen:
+   dan is zichtbaar hoe ver ze uit elkaar liggen zonder dat een gestapelde
+   balk suggereert dat ze bij elkaar optellen. */
+export function meetlat({ max, punten, caption, fmt = num, eenheid = '' }) {
+  const merken = punten.map((p, i) => {
+    const x = (p.waarde / max) * 100;
+    const boven = i % 2 === 0;
+    /* Een markering aan de rand zou half buiten het vlak vallen. Die wordt
+       daarom naar binnen uitgelijnd in plaats van gecentreerd. */
+    const rand = x > 88 ? ' rechts' : x < 12 ? ' links' : '';
+    return `<div class="merk${boven ? '' : ' onder'}${rand}" style="left:${x.toFixed(2)}%"
+      data-tip="${tip(`<b>${esc(p.label)}</b><br>${fmt(p.waarde)}${eenheid}` +
+        (p.toelichting ? `<br><span style="color:var(--text-secondary)">${esc(p.toelichting)}</span>` : ''))}">
+      <span class="l">${esc(p.label)}</span>
+      <span class="w num">${fmt(p.waarde)}</span>
+      <span class="s" style="background:${SERIES(p.serie ?? 1)}"></span>
+    </div>`;
+  }).join('');
+  const tbl = table({
+    cols: [{label:'Grens'}, {label:`Waarde`, r:true}, {label:'Wat het is'}],
+    rows: punten.map(p => [esc(p.label), fmt(p.waarde) + eenheid, esc(p.toelichting ?? '')])
+  });
+  return `<figure>
+    ${caption ? `<figcaption>${caption}</figcaption>` : ''}
+    <div class="meetlat"><div class="baan"></div>${merken}</div>
+    ${tableDetails('Toon als tabel', tbl)}
+  </figure>`;
+}

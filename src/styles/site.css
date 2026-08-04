@@ -345,3 +345,42 @@ details.methode .inh > *:first-child{margin-top:14px}
 .begrippen div:last-child{border-right:0}
 .begrippen b{display:block;font-size:12.5px;color:var(--text-primary)}
 .begrippen span{font-size:11.5px;color:var(--text-muted)}
+
+/* ---------- meetlat ----------
+   Markeringen staan om en om boven en onder de baan, en elk blokje eindigt
+   precies op de baan. Zonder die vaste hoogte lopen de bijschriften van twee
+   dicht bij elkaar liggende grenzen door elkaar heen. */
+.meetlat{position:relative;height:190px;margin:26px 0 8px}
+.meetlat .baan{position:absolute;left:0;right:0;top:95px;height:6px;background:var(--surface-2);
+  border-radius:3px;border:1px solid var(--line)}
+.meetlat .merk{position:absolute;transform:translateX(-50%);width:112px;text-align:center;cursor:default;
+  display:flex;flex-direction:column;justify-content:flex-end;align-items:center}
+.meetlat .merk{top:0;height:95px}
+.meetlat .merk.rechts{transform:translateX(-100%);text-align:right;align-items:flex-end}
+.meetlat .merk.links{transform:translateX(0);text-align:left;align-items:flex-start}
+.meetlat .merk.rechts .s,.meetlat .merk.links .s{margin:0}
+.meetlat .merk.onder{top:auto;bottom:0;height:89px;justify-content:flex-start;flex-direction:column-reverse}
+.meetlat .merk .w{font-size:17px;font-weight:700;letter-spacing:-.02em;
+  font-variant-numeric:tabular-nums;line-height:1.1;margin-bottom:5px}
+.meetlat .merk.onder .w{margin:0 0 0;margin-top:5px}
+.meetlat .merk .s{width:3px;height:22px;border-radius:2px;flex:none}
+.meetlat .merk .l{font-size:11.5px;color:var(--text-secondary);line-height:1.3;margin-bottom:6px}
+.meetlat .merk.onder .l{margin:6px 0 0}
+@media(min-width:701px){
+  /* De streep hoort op de waarde te staan, ook als het bijschrift naar binnen
+     is uitgelijnd. Daarom schuift alleen de streep terug naar de rand. */
+  .meetlat .merk.rechts .s{margin-right:0;position:relative;left:1.5px}
+  .meetlat .merk.links .s{position:relative;left:-1.5px}
+}
+@media(max-width:700px){
+  /* Op een smal scherm gaan vier bijschriften nooit naast elkaar passen.
+     Dan wordt het een lijst, met de baan als kleurstreep ernaast. */
+  .meetlat{height:auto;display:flex;flex-direction:column;gap:14px}
+  .meetlat .baan{display:none}
+  .meetlat .merk,.meetlat .merk.onder,.meetlat .merk.rechts,.meetlat .merk.links{position:static;transform:none;
+    text-align:left;align-items:stretch;width:auto;height:auto;
+    text-align:left;display:grid;grid-template-columns:auto 1fr;gap:0 12px;align-items:center}
+  .meetlat .merk .s,.meetlat .merk.onder .s{width:4px;height:100%;min-height:36px;grid-row:1/3;grid-column:1}
+  .meetlat .merk .w,.meetlat .merk.onder .w{grid-column:2;grid-row:1;margin:0;text-align:left}
+  .meetlat .merk .l,.meetlat .merk.onder .l{grid-column:2;grid-row:2;margin:2px 0 0}
+}
