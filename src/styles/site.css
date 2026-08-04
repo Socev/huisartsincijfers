@@ -1,5 +1,8 @@
 *{box-sizing:border-box}
 html{scroll-behavior:smooth}
+/* De kop blijft staan bij het scrollen. Zonder deze marge verdwijnt de titel
+   van een sectie eronder zodra je via een anker binnenkomt. */
+section[id],[id]{scroll-margin-top:84px}
 body{margin:0;background:var(--surface-0);color:var(--text-primary);
   font:16px/1.65 var(--font-ui);-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
 .wrap{max-width:var(--wrap);margin:0 auto;padding:0 20px}
