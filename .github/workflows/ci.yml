@@ -1,0 +1,73 @@
+# Tests bij elke push en pull request; deploy naar Cloudflare alleen vanaf main
+# en alleen als dat expliciet is aangezet.
+#
+# De deploy staat bewust achter een schakelaar. Cloudflare kan de site ook zelf
+# vanaf GitHub bouwen (Workers Builds). Staat die koppeling aan, dan zou deze
+# workflow er een tweede deploy bovenop doen. Zet de repository-variabele
+# DEPLOY_VIA_ACTIONS pas op "true" als de git-koppeling in Cloudflare uit staat.
+
+name: Tests en deploy
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    name: Tests en build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      # De site heeft geen afhankelijkheden nodig om te bouwen of te testen.
+      # Dat is een ontwerpkeuze: een site die het van betrouwbaarheid moet
+      # hebben, moet over vijf jaar nog te bouwen zijn. Geen npm install dus.
+      - name: Kernberekeningen testen
+        run: node --test test/*.test.mjs
+
+      - name: Site bouwen
+        run: node build.mjs
+
+      - name: Controleren dat elke pagina er staat
+        run: |
+          ontbreekt=0
+          for pad in index bronnen over nac arbeidskosten uren uurtarief \
+                     modelwissel beroepsgroep inkomen werkdruk praktijkkosten \
+                     tarieven omzet; do
+            if [ "$pad" = "index" ]; then bestand="dist/index.html"; else bestand="dist/$pad/index.html"; fi
+            if [ ! -s "$bestand" ]; then echo "ontbreekt of leeg: $bestand"; ontbreekt=1; fi
+          done
+          test -s dist/sitemap.xml || { echo "sitemap ontbreekt"; ontbreekt=1; }
+          test -s dist/robots.txt || { echo "robots.txt ontbreekt"; ontbreekt=1; }
+          exit $ontbreekt
+
+  deploy:
+    name: Deploy naar Cloudflare
+    needs: test
+    if: github.ref == 'refs/heads/main' && vars.DEPLOY_VIA_ACTIONS == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Site bouwen
+        run: node build.mjs
+
+      - name: Publiceren
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: deploy
