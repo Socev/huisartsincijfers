@@ -39,10 +39,10 @@ if (nietGevonden) schrijf('404.html', (await nietGevonden()).html);
 
 /* robots + sitemap */
 schrijf('robots.txt', `User-agent: *\nAllow: /\nSitemap: https://huisartsincijfers.nl/sitemap.xml\n`);
-const { NAV } = await import('./src/lib/layout.mjs');
+const { ALLE_PADEN } = await import('./src/lib/layout.mjs');
 schrijf('sitemap.xml',
   `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n` +
-  NAV.map(x => `  <url><loc>https://huisartsincijfers.nl${x.href}</loc></url>`).join('\n') +
+  ALLE_PADEN.map(pad => `  <url><loc>https://huisartsincijfers.nl${pad}</loc></url>`).join('\n') +
   `\n</urlset>\n`);
 
 console.log(`Gebouwd: ${n} pagina's in ${OUT}/`);

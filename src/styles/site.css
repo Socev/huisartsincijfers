@@ -19,19 +19,77 @@ header.site .wrap{display:flex;align-items:center;gap:14px;min-height:62px;paddi
 .logo svg{display:block}
 .logo .wm{font-weight:700;letter-spacing:-.022em;font-size:16.5px}
 .logo .wm i{font-style:normal;color:var(--text-muted);font-weight:400}
-nav.main{display:flex;gap:2px;flex:1;min-width:0;flex-wrap:wrap;justify-content:flex-end}
-nav.main a{color:var(--text-secondary);text-decoration:none;font-size:14px;padding:6px 10px;
-  border-radius:var(--radius-sm);white-space:nowrap}
+/* ---------- hoofdmenu ----------
+   Zes ingangen. Groepen zijn <details>, zodat het menu ook zonder JavaScript
+   werkt en met het toetsenbord te bedienen is. Op desktop staat de lade altijd
+   open; op mobiel is het een echte knop met een uitschuivend paneel, geen rij
+   links die over meerdere regels breekt. */
+.drawer{flex:1;min-width:0;display:flex;justify-content:flex-end}
+.drawer > summary{list-style:none;cursor:pointer;display:flex;flex-direction:column;justify-content:center;
+  gap:4px;width:40px;height:36px;padding:0 9px;border:1px solid var(--line-strong);
+  border-radius:var(--radius-sm);margin-left:auto}
+.drawer > summary::-webkit-details-marker{display:none}
+.drawer > summary span{display:block;height:2px;background:var(--text-secondary);border-radius:2px}
+.drawer[open] > summary{background:var(--surface-2)}
+
+nav.main{display:flex;gap:2px;align-items:center;flex-wrap:wrap;justify-content:flex-end}
+nav.main a{color:var(--text-secondary);text-decoration:none;font-size:14px;padding:7px 10px;
+  border-radius:var(--radius-sm);white-space:nowrap;display:block}
 nav.main a:hover{color:var(--text-primary);background:var(--surface-2)}
 nav.main a[aria-current=page]{color:var(--text-primary);background:var(--surface-2);font-weight:600}
+
+.grp{position:relative}
+.grp > summary{list-style:none;cursor:pointer;color:var(--text-secondary);font-size:14px;padding:7px 10px;
+  border-radius:var(--radius-sm);white-space:nowrap;display:flex;align-items:center;gap:5px}
+.grp > summary::-webkit-details-marker{display:none}
+.grp > summary i{font-style:normal;font-size:9px;opacity:.6;transition:transform .15s}
+.grp[open] > summary i{transform:rotate(180deg)}
+.grp > summary:hover{color:var(--text-primary);background:var(--surface-2)}
+/* De actieve groep is gemarkeerd, én de actieve pagina binnen de uitklap. */
+.grp[data-actief=ja] > summary{color:var(--text-primary);font-weight:600}
+.uitklap{display:flex;flex-direction:column;gap:1px}
+
 .tt{background:none;border:1px solid var(--line-strong);border-radius:var(--radius-sm);
   color:var(--text-secondary);cursor:pointer;font:inherit;font-size:12px;padding:6px 10px;flex:none}
-@media(max-width:640px){.logo .wm{display:none}}
 .tt:hover{color:var(--text-primary)}
 
+@media(max-width:899px){
+  /* Mobiel: het paneel schuift onder de kop uit. Groepen staan open uitgeklapt
+     zodra je ze aantikt; geen zwevende dropdowns op een klein scherm. */
+  .drawer[open] > .paneel{position:absolute;left:0;right:0;top:100%;z-index:40;
+    background:var(--surface-1);border-bottom:1px solid var(--line);
+    box-shadow:0 12px 30px rgba(0,0,0,.12);
+    flex-direction:column;align-items:stretch;justify-content:flex-start;
+    padding:10px 20px 18px;max-height:calc(100vh - 62px);overflow-y:auto}
+  header.site .wrap{position:relative}
+  nav.main a,.grp > summary{font-size:15.5px;padding:10px 6px}
+  .grp > summary{justify-content:space-between}
+  .uitklap{padding:2px 0 8px 14px;border-left:1px solid var(--line);margin:0 0 6px 6px}
+  .uitklap a{font-size:14.5px;padding:8px 6px}
+}
+
+@media(min-width:900px){
+  /* De lade bestaat op desktop niet: de knop verdwijnt en het paneel staat vast
+     open, ook als het <details>-element dicht is.
+
+     Dat vraagt twee regels, omdat browsers een gesloten <details> op twee
+     manieren verbergen. Nieuwe engines gebruiken ::details-content met
+     content-visibility; oudere zetten display op none bij de kinderen. Beide
+     worden hier opengezet. Faalt het alsnog, dan verschijnt de menuknop —
+     onhandig op een breed scherm, maar het menu blijft werken. */
+  .drawer > summary{display:none}
+  .drawer::details-content{content-visibility:visible;display:contents}
+  .drawer > .paneel{display:flex !important}
+  .grp > .uitklap{position:absolute;right:0;top:calc(100% + 6px);min-width:250px;z-index:40;
+    background:var(--surface-1);border:1px solid var(--line-strong);border-radius:var(--radius);
+    padding:7px;box-shadow:0 14px 34px rgba(0,0,0,.14)}
+  .grp > .uitklap a{white-space:normal;font-size:13.5px}
+}
+
 /* ---------- prototypebalk ---------- */
-.proto{background:var(--signal);color:#1a1a19;font-size:12.5px;font-weight:600;padding:7px 0;text-align:center}
-.proto a{color:inherit}
+.proto{background:var(--surface-2);color:var(--text-muted);font-size:12px;padding:7px 0;text-align:center;
+  border-bottom:1px solid var(--line)}
+.proto a{color:var(--text-secondary)}
 
 /* ---------- pagina ---------- */
 .page-head{padding:44px 0 30px}

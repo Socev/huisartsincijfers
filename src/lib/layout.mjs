@@ -8,22 +8,34 @@ export const SITE = {
   bijgewerkt: '2026-08-02'
 };
 
+/* De hoofdnavigatie telde veertien links die op elk scherm over meerdere regels
+   braken, waardoor alle onderwerpen even belangrijk leken. Nu zes ingangen,
+   gegroepeerd naar de vraag die de lezer stelt — niet naar het onderwerp. */
 export const NAV = [
-  { href: '/',                     label: 'Kerncijfers' },
-  { href: '/nac/',                 label: 'De nac' },
-  { href: '/arbeidskosten/',       label: 'Arbeidskosten' },
-  { href: '/uren/',                label: 'Uren' },
-  { href: '/uurtarief/',           label: 'Uurtarief' },
-  { href: '/modelwissel/',         label: 'Modelwissel' },
-  { href: '/beroepsgroep/',        label: 'Beroepsgroep' },
-  { href: '/inkomen/',             label: 'Inkomen' },
-  { href: '/werkdruk/',            label: 'Werkdruk' },
-  { href: '/praktijkkosten/',      label: 'Praktijkkosten' },
-  { href: '/tarieven/',            label: 'Tarieven' },
-  { href: '/omzet/',               label: 'Omzet en scope' },
-  { href: '/bronnen/',             label: 'Bronnen' },
-  { href: '/over/',                label: 'Over' }
+  { href: '/', label: 'Kerncijfers' },
+  { label: 'Nac en arbeid', kinderen: [
+    { href: '/nac/',           label: 'Wat is de nac?' },
+    { href: '/arbeidskosten/', label: 'Van praktijkhouders naar nac\'s' },
+    { href: '/uren/',          label: 'Uren en fte' },
+    { href: '/uurtarief/',     label: 'Arbeidsvergoeding per uur' },
+    { href: '/modelwissel/',   label: 'De modelwissel van 2025' }
+  ]},
+  { label: 'Praktijk en tarieven', kinderen: [
+    { href: '/praktijkkosten/', label: 'Praktijkkosten' },
+    { href: '/tarieven/',       label: 'Basistarieven' },
+    { href: '/omzet/',          label: 'Omzet, scope en schoning' },
+    { href: '/inkomen/',        label: 'Inkomen en de norm' }
+  ]},
+  { label: 'Beroepsgroep', kinderen: [
+    { href: '/beroepsgroep/', label: 'Wie levert de zorg?' },
+    { href: '/werkdruk/',     label: 'Werkdruk en patiëntenstops' }
+  ]},
+  { href: '/bronnen/', label: 'Bronnen' },
+  { href: '/over/',    label: 'Over' }
 ];
+
+/** Alle pagina's plat, voor de sitemap en voor het markeren van de actieve groep. */
+export const ALLE_PADEN = NAV.flatMap(n => n.kinderen ? n.kinderen.map(k => k.href) : [n.href]);
 
 const MARK = `<svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true">
   <rect x="1" y="13" width="4" height="8" rx="1.4" fill="currentColor"/>
@@ -35,8 +47,20 @@ const MARK = `<svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"
 
 export function pagina({ pad, titel, omschrijving, eyebrow, h1, lede, body,
                          status, acties, proto = true }) {
-  const nav = NAV.map(n =>
-    `<a href="${n.href}"${n.href === pad ? ' aria-current="page"' : ''}>${esc(n.label)}</a>`).join('');
+  /* Groepen zijn <details>: ze werken zonder JavaScript en zijn met het
+     toetsenbord te bedienen. site.js sluit alleen de andere groepen en vangt
+     Escape af — een verbetering, geen voorwaarde. */
+  const link = (n, actief) =>
+    `<a href="${n.href}"${actief ? ' aria-current="page"' : ''}>${esc(n.label)}</a>`;
+
+  const nav = NAV.map(n => {
+    if (!n.kinderen) return link(n, n.href === pad);
+    const actiefIn = n.kinderen.some(k => k.href === pad);
+    return `<details class="grp"${actiefIn ? ' data-actief="ja"' : ''}>
+      <summary${actiefIn ? ' aria-current="true"' : ''}>${esc(n.label)}<i aria-hidden="true">▾</i></summary>
+      <div class="uitklap">${n.kinderen.map(k => link(k, k.href === pad)).join('')}</div>
+    </details>`;
+  }).join('');
 
   return `<!DOCTYPE html>
 <html lang="nl">
@@ -64,7 +88,10 @@ ${proto ? `<div class="proto">Deze site is in opbouw. De cijfers zijn gecontrole
 
 <header class="site"><div class="wrap">
   <a class="logo" href="/">${MARK}<span class="wm">huisartsincijfers<i>.nl</i></span></a>
-  <nav class="main" aria-label="Hoofdmenu">${nav}</nav>
+  <details class="drawer" id="drawer">
+    <summary aria-label="Menu openen"><span></span><span></span><span></span></summary>
+    <nav class="main paneel" aria-label="Hoofdmenu">${nav}</nav>
+  </details>
   <button class="tt" id="tt" type="button" aria-live="polite">donker</button>
 </div></header>
 

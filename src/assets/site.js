@@ -31,3 +31,40 @@
   mq.addEventListener('change', sync);
   sync();
 })();
+
+/* Menu. De <details>-elementen werken zonder dit script; dit sluit alleen de
+   andere groepen, vangt Escape af en klapt de lade dicht als je ernaast klikt. */
+(function () {
+  var kop = document.querySelector('header.site');
+  if (!kop) return;
+  var lade = document.getElementById('drawer');
+  var groepen = Array.prototype.slice.call(kop.querySelectorAll('details.grp'));
+
+  groepen.forEach(function (g) {
+    g.addEventListener('toggle', function () {
+      if (!g.open) return;
+      groepen.forEach(function (a) { if (a !== g) a.open = false; });
+    });
+  });
+
+  function sluitAlles() {
+    groepen.forEach(function (g) { g.open = false; });
+    if (lade && window.innerWidth < 900) lade.open = false;
+  }
+
+  document.addEventListener('click', function (e) {
+    if (!kop.contains(e.target)) sluitAlles();
+  });
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') sluitAlles();
+  });
+  /* Op desktop hoort het menu altijd zichtbaar te zijn. De CSS regelt dat al,
+     maar door het <details>-element daar ook echt open te zetten is de site
+     niet afhankelijk van hoe een browser een gesloten details verbergt. */
+  function stemAfOpBreedte() {
+    if (!lade) return;
+    lade.open = window.innerWidth >= 900;
+  }
+  addEventListener('resize', stemAfOpBreedte);
+  stemAfOpBreedte();
+})();
