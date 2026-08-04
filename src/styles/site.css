@@ -384,3 +384,51 @@ details.methode .inh > *:first-child{margin-top:14px}
   .meetlat .merk .w,.meetlat .merk.onder .w{grid-column:2;grid-row:1;margin:0;text-align:left}
   .meetlat .merk .l,.meetlat .merk.onder .l{grid-column:2;grid-row:2;margin:2px 0 0}
 }
+
+/* ---------- bronnenpagina: zoeken en filteren ----------
+   Zonder JavaScript staat alles er en is de filterbalk verborgen. Het filter
+   is een hulpmiddel, geen voorwaarde om bij de cijfers te komen. */
+.filterbalk{display:grid;gap:12px;margin:0 0 22px;padding:16px 18px;background:var(--surface-1);
+  border:1px solid var(--line);border-radius:var(--radius)}
+.zoekveld{display:block}
+.zoekveld .vk{display:block;font-size:11.5px;letter-spacing:.06em;text-transform:uppercase;
+  color:var(--text-muted);margin-bottom:6px}
+.zoekveld input{width:100%;font:inherit;font-size:15px;padding:10px 12px;border-radius:var(--radius-sm);
+  border:1px solid var(--line-strong);background:var(--surface-0);color:var(--text-primary)}
+.chips{display:flex;flex-wrap:wrap;gap:7px}
+.chips button{font:inherit;font-size:13px;padding:6px 13px;border-radius:999px;cursor:pointer;
+  border:1px solid var(--line-strong);background:var(--surface-2);color:var(--text-secondary)}
+.chips button[aria-pressed=true]{background:var(--accent);border-color:var(--accent);color:var(--text-invert);
+  font-weight:600}
+:root[data-theme=dark] .chips button[aria-pressed=true]{color:#12120f}
+@media(prefers-color-scheme:dark){:root:where(:not([data-theme=light])) .chips button[aria-pressed=true]{color:#12120f}}
+.telling{margin:0;font-size:12.5px;color:var(--text-muted)}
+
+details.parsectie{margin:0 0 12px}
+details.parsectie > summary{cursor:pointer;list-style:none;font-size:15px;font-weight:600;
+  padding:11px 4px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:9px}
+details.parsectie > summary::-webkit-details-marker{display:none}
+details.parsectie > summary::before{content:"›";font-size:17px;color:var(--text-muted);
+  transition:transform .15s;display:inline-block}
+details.parsectie[open] > summary::before{transform:rotate(90deg)}
+details.parsectie > summary i{font-style:normal;font-size:11.5px;font-weight:400;color:var(--text-muted);
+  background:var(--surface-2);border-radius:999px;padding:1px 8px}
+.parlijst{padding:2px 0 10px}
+
+/* Op breed scherm leest een parameter als tabelrij, op mobiel als kaart.
+   Eén stuk markup, twee verschijningsvormen. */
+.par{display:grid;gap:4px 16px;padding:13px 4px;border-bottom:1px solid var(--line);align-items:start}
+.par.kop{display:none}
+.par .p-l b{display:block;font-size:14px;font-weight:600;line-height:1.35}
+.par .p-l code{display:block;font-family:var(--font-mono);font-size:11px;color:var(--text-muted);margin-top:3px}
+.par .p-w{font-size:15px;font-weight:600;font-variant-numeric:tabular-nums}
+.par .p-b{font-size:12.5px;color:var(--text-secondary);line-height:1.5}
+.par .p-op{display:block;font-size:11.5px;color:var(--text-muted);margin-top:4px}
+.par[hidden]{display:none}
+@media(min-width:860px){
+  .par{grid-template-columns:2fr 1fr 2.4fr auto;align-items:baseline}
+  .par.kop{display:grid;font-size:11.5px;text-transform:uppercase;letter-spacing:.05em;
+    color:var(--text-secondary);background:var(--surface-2);border-radius:5px;padding:8px 10px;border:0;
+    position:sticky;top:63px;z-index:5}
+  .par .p-w{text-align:right}
+}

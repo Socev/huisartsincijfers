@@ -68,3 +68,62 @@
   addEventListener('resize', stemAfOpBreedte);
   stemAfOpBreedte();
 })();
+
+/* Bronnenpagina: zoeken en filteren op status. De pagina werkt zonder dit
+   script — dan staat alles er en blijft de filterbalk verborgen. */
+(function () {
+  var balk = document.getElementById('filters');
+  if (!balk) return;
+  balk.hidden = false;
+
+  var zoekveld = document.getElementById('zoek');
+  var telling  = document.getElementById('telling');
+  var niets    = document.getElementById('niets');
+  var wissen   = document.getElementById('wissen');
+  var knoppen  = [].slice.call(balk.querySelectorAll('.chips button'));
+  var params   = [].slice.call(document.querySelectorAll('.par:not(.kop)'));
+  var secties  = [].slice.call(document.querySelectorAll('details.parsectie'));
+  var status   = 'alle';
+
+  function pas() {
+    var q = (zoekveld.value || '').trim().toLowerCase();
+    var raak = 0;
+    params.forEach(function (el) {
+      var s = el.getAttribute('data-status') || '';
+      /* "afgeleid" moet ook "afgeleid, bevat schatting" vangen; op status
+         schatting willen we die samengestelde vorm er juist bij. */
+      var statusOk = status === 'alle' || s.indexOf(status) === 0 ||
+                     (status === 'schatting' && s.indexOf('schatting') >= 0);
+      var zoekOk = !q || (el.getAttribute('data-zoek') || '').indexOf(q) >= 0;
+      var toon = statusOk && zoekOk;
+      el.hidden = !toon;
+      if (toon) raak++;
+    });
+
+    /* Een sectie zonder zichtbare parameters heeft geen reden om open te staan. */
+    secties.forEach(function (sec) {
+      var over = sec.querySelectorAll('.par:not(.kop):not([hidden])').length;
+      sec.hidden = over === 0;
+      var teller = sec.querySelector('summary i');
+      if (teller) teller.textContent = over;
+    });
+
+    telling.textContent = raak + ' van ' + params.length + ' parameters';
+    niets.hidden = raak !== 0;
+  }
+
+  zoekveld.addEventListener('input', pas);
+  knoppen.forEach(function (k) {
+    k.addEventListener('click', function () {
+      status = k.getAttribute('data-status');
+      knoppen.forEach(function (a) { a.setAttribute('aria-pressed', String(a === k)); });
+      pas();
+    });
+  });
+  if (wissen) wissen.addEventListener('click', function () {
+    zoekveld.value = ''; status = 'alle';
+    knoppen.forEach(function (a) { a.setAttribute('aria-pressed', String(a.getAttribute('data-status') === 'alle')); });
+    pas(); zoekveld.focus();
+  });
+  pas();
+})();
