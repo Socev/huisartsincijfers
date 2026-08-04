@@ -34,13 +34,23 @@
   --series-7:#4a3aa7;
   --series-8:#e34948;
 
+
+  /* Semantische rollen. Kleur is nooit de enige drager: elk blok heeft ook een
+     label. Drie rollen die nu nog allemaal oranje waren en daardoor een
+     bevinding, een beperking en een technische noot even zwaar lieten wegen. */
+  --insight:var(--accent);      /* kernbevinding, conclusie */
+  --warning:var(--signal);      /* risico op verkeerde lezing, methodische beperking */
+  --method:var(--line-strong);  /* uitleg, technische noot */
+  --positive:var(--series-6);   /* alleen waar de betekenis echt positief is */
+  --negative:var(--series-8);   /* alleen waar de betekenis echt negatief is */
+
   /* Typografie */
   --font-ui:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
   --font-mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,monospace;
 
   /* Maatvoering */
   --wrap:1080px;
-  --wrap-tekst:78ch;
+  --wrap-tekst:68ch;
   --radius:10px;
   --radius-sm:6px;
   --gap:16px;
@@ -55,6 +65,7 @@
     --line:#33332f; --line-strong:#4a4a45;
     --text-primary:#ffffff; --text-secondary:#c3c2b7; --text-muted:#94938a;
     --accent:#7fb2f0; --accent-soft:#1c2a3a; --signal:#c98500;
+    --insight:#7fb2f0; --warning:#c98500; --method:#4a4a45;
     --series-1:#3987e5; --series-2:#d95926; --series-3:#199e70; --series-4:#c98500;
     --series-5:#d55181; --series-6:#008300; --series-7:#9085e9; --series-8:#e66767;
   }
@@ -65,6 +76,7 @@
   --line:#33332f; --line-strong:#4a4a45;
   --text-primary:#ffffff; --text-secondary:#c3c2b7; --text-muted:#94938a;
   --accent:#7fb2f0; --accent-soft:#1c2a3a; --signal:#c98500;
+    --insight:#7fb2f0; --warning:#c98500; --method:#4a4a45;
   --series-1:#3987e5; --series-2:#d95926; --series-3:#199e70; --series-4:#c98500;
   --series-5:#d55181; --series-6:#008300; --series-7:#9085e9; --series-8:#e66767;
 }

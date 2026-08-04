@@ -33,7 +33,8 @@ const MARK = `<svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"
   <rect x="19" y="14" width="4" height="7" rx="1.4" fill="var(--accent)"/>
 </svg>`;
 
-export function pagina({ pad, titel, omschrijving, eyebrow, h1, lede, body, proto = true }) {
+export function pagina({ pad, titel, omschrijving, eyebrow, h1, lede, body,
+                         status, acties, proto = true }) {
   const nav = NAV.map(n =>
     `<a href="${n.href}"${n.href === pad ? ' aria-current="page"' : ''}>${esc(n.label)}</a>`).join('');
 
@@ -72,6 +73,11 @@ ${proto ? `<div class="proto">Deze site is in opbouw. De cijfers zijn gecontrole
     ${eyebrow ? `<p class="eyebrow">${esc(eyebrow)}</p>` : ''}
     <h1>${esc(h1)}</h1>
     ${lede ? `<p class="lede">${lede}</p>` : ''}
+    ${status ? `<p class="statusregel">${status.filter(Boolean).map(esc).join('<span class="sep">·</span>')}</p>` : ''}
+    ${acties ? `<div class="acties">
+      ${acties.primair  ? `<a class="knop" href="${esc(acties.primair.href)}">${esc(acties.primair.label)}</a>` : ''}
+      ${acties.secundair ? `<a class="knop-sec" href="${esc(acties.secundair.href)}">${esc(acties.secundair.label)}</a>` : ''}
+    </div>` : ''}
   </div>
   ${body}
 </div></main>

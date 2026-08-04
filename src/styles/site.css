@@ -174,3 +174,113 @@ figure figcaption,
 figure .bron,
 details.tbl p,
 .tile .k{max-width:none}
+
+/* ===========================================================================
+   Claim-first bouwstenen. Zie HUISSTIJL.md en hoofdstuk 20 van de audit:
+   eerst de conclusie, dan het bewijs, dan de rekenregel, dan de methode.
+   =========================================================================== */
+
+/* ---------- statusregel onder een kop ----------
+   Jaar en status horen zichtbaar bij elk prominent kerngetal. Klein, grijs,
+   maar altijd aanwezig: een schatting in een hero zonder label is een fout. */
+.statusregel{display:flex;flex-wrap:wrap;align-items:center;gap:8px 14px;margin:14px 0 0;
+  font-size:12px;color:var(--text-muted)}
+.statusregel .sep{opacity:.5}
+
+/* ---------- knoppen onder een claim ---------- */
+.acties{display:flex;flex-wrap:wrap;align-items:center;gap:10px 18px;margin:26px 0 0}
+.knop{display:inline-block;background:var(--accent);color:var(--text-invert);text-decoration:none;
+  font-size:14.5px;font-weight:600;padding:11px 18px;border-radius:var(--radius-sm)}
+.knop:hover{filter:brightness(1.08)}
+:root[data-theme=dark] .knop{color:#12120f}
+@media(prefers-color-scheme:dark){:root:where(:not([data-theme=light])) .knop{color:#12120f}}
+.knop-sec{font-size:14px;color:var(--accent);text-decoration:underline;text-underline-offset:3px}
+
+/* ---------- twee grootheden tegenover elkaar ----------
+   Personen links, rekeneenheden rechts. Nooit dezelfde eenheid suggereren:
+   elk blok draagt zijn eigen eenheidsregel. */
+.contrast{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:10px;
+  background:var(--surface-1);border:1px solid var(--line);border-radius:var(--radius);padding:26px 22px;
+  box-shadow:0 1px 2px rgba(20,20,19,.035)}
+.contrast .zij{min-width:0}
+.contrast .zij .v{font-size:clamp(34px,5.6vw,50px);font-weight:700;letter-spacing:-.04em;line-height:1;
+  font-variant-numeric:tabular-nums}
+.contrast .zij .k{font-size:14px;color:var(--text-primary);margin-top:9px;font-weight:600}
+.contrast .zij .e{font-size:12.5px;color:var(--text-secondary);margin-top:3px}
+.contrast .zij .s{font-size:11px;color:var(--text-muted);margin-top:8px}
+.contrast .pijl{font-size:22px;color:var(--text-muted);padding:0 6px;align-self:center}
+.contrast .ratio{grid-column:1/-1;border-top:1px solid var(--line);margin-top:20px;padding-top:14px;
+  font-size:13.5px;color:var(--text-secondary)}
+.contrast .ratio b{color:var(--text-primary);font-variant-numeric:tabular-nums}
+@media(max-width:620px){
+  .contrast{grid-template-columns:1fr;gap:18px}
+  .contrast .pijl{transform:rotate(90deg);padding:0}
+}
+
+/* ---------- causale keten ----------
+   Elke stap draagt waarde, eenheid, status en de rekenregel die ernaartoe
+   leidt. De pijl vertelt de regel, niet alleen het verlies. */
+.keten{margin:0}
+.keten .stap{display:grid;grid-template-columns:auto 1fr;gap:0 16px}
+.keten .rail{width:11px;display:flex;flex-direction:column;align-items:center}
+.keten .dot{width:11px;height:11px;border-radius:50%;background:var(--series-1);flex:none;margin-top:7px}
+.keten .stap:nth-child(2) .dot{background:var(--series-3)}
+.keten .stap:nth-child(3) .dot{background:var(--series-4)}
+.keten .stap:nth-child(4) .dot{background:var(--series-2)}
+.keten .lijn{flex:1;width:1px;background:var(--line-strong);margin:5px 0}
+.keten .stap:last-child .lijn{display:none}
+.keten .inh{padding-bottom:6px;min-width:0}
+.keten .v{font-size:clamp(26px,3.6vw,34px);font-weight:700;letter-spacing:-.032em;line-height:1.1;
+  font-variant-numeric:tabular-nums}
+.keten .k{font-size:14.5px;color:var(--text-primary);font-weight:600;margin-top:4px}
+.keten .e{font-size:12.5px;color:var(--text-secondary);margin-top:2px}
+.keten .st{margin-top:8px}
+.keten .regel{margin:14px 0 18px;padding:10px 14px;border-left:2px solid var(--line-strong);
+  background:var(--surface-2);border-radius:0 var(--radius-sm) var(--radius-sm) 0;
+  font-size:13px;color:var(--text-secondary)}
+.keten .regel .rr{color:var(--text-primary);font-variant-numeric:tabular-nums;font-weight:600;display:block;margin-bottom:3px}
+.keten a.meer{font-size:12.5px;display:inline-block;margin-top:8px}
+
+/* ---------- bewijskaart ---------- */
+.ev{background:var(--surface-1);border:1px solid var(--line);border-radius:var(--radius);padding:20px;
+  display:flex;flex-direction:column;box-shadow:0 1px 2px rgba(20,20,19,.035)}
+.ev .claim{font-size:15.5px;font-weight:600;letter-spacing:-.012em;line-height:1.35;margin:0 0 12px}
+.ev .kern{font-size:30px;font-weight:700;letter-spacing:-.03em;line-height:1;font-variant-numeric:tabular-nums}
+.ev .bewijs{font-size:13.5px;color:var(--text-secondary);margin-top:10px;line-height:1.5;flex:1;max-width:none}
+.ev .voet{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin-top:14px}
+
+/* ---------- semantische call-outs ----------
+   Drie rollen, drie kleuren, en altijd een woordlabel erbij: kleur mag nooit
+   de enige informatiedrager zijn. */
+.callout{position:relative}
+.callout .rol{display:block;font-size:10.5px;letter-spacing:.09em;text-transform:uppercase;
+  font-weight:700;margin-bottom:6px}
+.callout.inzicht{border-left-color:var(--insight);background:var(--accent-soft)}
+.callout.inzicht .rol{color:var(--insight)}
+.callout.letop{border-left-color:var(--warning)}
+.callout.letop .rol{color:var(--warning)}
+.callout.methode{border-left-color:var(--method);background:var(--surface-2)}
+.callout.methode .rol{color:var(--text-muted)}
+
+/* ---------- methodeblok ---------- */
+details.methode{border:1px solid var(--line);border-radius:var(--radius);background:var(--surface-1);
+  margin:22px 0;padding:0}
+details.methode > summary{cursor:pointer;padding:13px 18px;font-size:13.5px;color:var(--text-secondary);
+  font-weight:600;list-style:none;display:flex;align-items:center;gap:9px}
+details.methode > summary::-webkit-details-marker{display:none}
+details.methode > summary::before{content:"›";font-size:17px;line-height:1;color:var(--text-muted);
+  transition:transform .15s;display:inline-block}
+details.methode[open] > summary::before{transform:rotate(90deg)}
+details.methode > summary:hover{color:var(--text-primary)}
+details.methode .inh{padding:0 18px 18px;border-top:1px solid var(--line)}
+details.methode .inh > *:first-child{margin-top:14px}
+
+/* ---------- begrippenlegenda ----------
+   Personen, rekeneenheden en gedekte eenheden zijn verschillende dingen. Waar
+   ze in één beeld staan, gaat deze balk erboven. */
+.begrippen{display:grid;gap:0;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+  border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;margin:0 0 18px}
+.begrippen div{padding:11px 14px;border-right:1px solid var(--line);background:var(--surface-2)}
+.begrippen div:last-child{border-right:0}
+.begrippen b{display:block;font-size:12.5px;color:var(--text-primary)}
+.begrippen span{font-size:11.5px;color:var(--text-muted)}

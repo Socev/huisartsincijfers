@@ -44,8 +44,18 @@ export function tile({ waarde, label, bron, href }) {
 export const heroNumber = (n, uitleg) =>
   `<div class="hero-n"><div class="n">${n}</div><div class="u">${uitleg}</div></div>`;
 
-/* ---------- let op ---------- */
-export const callout = html => `<div class="callout"><p>${html}</p></div>`;
+/* ---------- call-out in drie rollen ----------
+   inzicht = de hoofdconclusie · letop = risico op verkeerde lezing ·
+   methode = technische noot. Kleur is nooit de enige drager: elke rol draagt
+   ook een woordlabel, zodat de betekenis overkomt zonder kleurwaarneming. */
+const ROLLEN = { inzicht: 'Inzicht', letop: 'Let op', methode: 'Methode' };
+
+export const callout = (html, rol) => {
+  const label = ROLLEN[rol];
+  return `<div class="callout${rol ? ' ' + rol : ''}">` +
+    (label ? `<span class="rol">${label}</span>` : '') +
+    `<p>${html}</p></div>`;
+};
 
 /* ---------- paneel ---------- */
 export const panel = html => `<div class="panel">${html}</div>`;
@@ -288,3 +298,92 @@ export function trechter({ stappen, caption, fmt = num, eenheid = '' }) {
   });
   return `<figure>${caption ? `<figcaption>${caption}</figcaption>` : ''}${rijen}${tableDetails('Toon als tabel', tbl)}</figure>`;
 }
+
+/* ===========================================================================
+   Claim-first bouwstenen
+
+   De site toonde eerst definities en voorbehouden, en pas daarna waarom een
+   cijfer ertoe doet. Deze componenten draaien dat om: conclusie, bewijs,
+   rekenregel, methode. Zie hoofdstuk 20 van de audit.
+   =========================================================================== */
+
+/* ---------- status ----------
+   Elk prominent kerngetal draagt zijn jaar en zijn status. Een schatting in
+   een hero zonder zichtbaar label is een fout, geen stijlkwestie. */
+export const statusBadge = status =>
+  `<span class="badge ${String(status).includes('schatting') ? 'schatting' : status === 'definitief' ? '' : 'afgeleid'}">${esc(status)}</span>`;
+
+export function statusregel(delen) {
+  return `<p class="statusregel">` +
+    delen.filter(Boolean).map(esc).join('<span class="sep">·</span>') + `</p>`;
+}
+
+/* ---------- twee grootheden tegenover elkaar ----------
+   Voor personen tegenover rekeneenheden. Beide zijden dragen hun eigen
+   eenheid en status, zodat de vergelijking niet leest als hetzelfde soort ding. */
+export function statContrast({ links, rechts, ratio, pijl = '→' }) {
+  const zij = z => `<div class="zij">
+    <div class="v num">${z.waarde}</div>
+    <div class="k">${esc(z.label)}</div>
+    ${z.eenheid ? `<div class="e">${esc(z.eenheid)}</div>` : ''}
+    ${z.status ? `<div class="s">${statusBadge(z.status)}</div>` : ''}
+  </div>`;
+  return `<div class="contrast">
+    ${zij(links)}
+    <div class="pijl" aria-hidden="true">${pijl}</div>
+    ${zij(rechts)}
+    ${ratio ? `<p class="ratio">${ratio}</p>` : ''}
+  </div>`;
+}
+
+/* ---------- causale keten ----------
+   Personen → rekeneenheden → na schoning → gedekt. Elke stap toont waarde,
+   eenheid en status; elke pijl toont de rekenregel én de oorzaak, niet alleen
+   het verlies. Klikken springt naar de uitleg. */
+export function causalChain({ stappen, fmt = num }) {
+  const rijen = stappen.map((s, i) => `
+    <div class="stap">
+      <div class="rail"><div class="dot"></div><div class="lijn"></div></div>
+      <div class="inh">
+        <div class="v num">${fmt(s.waarde)}</div>
+        <div class="k">${esc(s.label)}</div>
+        ${s.eenheidKort ? `<div class="e">${esc(s.eenheidKort)}</div>` : ''}
+        ${s.status ? `<div class="st">${statusBadge(s.status)}</div>` : ''}
+        ${s.toelichting ? `<p class="bron" style="margin:8px 0 0">${esc(s.toelichting)}</p>` : ''}
+        ${stappen[i+1] ? `<div class="regel">
+          <span class="rr">${esc(stappen[i+1].regel ?? '')}</span>
+          ${esc(stappen[i+1].oorzaak ?? '')}
+          ${stappen[i+1].anchor ? `<a class="meer" href="${esc(stappen[i+1].anchor)}">Hoe deze stap werkt →</a>` : ''}
+        </div>` : ''}
+      </div>
+    </div>`).join('');
+  return `<div class="keten">${rijen}</div>`;
+}
+
+/* ---------- bewijskaart ----------
+   Eén claim, één kerngetal, één zin bewijs, de status, en een weg naar de
+   berekening. Meer hoort er niet in. */
+export function evidenceCard({ claim, kern, bewijs, status, href, hrefLabel = 'Bekijk de berekening' }) {
+  return `<div class="ev">
+    <p class="claim">${claim}</p>
+    ${kern ? `<div class="kern num">${kern}</div>` : ''}
+    <p class="bewijs">${bewijs}</p>
+    <div class="voet">
+      ${status ? statusBadge(status) : ''}
+      ${href ? `<a href="${esc(href)}" style="font-size:12.5px">${esc(hrefLabel)} →</a>` : ''}
+    </div>
+  </div>`;
+}
+
+/* ---------- methodeblok ----------
+   Methode, citaten, detailtabellen en gevoeligheden horen beschikbaar te zijn
+   maar niet vóór de kernthese. Werkt zonder JavaScript. */
+export const methodDisclosure = (titel, html) =>
+  `<details class="methode"><summary>${esc(titel)}</summary><div class="inh">${html}</div></details>`;
+
+/* ---------- begrippenlegenda ----------
+   Personen, rekeneenheden en gedekte eenheden zijn verschillende dingen.
+   Waar ze in één beeld staan, gaat deze balk erboven. */
+export const begrippenBalk = (items) =>
+  `<div class="begrippen">` + items.map(i =>
+    `<div><b>${esc(i.term)}</b><span>${esc(i.uitleg)}</span></div>`).join('') + `</div>`;
