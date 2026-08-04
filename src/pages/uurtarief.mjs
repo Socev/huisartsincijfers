@@ -38,11 +38,10 @@ export default function () {
   ${panel(serieChart(uurbedragSerie(), { fmt: eur, hoogte: 330 }))}
   ${panel(dataTable(uurTabel, [v=>String(v), num, v=>num(v,1), num, v=>num(v,1), eur, eur]))}
   ${anwNoot(w('uren','nivel_werkweek'), w('uren','anw_dienst'), { kort:true })}
-  <p class="small">Wie de dienst op de post buiten beschouwing laat, deelt door minder uren en komt dus
-  ${pct(w('uren','nivel_werkweek')/(w('uren','nivel_werkweek')-w('uren','anw_dienst'))-1,1)} hóger uit:
-  ${eur(u24*w('uren','nivel_werkweek')/(w('uren','nivel_werkweek')-w('uren','anw_dienst')))} in 2024 en
-  ${eur(u25*w('uren','nivel_werkweek')/(w('uren','nivel_werkweek')-w('uren','anw_dienst')))} in 2025. De
-  knik van ${pct(knik.aandeel,1)} verandert daar niet door — die is in elke variant hetzelfde.</p>
+  ${callout(`De dienst op de huisartsenpost is in <b>alle</b> hierboven getoonde uurbedragen al buiten
+  beschouwing gelaten. Die zorg kent een aparte bekostiging en valt buiten de overdagtarieven. De daling
+  tussen 2024 en 2025 verandert niet door deze keuze van de noemer — in elke variant is zij even groot.`,
+  'methode')}
 </section>
 
 <section>

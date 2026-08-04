@@ -8,7 +8,7 @@ export default function () {
   const body = `
 <section>
   <div class="grid c4">
-    ${tile({ waarde: pct(w('werkdruk','stop_2024'),0), label:'van de praktijken had in 2024 een patiëntenstop. In 2018 was dat ' + pct(w('werkdruk','stop_2018'),0) + '.', bron:'Nivel arbeidsmarktonderzoek' })}
+    ${tile({ waarde: pct(w('werkdruk','stop_2024'),0), label:'van de praktijken hadden in 2024 een patiëntenstop. In 2018 was dat ' + pct(w('werkdruk','stop_2018'),0) + '.', bron:'Nivel arbeidsmarktonderzoek' })}
     ${tile({ waarde: num(w('werkdruk','werkdruk_2024')), label:'werkdrukscore van huisartsen op een schaal van honderd — hoger is meer druk', bron:'Nivel arbeidsmarktonderzoek' })}
     ${tile({ waarde: num(w('werkdruk','werkplezier_2024')), label:'werkplezierscore in de praktijk. Die blijft opvallend stabiel.', bron:'Nivel arbeidsmarktonderzoek' })}
     ${tile({ waarde: pct(w('werkdruk','verzuim_2022')/100,1), label:'ziekteverzuim in de branche in het piekjaar 2022, tegen ' + pct(w('werkdruk','verzuim_2013')/100,1) + ' in 2013', bron:'CBS AZW' })}
@@ -16,7 +16,7 @@ export default function () {
 </section>
 
 <section>
-  <h2>Zes op de tien praktijken zit vol</h2>
+  <h2>Zes op de tien praktijken zitten vol</h2>
   <p class="sub">Het aandeel praktijken met een patiëntenstop liep op van bijna de helft naar zes op de tien.
   De verwachte tekorten schommelen sterk van jaar op jaar — dat zijn verwachtingen, geen metingen, en ze
   reageren zichtbaar op de actualiteit.</p>
@@ -54,7 +54,7 @@ export default function () {
 
   return { pad:'/werkdruk/', html: pagina({
     pad:'/werkdruk/', titel:'Werkdruk en capaciteit', eyebrow:'Arbeidsmarkt en belasting',
-    h1:`Zes op de tien praktijken had in 2024 een patiëntenstop`,
+    h1:`Zes op de tien praktijken hadden in 2024 een patiëntenstop`,
     status:[`Nivel-arbeidsmarktonderzoek 2024`, `enquête onder praktijken`,
             `vraagstelling gewijzigd na 2022`],
     omschrijving:'Het aandeel praktijken met een patiëntenstop, de werkdruk- en werkplezierscores en het ziekteverzuim in de branche.',

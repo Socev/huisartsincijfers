@@ -40,8 +40,8 @@ export default function () {
   ${panel(dataTable(T.kerngetallen, [null, eur0, eur0, v=>pct(v,1)]))}
   ${callout(`In de gemeten kostprijs verschoof het gewicht van de arbeidskosten van de praktijkhouder naar
   personeel en inhuur. Dat verklaart een deel van de modeluitkomst; het zegt niet wat iedere individuele
-  praktijk feitelijk heeft ontvangen. Het geld is niet uit de tarieven verdwenen — het staat op een andere
-  regel.`, 'inzicht')}
+  praktijk feitelijk heeft ontvangen. Binnen de gemeten kostprijs is het relatieve gewicht verschoven naar andere
+  kostenregels. Daaruit volgt niet één op één wat individuele praktijken feitelijk ontvingen.`, 'inzicht')}
   ${callout(`<b>Let op de noemer.</b> De mutatie van ${pct(arbeid[3],1)} is <i>per praktijk</i>; de stijging van
   personeel en inhuur hieronder is <i>per 1.000 verzekerden</i>. Praktijken zijn in deze periode groter
   geworden, dus die twee noemers lopen uiteen. Vergelijk daarom binnen een noemer, niet ertussen.`, 'letop')}

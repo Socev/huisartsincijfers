@@ -1,8 +1,8 @@
 import { pagina } from '../lib/layout.mjs';
 import { w, p, data } from '../lib/data.mjs';
-import { panel, tile, callout, serieChart, dataTable, compareBars,
+import { panel, tile, callout, serieChart, dataTable, compareBars, table,
          statContrast, evidenceCard, methodDisclosure } from '../lib/components.mjs';
-import { num, pct } from '../lib/format.mjs';
+import { num, pct, eur0 } from '../lib/format.mjs';
 
 export default function () {
   const R = data.beroepsgroep.reeksen, T = data.beroepsgroep.tabellen;
@@ -23,6 +23,12 @@ export default function () {
   const laatste = s => [...s.waarden].reverse().find(v => v != null);
   const laatsteJaar = s => P.jaren[s.waarden.length - 1 - [...s.waarden].reverse().findIndex(v => v != null)];
   const solo = vorm('solo'), groeps = vorm('groep');
+
+  /* Werkgeverskosten waarnemer tegenover hidha, uit het eigen rekenmodel. */
+  const kw   = w('personeel','kosten_waarnemer_2025');
+  const kh25 = w('personeel','kosten_hidha_2025');
+  const kh26 = w('personeel','kosten_hidha_2026');
+  const meer = (h) => h / kw - 1;
 
   const body = `
 <section id="tellingen">
@@ -102,12 +108,12 @@ export default function () {
   ${callout(`<b>Waarom deze reeks geïndexeerd is.</b> In absolute aantallen overheersen de twee grote groepen
   en zie je de kleine groepen niet bewegen. Juist daar gebeurt het meeste: de directeur-grootaandeelhouders
   groeien met ${pct(w('beroepsgroep','sph_dga_groei'),1)} in vier jaar en de huisartsen in dienstverband met
-  ${pct(w('beroepsgroep','sph_hidha_groei'),1)}. Dat is relevant voor de kosten van een praktijk: een hidha is
-  duurder dan een waarnemer die per uur wordt ingehuurd — hij brengt vakantie, scholing, doorbetaling bij
-  ziekte en werkgeverslasten mee. <a href="/praktijkkosten/">Wat dat doet met de personeelskosten</a>.`,
+  ${pct(w('beroepsgroep','sph_hidha_groei'),1)}. Dat is relevant voor de kosten van een praktijk — zie hieronder.`,
   'methode')}
   ${panel(dataTable(T.sph_typen, [null, num, num, num, num, num, v=>pct(v,1)]))}
-  ${callout(`Vier bewegingen tegelijk, alle vier weg van het klassieke praktijkhouderschap. De vrijgevestigden
+  ${callout(`Vier bewegingen tegelijk, alle vier weg van het traditionele vrijgevestigde praktijkhouderschap
+  als dominante vorm. Een dga blíjft praktijkhouder — alleen de rechtsvorm verandert; de groei van waarneming
+  en loondienst betreft wél een verschuiving weg van het praktijkhouderschap zelf. De vrijgevestigden
   dalen met ${pct(Math.abs(w('beroepsgroep','sph_vrijgevestigd_daling')),1)}, de waarnemers stijgen met
   ${pct(w('beroepsgroep','sph_waarnemend_groei'),1)} en zijn inmiddels de grootste groep werkende huisartsen,
   de hidha's met ${pct(w('beroepsgroep','sph_hidha_groei'),1)} en de dga's met
@@ -115,6 +121,48 @@ export default function () {
   zien: <a href="/beroepsgroep/#waarneming">de verschuiving gaat vooral naar waarneming</a>.`, 'inzicht')}
   ${methodDisclosure('Waarom de twee registers niet op elkaar aansluiten', `
     ${dataTable(T.sph_sluit_niet, [null, num, num, null])}`)}
+</section>
+
+<section id="personeelsmix">
+  <h2>Loondienst is niet vanzelf de goedkopere keuze</h2>
+  <p class="sub">De verschuiving naar loondienst wordt vaak besproken alsof zij de praktijk goedkoper uit
+  laat komen. In een doorgerekend scenario is het omgekeerde het geval.</p>
+
+  ${statContrast({
+    pijl: 'tegenover',
+    links:  { waarde: eur0(kw), label: 'waarnemer', eenheid: `werkgeverskosten per jaar · ${eur0(w('personeel','tarief_waarnemer_uur'))} per uur`,
+              status: p('personeel','kosten_waarnemer_2025').status },
+    rechts: { waarde: eur0(kh25), label: 'huisarts in dienst, schaal 9',
+              eenheid: `werkgeverskosten per jaar · ${pct(meer(kh25),1)} meer`,
+              status: p('personeel','kosten_hidha_2025').status },
+    ratio: `Een structureel ingezette hidha is bij gangbare waarnemerstarieven vaak <b>duurder</b> voor de
+      werkgever. Hij groeit binnen de cao door naar schaal 9 en brengt naast het salaris werkgeverslasten
+      mee: pensioen, vakantie, scholing, doorbetaling bij ziekte en verzuimverzekering. In het concept voor
+      2026 loopt het verschil op tot <b>${pct(meer(kh26),1)}</b> (${eur0(kh26)}).`
+  })}
+
+  ${callout(`De uitkomst hangt sterk af van het waarnemerstarief. Bij
+  ${eur0(85)} per uur is de hidha ${pct(w('personeel','bandbreedte_laag'),1)} duurder, bij ${eur0(75)} per uur
+  ${pct(w('personeel','bandbreedte_hoog'),1)}. De richting blijft in de hele bandbreedte dezelfde.`, 'letop')}
+
+  ${methodDisclosure('De uitgangspunten van deze berekening', `
+    <p class="small">Gelijke inzet voor beide vormen: ${num(w('personeel','dagen_week'))} werkdagen per week
+    van ${num(w('personeel','uren_dag'))} uur, ${num(w('modelwissel','werkweken'))} werkweken per jaar voor de
+    waarnemer, waarnemerstarief ${eur0(w('personeel','tarief_waarnemer_uur'))} per uur overdag. De hidha zit in
+    salaristrede 9 met pensioenregeling SPH; de werkgeverslasten omvatten onder meer pensioen,
+    werknemersverzekeringen en verzuimverzekering. Diensten zijn voor de werkgever zo gecorrigeerd dat zij in
+    de vergelijking in beginsel quitte spelen.</p>
+    ${table({
+      cols:[{label:'Vergelijking'},{label:'Werkgeverskosten per jaar',r:true},{label:'Verschil',r:true}],
+      rows:[
+        [`Waarnemer 2025, ${eur0(w('personeel','tarief_waarnemer_uur'))} per uur`, eur0(kw), '—'],
+        ['Hidha 2025, schaal 9', eur0(kh25), '+' + pct(meer(kh25),1)],
+        ['Hidha 2026 concept, schaal 9', eur0(kh26), '+' + pct(meer(kh26),1)]
+      ]})}
+    <p class="small" style="margin-top:12px">Het model is inhoudelijk gecontroleerd en met accountants
+    geverifieerd. Het is nog niet als document gepubliceerd; zolang dat niet zo is, is dit het enige blok op
+    deze site dat u niet zelf kunt narekenen. De uitkomst is bovendien gevoelig voor uren, salaristrede,
+    uurtarief, pensioenkeuze en overige instellingen — verander één daarvan en het verschil verschuift.</p>`)}
 </section>`;
 
   return { pad:'/praktijkhouderschap/', html: pagina({

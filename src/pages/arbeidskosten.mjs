@@ -1,7 +1,8 @@
 import { pagina } from '../lib/layout.mjs';
 import { w, p, data } from '../lib/data.mjs';
 import { stackedBar, table, panel, callout, dataTable, bronLabel, tile, compareBars, anwNoot,
-         heroNumber, statContrast, causalChain, evidenceCard, begrippenBalk } from '../lib/components.mjs';
+         heroNumber, statContrast, causalChain, evidenceCard, begrippenBalk,
+         methodDisclosure } from '../lib/components.mjs';
 import { nacKeten, werkweek } from '../lib/metrics.mjs';
 import { eur, eur0, num, pct, mln, esc } from '../lib/format.mjs';
 
@@ -20,6 +21,14 @@ export default function () {
   };
   const c25 = cascade(2025), c26 = cascade(2026);
   const k = nacKeten(2025), u = werkweek();
+
+  /* De verdeling over dekkingsbronnen, per gewerkt uur. Stond eerst op de
+     homepage; die vertelt nu één verhaal en verwijst hierheen. */
+  const urenTotaal = k.personen * u.netto * u.werkweken;
+  const perUur = k.brutoNac * J[2025].nac / urenTotaal;
+  const delen = data.nac.dekkingsbronnen.map((d, i) => ({
+    ...d, waarde: [perUur*b100*tg, perUur*b100*(1-tg), perUur*sb, perUur*sp][i]
+  }));
   /* De urenslider loopt van de NZa-uitvraag tot de Nivel-werkweek min de dienst. */
   const nzaU = w('uren','nza_uren_per_fte'),
         netU = +(w('uren','nivel_werkweek') - w('uren','anw_dienst')).toFixed(1);
@@ -157,6 +166,23 @@ export default function () {
   ${callout(`<strong>Waarom deze twee verschillen.</strong> De NZa vraagt alleen naar zorg verlenen, praktijk
   managen en apotheek. Bestuurswerk, extern overleg, nascholing en de dienst vallen buiten de vraagstelling —
   samen ${num(w('uren','niet_uitgevraagd'),1)} uur per week. <a href="/uren/">Die aansluiting staat hier uitgewerkt</a>.`)}
+
+  <h3>Wie moet welk deel dekken?</h3>
+  <p class="sub">Dezelfde keten, uitgedrukt per gewerkt uur. Een deel landt in prestaties met een
+  NZa-maximumtarief. De rest wordt verondersteld te worden verdiend uit vrij onderhandelbare zorg, uit de
+  aparte poh-ggz-module, of uit activiteiten buiten de tariefbeschikking.</p>
+  ${panel(stackedBar({
+    items: delen.map(d => ({ naam: d.naam, kort: d.kort, waarde: d.waarde, toelichting: d.toelichting })),
+    caption: `Opbouw van de normatieve arbeidsvergoeding per gewerkt uur, prijspeil 2025.
+      Noemer: alle gewerkte uren van de beroepsgroep, exclusief de apart bekostigde dienst.`
+  }))}
+  ${methodDisclosure('Hoe dit bedrag is opgebouwd', `
+    <p class="small">Het landelijke bedrag aan normatieve arbeidskosten wordt gedeeld door alle uren die
+    praktijkhouders samen werken: ${num(k.personen)} personen maal ${num(u.netto,1)} uur maal
+    ${num(u.werkweken)} werkweken. Dat geeft ${eur(perUur)} per gewerkt uur. Daarvan blijft ${pct(b100,2)}
+    binnen de honderd procent, en daarvan is ${pct(tg,1)} tariefgereguleerd.</p>
+    <p class="small">De dienst op de huisartsenpost zit niet in de noemer. Die zorg kent een aparte
+    bekostiging en valt buiten de overdagtarieven. <a href="/uren/#anw">Waarom die aftrek nodig is</a>.</p>`)}
 </section>
 
 <section id="rekentool">

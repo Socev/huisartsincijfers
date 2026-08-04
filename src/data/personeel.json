@@ -1,0 +1,70 @@
+{
+ "_titel": "Werkgeverskosten: waarnemer tegenover huisarts in dienst",
+ "_let_op": "De uitkomsten hieronder komen uit een eigen rekenmodel dat niet als document is gepubliceerd. Zij zijn gevoelig voor het aantal uren, de salaristrede, het waarnemerstarief, de pensioenkeuze en de overige instellingen; de uitgangspunten staan daarom bij elk cijfer. Zolang er geen publiek toegankelijke samenvatting van het model is, is dit het enige blok op deze site dat een lezer niet zelf kan narekenen.",
+ "parameters": {
+  "kosten_waarnemer_2025": {
+   "waarde": 101581.8,
+   "label": "Werkgeverskosten waarnemer per jaar, 2025",
+   "eenheid": "euro",
+   "bron": "zzp-hidha-model",
+   "vindplaats": "drie dagen van negen uur, 46 werkweken, waarnemerstarief 80 euro per uur",
+   "status": "afgeleid"
+  },
+  "kosten_hidha_2025": {
+   "waarde": 115115.01,
+   "label": "Werkgeverskosten hidha per jaar, 2025, schaal 9",
+   "eenheid": "euro",
+   "bron": "zzp-hidha-model",
+   "vindplaats": "gelijke inzet; salaris schaal 9, pensioenregeling SPH, inclusief werkgeverslasten en verzuimverzekering",
+   "status": "afgeleid"
+  },
+  "kosten_hidha_2026": {
+   "waarde": 121699.74,
+   "label": "Werkgeverskosten hidha per jaar, 2026 concept, schaal 9",
+   "eenheid": "euro",
+   "bron": "zzp-hidha-model",
+   "vindplaats": "conceptcao 2026; verder gelijke uitgangspunten als 2025",
+   "status": "schatting"
+  },
+  "tarief_waarnemer_uur": {
+   "waarde": 80,
+   "label": "Gehanteerd waarnemerstarief overdag",
+   "eenheid": "euro/uur",
+   "bron": "zzp-hidha-model",
+   "vindplaats": "middenwaarde van de gangbare bandbreedte 75 tot 85 euro",
+   "status": "schatting"
+  },
+  "bandbreedte_laag": {
+   "waarde": 0.068,
+   "label": "Verschil bij een waarnemerstarief van 85 euro per uur, 2025",
+   "eenheid": "aandeel",
+   "bron": "zzp-hidha-model",
+   "vindplaats": "gevoeligheidsanalyse op het uurtarief",
+   "status": "afgeleid"
+  },
+  "bandbreedte_hoog": {
+   "waarde": 0.207,
+   "label": "Verschil bij een waarnemerstarief van 75 euro per uur, 2025",
+   "eenheid": "aandeel",
+   "bron": "zzp-hidha-model",
+   "vindplaats": "gevoeligheidsanalyse op het uurtarief",
+   "status": "afgeleid"
+  },
+  "dagen_week": {
+   "waarde": 3,
+   "label": "Werkdagen per week in het scenario",
+   "eenheid": "dagen",
+   "bron": "zzp-hidha-model",
+   "vindplaats": "actieve uitgangspunten in het werkblad",
+   "status": "definitief"
+  },
+  "uren_dag": {
+   "waarde": 9,
+   "label": "Uren per werkdag in het scenario",
+   "eenheid": "uur",
+   "bron": "zzp-hidha-model",
+   "vindplaats": "actieve uitgangspunten in het werkblad",
+   "status": "definitief"
+  }
+ }
+}

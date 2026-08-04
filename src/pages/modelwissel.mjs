@@ -21,7 +21,7 @@ export default function () {
     links:  { waarde: '+' + pct(norm25/norm24 - 1, 1), label: 'normbedrag per fte praktijkhouder',
               eenheid: `${eur0(norm24)} → ${eur0(norm25)} · per rekeneenheid`,
               status: 'definitief' },
-    rechts: { waarde: '−' + pct(1 - fte22/fte15, 1), label: 'vergoede fte per 1.000 patiënten',
+    rechts: { waarde: '−' + pct(1 - fte22/fte15, 1), label: 'toegerekende fte per 1.000 patiënten',
               eenheid: `${num(fte15,4)} → ${num(fte22,4)} · per patiënt`,
               status: p('modelwissel','fte_p1000_2022').status },
     ratio: `Twee bewegingen in tegengestelde richting, in hetzelfde jaar. Netto komt wat de tarieven per
@@ -44,14 +44,14 @@ export default function () {
     items:[
       { label:`Model 2015: één volledige arbeidsvergoeding per ${num(np15)} ingeschrevenen`,
         waarde: w('modelwissel','fte_p1000_2015'), serie:1,
-        toelichting:`${num(fte15,4)} vergoede fte per 1.000 ingeschrevenen` },
+        toelichting:`${num(fte15,4)} ingerekende fte per 1.000 ingeschrevenen` },
       { label:`Model 2022 herzien: één volledige arbeidsvergoeding per ${num(np22)} ingeschrevenen`,
         waarde: w('modelwissel','fte_p1000_2022'), serie:2,
-        toelichting:`${num(fte22,4)} vergoede fte per 1.000, na schoning buiten de honderd procent` }
-    ], fmt: v=>num(v,4), eenheid:' fte', caption:'Vergoede fte praktijkhouder per 1.000 ingeschreven verzekerden.'
+        toelichting:`${num(fte22,4)} ingerekende fte per 1.000, na schoning buiten de honderd procent` }
+    ], fmt: v=>num(v,4), eenheid:' fte', caption:'Toegerekende fte praktijkhouder per 1.000 ingeschreven verzekerden in de tariefonderbouwing.'
   }))}
   ${callout(`<strong>Dit is de kern van de wissel.</strong> Per 1.000 patiënten wordt ${pct(1-w('modelwissel','fte_p1000_2022')/w('modelwissel','fte_p1000_2015'),1)}
-  minder fte praktijkhouder vergoed dan onder het oude model. Dat is geen bezuiniging die ergens is
+  minder fte praktijkhouder toegerekend dan onder het oude model. Dat is geen bezuiniging die ergens is
   afgesproken; het is het gevolg van twee dingen die tegelijk gebeurden. De normpraktijk verdween als
   rekeneenheid, en de fte-telling werd afgeleid uit de opgegeven uren van de onderzochte praktijken, met een
   aftopping op 1,0. <a href="/arbeidskosten/">Hoe die telling werkt</a>.`)}
@@ -110,12 +110,12 @@ export default function () {
 
   return { pad:'/modelwissel/', html: pagina({
     pad:'/modelwissel/', titel:'De modelwissel', eyebrow:'Kostprijsmodel 2015 tegenover 2022',
-    h1:'De nac per fte steeg. De vergoede fte per patiënt daalde harder.',
+    h1:'De nac per fte steeg. De toegerekende fte per patiënt daalde harder.',
     status:[`Kostprijsmodel 2015 tegenover 2022`, `overgang per 2025`,
             `fte per 1.000: ${p('modelwissel','fte_p1000_2022').status}`],
     omschrijving:'Wat er per 1.000 ingeschreven verzekerden in de tarieven zit, per kostenpost, van 2018 tot 2026 — en wat er in 2025 verschoof.',
     lede:`Vanaf 2025 verdween de oude normpraktijk als rekeneenheid. Het nieuwe model rekent met gemeten
-      praktijkkosten en een afgetopte fte-telling. Daardoor daalde de hoeveelheid praktijkhouder-fte per
+      praktijkkosten en een afgetopte fte-telling. Daardoor daalde de toegerekende praktijkhouder-fte per
       1.000 patiënten met ${pct(1-fte22/fte15,1)}, ondanks een normbedrag per fte dat juist
       ${pct(norm25/norm24-1,1)} hoger uitkwam.`,
     body })};

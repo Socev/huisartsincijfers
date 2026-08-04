@@ -1,6 +1,7 @@
 import { pagina } from '../lib/layout.mjs';
 import { w, p, data } from '../lib/data.mjs';
-import { panel, tile, callout, dataTable, compareBars, bronLabel } from '../lib/components.mjs';
+import { panel, tile, callout, dataTable, compareBars, bronLabel,
+         statContrast, methodDisclosure } from '../lib/components.mjs';
 import { eur, eur0, num, pct } from '../lib/format.mjs';
 
 /* Een citaat uit een NZa-document. Letterlijk, met vindplaats erbij, zodat de
@@ -19,6 +20,20 @@ export default function () {
   const R = data.nacopbouw.reeksen.nac.reeksen[0];
 
   const body = `
+<section id="openbaarheid">
+  ${statContrast({
+    pijl: 'maar',
+    links:  { waarde: eur0(nac26), label: 'nac per fte, prijspeil 2026',
+              eenheid: 'gepubliceerd in de beslissing op bezwaar', status: 'definitief' },
+    rechts: { waarde: num(mm) + ' punten', label: 'functiezwaarte van de maatmens',
+              eenheid: 'gepubliceerd in het onderzoek van Berenschot', status: 'definitief' },
+    ratio: `Beide uiteinden van de keten staan in openbare stukken. <b>De formule ertussen niet.</b> Welke drie
+      zorg-cao's de loonlijn vormen, hoe die lijn is opgebouwd en hoe het bedrag zich splitst tussen primaire
+      beloning en sociale lasten, is niet gepubliceerd. Juist de stap waarin functiepunten geld worden, is
+      daardoor niet na te rekenen.`
+  })}
+</section>
+
 <section>
   <h2>Eén bedrag, vijf stappen</h2>
   <p class="sub">De arbeid van een praktijkhouder staat nergens in een boekhouding. De NZa stelt die kosten
@@ -151,11 +166,14 @@ export default function () {
 
   return { pad:'/nac/', html: pagina({
     pad:'/nac/', titel:'De normatieve arbeidskostencomponent',
-    eyebrow:'Van functiebeeld naar normbedrag',
-    h1:'Hoe de nac is opgebouwd, en waar de onderbouwing ophoudt',
-    omschrijving:'De vijf stappen van functiebeeld naar normbedrag: USB-weging in 374 punten, een loonlijn uit drie zorg-cao’s, en de vraag hoeveel uur er bij één nac hoort.',
-    lede:`Het normbedrag voor de arbeid van een praktijkhouder komt niet uit een onderhandeling en niet uit een
-      meting, maar uit een functiewaardering. Deze pagina volgt die keten stap voor stap: wie is de maatmens,
-      hoe zwaar weegt het praktijkhouderschap daarin, en waar houdt de openbare onderbouwing op.`,
+    eyebrow:'Normbedrag voor de arbeid van de praktijkhouder',
+    h1:`${eur0(nac26)} per fte. De formule van ${num(mm)} functiepunten naar euro's is niet openbaar.`,
+    status:[`Prijspeil voorcalculatorisch 2026`, `nac: definitief`,
+            `loonlijn: niet gepubliceerd`],
+    omschrijving:`De vijf stappen van functiebeeld naar normbedrag, en waarom de omzetting van ${num(mm)} functiepunten naar euro's niet reproduceerbaar is.`,
+    lede:`De USB-weging en het uiteindelijke normbedrag zijn gepubliceerd. De drie gebruikte zorg-cao's, de
+      formule van de loonlijn en de splitsing tussen primaire beloning en sociale lasten ontbreken. Daardoor is
+      juist de stap waarin functiepunten geld worden niet volledig na te rekenen. Deze pagina volgt de keten
+      stap voor stap en markeert per stap wat wél en wat niet controleerbaar is.`,
     body })};
 }

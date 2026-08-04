@@ -1,11 +1,12 @@
 import { esc, datum } from './format.mjs';
+import { BIJGEWERKT } from './versie.mjs';
 
 export const SITE = {
   naam: 'huisartsincijfers.nl',
   titel: 'Huisarts in cijfers',
   omschrijving: 'De financiering van de Nederlandse huisartsenzorg, herleidbaar tot de bron.',
   url: 'https://huisartsincijfers.nl',
-  bijgewerkt: '2026-08-02'
+  get bijgewerkt() { return BIJGEWERKT; }
 };
 
 /* De hoofdnavigatie telde veertien links die op elk scherm over meerdere regels

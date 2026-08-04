@@ -1,8 +1,8 @@
 import { pagina } from '../lib/layout.mjs';
 import { w, data } from '../lib/data.mjs';
 import { nacKeten, werkweek, uurbedragVerschil } from '../lib/metrics.mjs';
-import { tile, stackedBar, callout, panel, statContrast, causalChain,
-         evidenceCard, begrippenBalk, methodDisclosure } from '../lib/components.mjs';
+import { tile, callout, panel, statContrast, causalChain,
+         evidenceCard, begrippenBalk } from '../lib/components.mjs';
 import { eur, num, pct, uur } from '../lib/format.mjs';
 
 export default function () {
@@ -10,16 +10,11 @@ export default function () {
   const u = werkweek();
   const knik = uurbedragVerschil(2024, 2025);
 
-  /* Dezelfde keten, alleen uitgedrukt in euro's per gewerkt uur in plaats van
-     in rekeneenheden. Geen tweede route naar hetzelfde getal: de aandelen
-     komen uit nacKeten, de noemer uit werkweek(). */
-  const uren  = k.personen * u.netto * u.werkweken;
-  const bruto = k.brutoNac * w('nac', 'nac_2025_vc') / uren;
-  const b100  = w('nac', 'binnen_100'), tg = w('nac', 'tarief_gereguleerd');
-  const delen = data.nac.dekkingsbronnen.map((d, i) => ({
-    ...d, waarde: [bruto*b100*tg, bruto*b100*(1-tg),
-                   bruto*w('nac','schoning_buiten_100'), bruto*w('nac','correctie_poh_ggz')][i]
-  }));
+  /* De kop noemt de orde van grootte, niet de precisie. 7.538 is een schatting
+     en 5.888 een afleiding; exact opschrijven suggereert een zekerheid die er
+     niet is. De exacte waarden en hun status staan in het contrastblok eronder. */
+  const rond100 = v => Math.round(v / 100) * 100;
+
 
   const body = `
 <section>
@@ -85,23 +80,11 @@ export default function () {
 </section>
 
 <section>
-  <h2>Wie moet welk deel dekken?</h2>
-  <p class="sub">Dezelfde keten, uitgedrukt per gewerkt uur. Een deel landt in prestaties met een
-  NZa-maximumtarief. De rest wordt verondersteld te worden verdiend uit vrij onderhandelbare zorg, uit de
-  aparte poh-ggz-module, of uit activiteiten buiten de tariefbeschikking.</p>
-  ${panel(stackedBar({
-    items: delen.map(d => ({ naam: d.naam, kort: d.kort, waarde: d.waarde, toelichting: d.toelichting })),
-    caption: `Opbouw van de normatieve arbeidsvergoeding per gewerkt uur, prijspeil 2025.
-      Noemer: alle gewerkte uren van de beroepsgroep, exclusief de apart bekostigde dienst.`
-  }))}
-  ${methodDisclosure('Hoe dit bedrag is opgebouwd', `
-    <p class="small">Het landelijke bedrag aan normatieve arbeidskosten wordt gedeeld door alle uren die
-    praktijkhouders samen werken: ${num(k.personen)} personen maal ${num(u.netto,1)} uur maal
-    ${num(u.werkweken)} werkweken. Dat geeft ${eur(bruto)} per gewerkt uur. Daarvan blijft
-    ${pct(b100,2)} binnen de honderd procent, en daarvan is ${pct(tg,1)} tariefgereguleerd.</p>
-    <p class="small">De dienst op de huisartsenpost zit niet in de noemer. Die zorg kent een aparte
-    bekostiging en valt buiten de overdagtarieven; haar uren toerekenen aan een tarief dat ze niet vergoedt
-    zou de uitkomst vertekenen. <a href="/uren/#anw">Waarom die aftrek nodig is</a>.</p>`)}
+  ${callout(`<b>Van de arbeidskostencomponent landt maar een deel in prestaties met een NZa-maximumtarief.</b>
+  De rest wordt verondersteld te worden verdiend uit vrij onderhandelbare zorg, uit de poh-ggz-module of uit
+  activiteiten buiten de tariefbeschikking. Hoe het normbedrag per gewerkt uur over die vier bronnen wordt
+  verdeeld, staat op de arbeidskostenpagina.
+  <a href="/arbeidskosten/#maximumtarieven">Bekijk de verdeling per gewerkt uur →</a>`, 'inzicht')}
 </section>
 
 <section>
@@ -112,7 +95,7 @@ export default function () {
         in het jaar waarin het normbedrag per fte juist steeg.`,
       bron: 'Eigen berekening op de reeks 2018-2026' })}
     ${tile({ waarde: 'Modelwissel', href: '/modelwissel/',
-      label: `Wat er in 2025 veranderde: de normpraktijk verdween als rekeneenheid en de vergoede fte per
+      label: `Wat er in 2025 veranderde: de normpraktijk verdween als rekeneenheid en de toegerekende fte per
         1.000 patiënten daalde met ${pct(1 - w('modelwissel','fte_p1000_2022')/w('modelwissel','fte_p1000_2015'), 1)}.` })}
     ${tile({ waarde: 'Praktijkkosten', href: '/praktijkkosten/',
       label: `Waar de groei van de praktijkkosten naartoe ging, en waarom de post voor de praktijkhouder
@@ -151,7 +134,7 @@ export default function () {
   return { pad:'/', html: pagina({
     pad:'/', titel:'Kerncijfers',
     eyebrow:'Bekostiging van de huisartsenzorg',
-    h1:`${num(k.personen)} praktijkhouders. ${num(k.binnen100)} nac's in de tariefonderbouwing.`,
+    h1:`Circa ${num(rond100(k.personen))} praktijkhouders. Circa ${num(rond100(k.binnen100))} nac's in de tariefonderbouwing.`,
     omschrijving:'Hoeveel normatieve arbeidskostencomponenten er tegenover het aantal praktijkhouders staan, en welk deel daarvan door NZa-maximumtarieven wordt gedekt.',
     lede:`De gemiddelde praktijkhouder werkt ${num(u.netto,1)} uur per week, exclusief de apart bekostigde
       dienst op de huisartsenpost. Toch rekent het model binnen de honderd procent gemiddeld ongeveer

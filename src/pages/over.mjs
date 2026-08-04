@@ -51,8 +51,10 @@ export default function () {
     gegevens zijn niet openbaar. Wij publiceren daaruit uitsluitend samengevatte uitkomsten — aandelen en
     gemiddelden — en geen gegevens die tot een individuele praktijk te herleiden zijn. Waar de NZa hetzelfde
     getal zelf publiceert, verwijzen wij naar die publicatie.</li>
-    <li>Twee NZa-documenten geven verschillende tarieven voor voorcalculatorisch 2025. Wij kiezen daar geen kant
-    in tot dat is opgehelderd.</li>
+    <li>Twee NZa-documenten tonen verschillende reeksen voor voorcalculatorisch 2025. De tariefbeschikking
+    maakt aannemelijk dat het Addendum de reeks vóór en het Verantwoordingsdocument de reeks ná de
+    herbeoordeling weergeeft. Die reconstructie en de controleberekening staan op de
+    <a href="/tarieven/">tarievenpagina</a>.</li>
   </ul>
 </section>
 

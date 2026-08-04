@@ -20,7 +20,7 @@
   },
   "fte_p1000_2015": {
    "waarde": 0.4773,
-   "label": "Vergoede fte praktijkhouder per 1.000 ingeschrevenen, model 2015",
+   "label": "Toegerekende fte praktijkhouder per 1.000 ingeschrevenen, model 2015",
    "eenheid": "fte",
    "bron": "eigen-berekening",
    "vindplaats": "1.000 gedeeld door 2.095",
@@ -28,7 +28,7 @@
   },
   "fte_p1000_2022": {
    "waarde": 0.3363,
-   "label": "Vergoede fte praktijkhouder per 1.000 ingeschrevenen, model 2022 na schoning",
+   "label": "Toegerekende fte praktijkhouder per 1.000 ingeschrevenen, model 2022 na schoning",
    "eenheid": "fte",
    "bron": "eigen-berekening",
    "vindplaats": "0,3772 voor schoning, maal 89,16%",
