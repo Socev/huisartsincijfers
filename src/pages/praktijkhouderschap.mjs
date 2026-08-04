@@ -12,10 +12,16 @@ export default function () {
   const nivel = tel('^Nivel'), sphSamen = tel('SPH: samen');
   const verschil = nivel[1] - sphSamen[1];
 
+  /* Let op de eenheid: deze reeks staat al in procenten (6,0 betekent 6%), niet
+     in aandelen. Door er pct() overheen te halen werd 6% eerst 600%. Vandaar
+     een eigen formatteerfunctie die bij de reeks hoort in plaats van bij de
+     gewoonte. */
   const P = R.praktijkvorm;
+  const procent = v => num(v, v % 1 ? 1 : 0) + '%';
   const vorm = naam => P.reeksen.find(s => new RegExp(naam, 'i').test(s.naam));
   const eerste = s => s.waarden.find(v => v != null);
   const laatste = s => [...s.waarden].reverse().find(v => v != null);
+  const laatsteJaar = s => P.jaren[s.waarden.length - 1 - [...s.waarden].reverse().findIndex(v => v != null)];
   const solo = vorm('solo'), groeps = vorm('groep');
 
   const body = `
@@ -44,23 +50,23 @@ export default function () {
       status: p('beroepsgroep','praktijken_2024').status })}
     ${evidenceCard({
       claim: 'Werkt solo',
-      kern: pct(laatste(solo), 0),
-      bewijs: `van de regulier gevestigde huisartsen, tegen ${pct(eerste(solo), 0)} in ${P.jaren[0]}.
-        De solopraktijk is bijna verdwenen.`,
+      kern: procent(laatste(solo)),
+      bewijs: `van de regulier gevestigde huisartsen in ${laatsteJaar(solo)}, tegen
+        ${procent(eerste(solo))} in ${P.jaren[0]}. De solopraktijk is bijna verdwenen.`,
       status: 'definitief', href: '#praktijkvorm', hrefLabel: 'De reeks' })}
     ${evidenceCard({
       claim: 'Werkt in een groepspraktijk',
-      kern: pct(laatste(groeps), 0),
-      bewijs: `van de regulier gevestigde huisartsen — twee derde, tegen ${pct(eerste(groeps), 0)} in
-        ${P.jaren[0]}. Drie of meer huisartsen per praktijk.`,
+      kern: procent(laatste(groeps)),
+      bewijs: `van de regulier gevestigde huisartsen in ${laatsteJaar(groeps)} — twee derde, tegen
+        ${procent(eerste(groeps))} in ${P.jaren[0]}. Drie of meer huisartsen per praktijk.`,
       status: 'definitief', href: '#praktijkvorm', hrefLabel: 'De reeks' })}
   </div>
 </section>
 
 <section id="praktijkvorm">
   <h2>De solopraktijk is bijna verdwenen</h2>
-  <p class="sub">In ${P.jaren[0]} werkte bijna een kwart van de huisartsen solo; nu nog
-  ${pct(laatste(solo), 0)}. Twee derde werkt in een groepspraktijk.</p>
+  <p class="sub">In ${P.jaren[0]} werkte bijna een kwart van de huisartsen solo; in ${laatsteJaar(solo)} nog
+  ${procent(laatste(solo))}. Twee derde werkt inmiddels in een groepspraktijk.</p>
   ${panel(serieChart(R.praktijkvorm, { fmt: v => num(v,0) + '%', hoogte: 300, yNul: true }))}
 </section>
 

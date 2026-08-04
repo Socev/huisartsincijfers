@@ -127,3 +127,30 @@
   });
   pas();
 })();
+
+/* Inhoudsopgave: markeert de sectie waar je bent. Zonder dit script blijft de
+   lijst gewoon een lijst met werkende links. */
+(function () {
+  var opzij = document.querySelector('.opzij');
+  if (!opzij || !('IntersectionObserver' in window)) return;
+  var links = {};
+  [].forEach.call(opzij.querySelectorAll('a'), function (a) {
+    links[a.getAttribute('href').slice(1)] = a;
+  });
+  var secties = Object.keys(links).map(function (id) { return document.getElementById(id); })
+                      .filter(Boolean);
+  if (!secties.length) return;
+
+  var zichtbaar = {};
+  var waarnemer = new IntersectionObserver(function (rijen) {
+    rijen.forEach(function (r) { zichtbaar[r.target.id] = r.isIntersecting; });
+    /* De bovenste zichtbare sectie is waar de lezer is. */
+    var actief = secties.filter(function (s) { return zichtbaar[s.id]; })[0];
+    Object.keys(links).forEach(function (id) {
+      if (actief && id === actief.id) links[id].setAttribute('aria-current', 'true');
+      else links[id].removeAttribute('aria-current');
+    });
+  }, { rootMargin: '-90px 0px -70% 0px' });
+
+  secties.forEach(function (s) { waarnemer.observe(s); });
+})();

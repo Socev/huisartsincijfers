@@ -45,4 +45,44 @@ schrijf('sitemap.xml',
   ALLE_PADEN.map(pad => `  <url><loc>https://huisartsincijfers.nl${pad}</loc></url>`).join('\n') +
   `\n</urlset>\n`);
 
+/* ---------------------------------------------------------------------------
+   Controle op onmogelijke percentages.
+
+   De datalaag kent twee soorten: aandelen (0,744) en percentages (66,0). Wie er
+   pct() overheen haalt terwijl het al procenten waren, krijgt 6.600% en ziet dat
+   niet als hij de pagina niet toevallig opent. Deze controle leest de gebouwde
+   HTML terug en faalt op elk percentage boven de drempel.
+
+   De drempel staat op 300%: echte mutaties boven de honderd procent bestaan
+   (behandelkosten stegen met 275%), maar drie keer over is in deze data geen
+   plausibele uitkomst meer.
+   --------------------------------------------------------------------------- */
+const DREMPEL = 300;
+const verdacht = [];
+const loopHtml = (map) => {
+  for (const naam of readdirSync(map, { withFileTypes: true })) {
+    const pad = join(map, naam.name);
+    if (naam.isDirectory()) loopHtml(pad);
+    else if (naam.name.endsWith('.html')) {
+      /* Eerst de opmaak eruit: een breedte van 100.00% in een style-attribuut is
+         geen getal dat de lezer ziet. Alleen zichtbare tekst telt. */
+      const tekst = readFileSync(pad, 'utf8')
+        .replace(/<(script|style)[\s\S]*?<\/\1>/gi, ' ')
+        .replace(/<[^>]+>/g, ' ');
+      /* Nederlandse notatie: punt is duizendscheiding, komma is decimaalteken. */
+      for (const m of tekst.matchAll(/(\d{1,3}(?:\.\d{3})*|\d+)(?:,(\d+))?\s*%/g)) {
+        const waarde = Number(m[1].replace(/\./g, '') + (m[2] ? '.' + m[2] : ''));
+        if (waarde > DREMPEL) verdacht.push(`${pad}: ${m[0]}`);
+      }
+    }
+  }
+};
+loopHtml(OUT);
+if (verdacht.length) {
+  console.error(`\nOnmogelijke percentages gevonden (boven ${DREMPEL}%):`);
+  for (const v of [...new Set(verdacht)].slice(0, 20)) console.error('  ' + v);
+  console.error('\nWaarschijnlijk is pct() toegepast op een reeks die al in procenten staat.');
+  process.exit(1);
+}
+
 console.log(`Gebouwd: ${n} pagina's in ${OUT}/`);

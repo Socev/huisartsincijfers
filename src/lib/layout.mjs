@@ -35,6 +35,40 @@ export const NAV = [
   { href: '/over/',    label: 'Over' }
 ];
 
+
+/* ---------- lokale inhoudsopgave ----------
+   Lange pagina's kregen geen ingang: je moest scrollen om te weten wat er stond.
+   Deze functie leest de secties uit de al opgebouwde body, geeft elke sectie een
+   anker als hij er nog geen heeft, en levert een lijst terug. Bewust achteraf op
+   de HTML in plaats van iets wat elke pagina zelf moet aanroepen — vergeten kan
+   dan niet. */
+const slug = t => t.toLowerCase()
+  .replace(/[àáâä]/g,'a').replace(/[èéêë]/g,'e').replace(/[ìíîï]/g,'i')
+  .replace(/[òóôö]/g,'o').replace(/[ùúûü]/g,'u').replace(/[ç]/g,'c')
+  .replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'').slice(0, 40);
+
+export function inhoudsopgave(body) {
+  const items = [];
+  const gezien = new Set();
+
+  const nieuw = body.replace(/<section([^>]*)>([\s\S]*?)<\/section>/g, (heel, attr, inhoud) => {
+    const kop = inhoud.match(/<h2[^>]*>([\s\S]*?)<\/h2>/);
+    if (!kop) return heel;
+    const tekst = kop[1].replace(/<[^>]+>/g, '').replace(/\s+/g, ' ').trim();
+    if (!tekst) return heel;
+
+    const bestaand = attr.match(/\bid="([^"]+)"/);
+    let id = bestaand ? bestaand[1] : slug(tekst);
+    while (gezien.has(id)) id += '-2';
+    gezien.add(id);
+
+    items.push({ id, tekst });
+    return bestaand ? heel : `<section${attr} id="${id}">${inhoud}</section>`;
+  });
+
+  return { body: nieuw, items };
+}
+
 /** Alle pagina's plat, voor de sitemap en voor het markeren van de actieve groep. */
 export const ALLE_PADEN = NAV.flatMap(n => n.kinderen ? n.kinderen.map(k => k.href) : [n.href]);
 
@@ -48,6 +82,10 @@ const MARK = `<svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"
 
 export function pagina({ pad, titel, omschrijving, eyebrow, h1, lede, body,
                          status, acties, proto = true }) {
+  /* De inhoudsopgave wordt uit de body zelf afgeleid; ontbrekende ankers worden
+     onderweg aangevuld, zodat elke sectie aanspreekbaar is. */
+  const toc = inhoudsopgave(body);
+
   /* Groepen zijn <details>: ze werken zonder JavaScript en zijn met het
      toetsenbord te bedienen. site.js sluit alleen de andere groepen en vangt
      Escape af — een verbetering, geen voorwaarde. */
@@ -96,7 +134,7 @@ ${proto ? `<div class="proto">Deze site is in opbouw. De cijfers zijn gecontrole
   <button class="tt" id="tt" type="button" aria-live="polite">donker</button>
 </div></header>
 
-<main id="inhoud"><div class="wrap">
+<main id="inhoud"><div class="wrap ${toc.items.length >= 4 ? 'met-opzij' : ''}">
   <div class="page-head">
     ${eyebrow ? `<p class="eyebrow">${esc(eyebrow)}</p>` : ''}
     <h1>${esc(h1)}</h1>
@@ -107,7 +145,11 @@ ${proto ? `<div class="proto">Deze site is in opbouw. De cijfers zijn gecontrole
       ${acties.secundair ? `<a class="knop-sec" href="${esc(acties.secundair.href)}">${esc(acties.secundair.label)}</a>` : ''}
     </div>` : ''}
   </div>
-  ${body}
+  ${toc.items.length >= 4 ? `<nav class="opzij" aria-label="Op deze pagina">
+    <b>Op deze pagina</b>
+    <ol>${toc.items.map(i => `<li><a href="#${esc(i.id)}">${esc(i.tekst)}</a></li>`).join('')}</ol>
+  </nav>` : ''}
+  <div class="kolom">${toc.body}</div>
 </div></main>
 
 <footer class="site"><div class="wrap">
