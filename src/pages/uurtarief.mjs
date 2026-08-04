@@ -1,21 +1,23 @@
 import { pagina } from '../lib/layout.mjs';
 import { w, p, data } from '../lib/data.mjs';
+import { uurbedrag, uurbedragVerschil, reeleMutatie, uurreeksTabel, normbedragTabel,
+         uurbedragSerie, nacsSerie, uurbedragen } from '../lib/metrics.mjs';
 import { panel, tile, callout, dataTable, heroNumber, serieChart, anwNoot } from '../lib/components.mjs';
 import { eur, eur0, num, pct } from '../lib/format.mjs';
 
 export default function () {
-  const T = data.modelwissel.tabellen;
-  const u24 = w('modelwissel','nac_uur_2024'), u25 = w('modelwissel','nac_uur_2025'),
-        u26 = w('modelwissel','nac_uur_2026');
-  const R = data.modelwissel.reeksen;
-  const reeel = R.uurbedrag.reeksen[1].waarden;
+  const reeks = uurbedragen();
+  const u24 = uurbedrag(2024).nominaal, u25 = uurbedrag(2025).nominaal,
+        u26 = uurbedrag(2026).nominaal;
+  const knik = uurbedragVerschil(2024, 2025);
+  const uurTabel = uurreeksTabel(), normTabel = normbedragTabel();
 
   const body = `
 <section>
   <h2>Twaalf euro per uur, in één jaar</h2>
   ${heroNumber('− ' + eur(u24-u25),
     `per gewerkt uur. Zoveel arbeidsvergoeding voor de praktijkhouder verdween tussen 2024 en 2025 uit de
-     tarieven — ${pct(1-u25/u24,1)}, in het jaar waarin de nac per fte juist fors omhoog ging.`)}
+     tarieven — ${pct(knik.aandeel,1)}, in het jaar waarin de nac per fte juist fors omhoog ging.`)}
   <p class="sub" style="margin-top:20px">Deze pagina deelt één ding door één ander ding: het bedrag aan
   arbeidsvergoeding voor praktijkhouders dat landelijk in de gereguleerde tarieven verwerkt zit, gedeeld door
   alle uren die praktijkhouders samen maken. Die maat omzeilt de discussie over wat een fte is — je rekent
@@ -24,36 +26,36 @@ export default function () {
     ${tile({ waarde: eur(u24), label:'per gewerkt uur in de tarieven, 2024 — het hoogste punt van de reeks', bron:'Eigen berekening' })}
     ${tile({ waarde: eur(u25), label:'per gewerkt uur, 2025, na de overgang naar het herziene model', bron:'Eigen berekening' })}
     ${tile({ waarde: eur(u26), label:'per gewerkt uur, 2026 — nog altijd onder het niveau van 2024', bron:'Eigen berekening' })}
-    ${tile({ waarde: pct(reeel[7]/reeel[0]-1,1), label:'verandering sinds 2018 na correctie voor inflatie, op prijspeil 2015', bron:'Eigen berekening, CBS-consumentenprijsindex' })}
+    ${tile({ waarde: pct(reeleMutatie(2018, 2025),1), label:'verandering sinds 2018 na correctie voor inflatie, op prijspeil 2015', bron:'Eigen berekening, CBS-consumentenprijsindex' })}
   </div>
 </section>
 
 <section>
   <h2>De reeks</h2>
-  <p class="sub">Nominaal liep het uurbedrag van ${eur(61.54)} in 2018 op tot ${eur(u24)} in 2024. In 2025
+  <p class="sub">Nominaal liep het uurbedrag van ${eur(uurbedrag(2018).nominaal)} in 2018 op tot ${eur(u24)} in 2024. In 2025
   valt het terug op het niveau van 2018. Gecorrigeerd voor inflatie is het beeld scherper: dan ligt 2025
   ruim een vijfde onder 2018.</p>
-  ${panel(serieChart(R.uurbedrag, { fmt: eur, hoogte: 330 }))}
-  ${panel(dataTable(T.uurreeks, [v=>String(v), num, v=>num(v,1), num, v=>num(v,1), eur, eur]))}
+  ${panel(serieChart(uurbedragSerie(), { fmt: eur, hoogte: 330 }))}
+  ${panel(dataTable(uurTabel, [v=>String(v), num, v=>num(v,1), num, v=>num(v,1), eur, eur]))}
   ${anwNoot(w('uren','nivel_werkweek'), w('uren','anw_dienst'), { kort:true })}
   <p class="small">Wie de dienst op de post buiten beschouwing laat, deelt door minder uren en komt dus
   ${pct(w('uren','nivel_werkweek')/(w('uren','nivel_werkweek')-w('uren','anw_dienst'))-1,1)} hóger uit:
   ${eur(u24*w('uren','nivel_werkweek')/(w('uren','nivel_werkweek')-w('uren','anw_dienst')))} in 2024 en
   ${eur(u25*w('uren','nivel_werkweek')/(w('uren','nivel_werkweek')-w('uren','anw_dienst')))} in 2025. De
-  knik van ${pct(1-u25/u24,1)} verandert daar niet door — die is in elke variant hetzelfde.</p>
+  knik van ${pct(knik.aandeel,1)} verandert daar niet door — die is in elke variant hetzelfde.</p>
 </section>
 
 <section>
   <h2>Waar de knik vandaan komt</h2>
   <p class="sub">Niet uit een verlaging van het normbedrag. Dat steeg juist. De daling zit volledig in het
   aantal normbedragen dat in de tarieven wordt ingerekend.</p>
-  ${panel(serieChart(R.nacs, { fmt: num, hoogte: 320 }))}
+  ${panel(serieChart(nacsSerie(), { fmt: num, hoogte: 320 }))}
   ${callout(`<strong>Twee lijnen die uit elkaar lopen.</strong> De ureninzet van praktijkhouders groeide
-  tussen 2018 en 2024 van ${num(10698)} naar ${num(11699)} fte van 36 uur — niet doordat er meer
+  tussen 2018 en 2024 van ${num(reeks.ureninzetFte36[0])} naar ${num(reeks.ureninzetFte36[6])} fte van 36 uur — niet doordat er meer
   praktijkhouders kwamen, maar doordat de werkweek langer werd. Het aantal nac’s in de tarieven kroop in
-  diezelfde jaren van ${num(8052)} naar ${num(8305)}, en viel in 2025 terug naar ${num(5885)}.
+  diezelfde jaren van ${num(reeks.nacs[0])} naar ${num(reeks.nacs[6])}, en viel in 2025 terug naar ${num(reeks.nacs[7])}.
   <a href="/modelwissel/">Wat er in 2025 precies veranderde</a>.`)}
-  ${panel(dataTable(T.normbedrag, [null, eur0, num, v => '€ ' + num(v,1) + ' mln']))}
+  ${panel(dataTable(normTabel, [null, eur0, num, v => '€ ' + num(v,1) + ' mln']))}
 </section>
 
 <section>

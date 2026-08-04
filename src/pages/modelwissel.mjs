@@ -1,5 +1,6 @@
 import { pagina } from '../lib/layout.mjs';
 import { w, p, data } from '../lib/data.mjs';
+import { normbedragTabel } from '../lib/metrics.mjs';
 import { panel, tile, callout, dataTable, heroNumber, compareBars, bronLabel } from '../lib/components.mjs';
 import { eur, eur0, num, pct } from '../lib/format.mjs';
 
@@ -63,7 +64,7 @@ export default function () {
   <h2>Het normbedrag steeg, het aantal normbedragen daalde</h2>
   <p class="sub">Beide bewegingen worden apart gecommuniceerd, en beide zijn waar. Naast elkaar gezet
   verklaren ze waarom een forse verhoging van de arbeidsvergoeding per fte niet in het tarief te zien is.</p>
-  ${panel(dataTable(T.normbedrag, [null, eur0, num, v => '€ ' + num(v,1) + ' mln']))}
+  ${panel(dataTable(normbedragTabel(), [null, eur0, num, v => '€ ' + num(v,1) + ' mln']))}
   ${callout(`<strong>Rekenen met de uitersten.</strong> Het normbedrag per fte steeg tussen 2024 en 2025 met
   ${pct(202476/171940-1,1)}. Het aantal fte dat ermee wordt vermenigvuldigd daalde met
   ${pct(1-5885/8305,1)}. Wat er landelijk aan arbeidsvergoeding voor praktijkhouders in de tarieven zit,

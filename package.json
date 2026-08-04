@@ -3,10 +3,12 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build": "node build.mjs",
+    "build": "node --test test/*.test.mjs && node build.mjs",
     "dev": "node build.mjs && node --run serve",
     "serve": "node -e \"const h=require('http'),f=require('fs'),p=require('path');h.createServer((q,s)=>{let u=q.url.split('?')[0];if(u.endsWith('/'))u+='index.html';if(!p.extname(u))u+='.html';const t=p.join('dist',u);f.readFile(t,(e,d)=>{if(e){s.writeHead(404);s.end('404')}else{s.writeHead(200,{'content-type':u.endsWith('.css')?'text/css':u.endsWith('.js')?'text/javascript':u.endsWith('.svg')?'image/svg+xml':u.endsWith('.json')?'application/json':'text/html; charset=utf-8'});s.end(d)}})}).listen(8788,()=>console.log('http://localhost:8788'))\"",
-    "deploy": "npm run build && wrangler deploy"
+    "deploy": "npm run build && wrangler deploy",
+    "test": "node --test test/*.test.mjs",
+    "data:sync": "node scripts/sync-cijfermeester.mjs"
   },
   "devDependencies": {
     "wrangler": "^4.42.0"

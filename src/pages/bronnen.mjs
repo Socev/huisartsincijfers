@@ -2,6 +2,7 @@ import { pagina } from '../lib/layout.mjs';
 import { bronnen, data, alleParameters } from '../lib/data.mjs';
 import { panel, table, callout } from '../lib/components.mjs';
 import { num, pct, eur, esc, datum } from '../lib/format.mjs';
+import { afgeleideKerngetallen, snapshotDatum, reeks } from '../lib/metrics.mjs';
 
 const toon = p => {
   const v = p.waarde;
@@ -14,6 +15,7 @@ const toon = p => {
 
 export default function () {
   const params = alleParameters();
+  const CM_REEKSEN = Object.values(data.cijfermeester?.reeksen ?? {});
   const perBestand = {};
   for (const p of params) (perBestand[p.bestand] ??= []).push(p);
 
@@ -54,6 +56,38 @@ export default function () {
   <span class="badge afgeleid">afgeleid</span> is door ons berekend uit bronnen met de rekenstap erbij, en
   <span class="badge schatting">schatting</span> berust op extrapolatie.</p>
   ${secties}
+</section>
+
+<section id="afgeleid">
+  <h2>Afgeleide kerngetallen</h2>
+  <p class="sub">Deze getallen staan niet als parameter in de datalaag: ze worden bij elke build berekend uit
+  de grondslagen hierboven. De rekenstap staat erbij, zodat ook het rekenwerk zelf te controleren is.
+  Een afleiding met een geschatte invoer heet hier <span class="badge schatting">afgeleid, bevat schatting</span> —
+  een verhouding is nooit steviger dan haar noemer.</p>
+  ${panel(table({
+    cols:[{label:'Grootheid'},{label:'Waarde',r:true},{label:'Rekenstap'},{label:'Status'}],
+    rows: afgeleideKerngetallen().map(k => [
+      esc(k.label),
+      k.eenheid === 'euro' ? eur(k.waarde)
+        : k.eenheid === 'uur/week' ? num(k.waarde, 1) + ' u'
+        : num(k.waarde, k.waarde % 1 ? (k.waarde < 10 ? 2 : 1) : 0),
+      esc(k.rekenstap),
+      `<span class="badge ${k.status.includes('schatting') ? 'schatting' : 'afgeleid'}">${esc(k.status)}</span>`
+    ])
+  }))}
+</section>
+
+<section id="cijfermeester">
+  <h2>De Cijfer-Meester</h2>
+  <p class="sub">Een deel van de reeksen op deze site komt uit de Cijfer-Meester, een zorgcijferdatabank waarin
+  elke waarde met bron, peiljaar en status is vastgelegd. De site leest die databank niet live uit maar werkt met
+  een momentopname, zodat wat u hier ziet een bevroren en citeerbare stand is.</p>
+  ${panel(table({
+    cols:[{label:'Reeks'},{label:'Jaren'},{label:'Bron'}],
+    rows: CM_REEKSEN.map(r => [esc(r.indicator), `${r.jaren[0]}–${r.jaren[r.jaren.length-1]}`,
+      esc(`${r.organisatie} — ${r.bron}`)])
+  }))}
+  <p class="bron" style="margin-top:12px">Momentopname van ${datum(snapshotDatum())}.</p>
 </section>
 
 <section id="datalaag">
