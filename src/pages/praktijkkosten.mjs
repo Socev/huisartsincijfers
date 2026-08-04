@@ -1,20 +1,36 @@
 import { pagina } from '../lib/layout.mjs';
 import { w, p, data } from '../lib/data.mjs';
-import { panel, dataTable, tile, barChart, callout, compareBars } from '../lib/components.mjs';
+import { panel, dataTable, tile, barChart, callout, compareBars, statContrast, methodDisclosure } from '../lib/components.mjs';
 import { num, pct, eur0 } from '../lib/format.mjs';
 
 export default function () {
   const T = data.praktijkkosten.tabellen;
   const per1000 = T.per_1000.rijen.filter(r => r[0] !== 'Totaal praktijkkosten');
 
+  /* De mutaties komen uit de tabel, niet uit vaste getallen in de tekst. Zo kan
+     de kop niet uit de pas gaan lopen met de cijfers eronder — en zo blijft
+     zichtbaar dat "totale kosten" en "praktijkkosten" twee verschillende posten
+     zijn: 22,8% tegenover 46,2%. Die twee worden makkelijk verwisseld. */
+  const kern = naam => T.kerngetallen.rijen.find(r => r[0] === naam);
+  const totaal   = kern('Totale kosten');
+  const praktijk = kern('Praktijkkosten');
+  const arbeid   = kern('Arbeidskosten praktijkhouder');
+
   const body = `
-<section>
-  <div class="grid c4">
-    ${tile({ waarde: eur0(w('praktijkkosten','kosten_per_praktijk_2022')), label:'totale kosten van een gemiddelde praktijk in 2022, prijspeil definitief 2022', bron:'NZa Tabel 33' })}
-    ${tile({ waarde: '+' + pct(0.462,1), label:'stijging van de praktijkkosten per praktijk tussen 2015 en 2022', bron:'NZa Tabel 33' })}
-    ${tile({ waarde: '−' + pct(0.103,1), label:'daling van de arbeidskosten van de praktijkhouder per praktijk', bron:'NZa Tabel 33' })}
-    ${tile({ waarde: num(w('praktijkkosten','fte_totaal_praktijk'),2), label:'fte per praktijk inclusief de praktijkhouder, na bijschatting door de NZa', bron:'NZa par. 4.3' })}
-  </div>
+<section id="tegenstelling">
+  ${statContrast({
+    pijl: 'tegenover',
+    links:  { waarde: '+' + pct(praktijk[3], 1), label: 'praktijkkosten per praktijk',
+              eenheid: `personeel, inhuur, huisvesting en overig · ${eur0(praktijk[2])} → ${eur0(praktijk[1])}`,
+              status: 'definitief' },
+    rechts: { waarde: '−' + pct(Math.abs(arbeid[3]), 1), label: 'arbeidskosten van de praktijkhouder',
+              eenheid: `per praktijk · ${eur0(arbeid[2])} → ${eur0(arbeid[1])}`,
+              status: 'definitief' },
+    ratio: `<b>Noemer: per praktijk</b>, beide jaren op prijspeil 2022, zodat alleen het volume-effect
+      zichtbaar is. Samen komen de <b>totale</b> kosten per praktijk uit op ${eur0(totaal[1])}, een stijging
+      van ${pct(totaal[3], 1)} — niet de ${pct(praktijk[3], 1)} van de post praktijkkosten alleen. Die twee
+      worden vaak door elkaar gehaald.`
+  })}
 </section>
 
 <section>
@@ -22,10 +38,13 @@ export default function () {
   <p class="sub">Beide jaren op prijspeil definitief 2022, zodat alleen het volume-effect zichtbaar is.
   De praktijk is groter geworden en de kosten stegen mee — behalve de arbeidskosten van de eigenaar.</p>
   ${panel(dataTable(T.kerngetallen, [null, eur0, eur0, v=>pct(v,1)]))}
-  ${callout(`<strong>Dit is de tegenwerping die u gaat horen.</strong> De arbeidskosten van de praktijkhouder
-  dalen met 10,3 procent per praktijk, maar personeel en inhuur stijgen met een derde per 1.000 verzekerden.
-  Het geld is niet uit de tarieven verdwenen; het is verschoven van de eigenaar naar loondienst en waarneming.
-  Of dat een probleem is, is een politieke vraag. Dát het zo is, staat in de tabel hieronder.`)}
+  ${callout(`In de gemeten kostprijs verschoof het gewicht van de arbeidskosten van de praktijkhouder naar
+  personeel en inhuur. Dat verklaart een deel van de modeluitkomst; het zegt niet wat iedere individuele
+  praktijk feitelijk heeft ontvangen. Het geld is niet uit de tarieven verdwenen — het staat op een andere
+  regel.`, 'inzicht')}
+  ${callout(`<b>Let op de noemer.</b> De mutatie van ${pct(arbeid[3],1)} is <i>per praktijk</i>; de stijging van
+  personeel en inhuur hieronder is <i>per 1.000 verzekerden</i>. Praktijken zijn in deze periode groter
+  geworden, dus die twee noemers lopen uiteen. Vergelijk daarom binnen een noemer, niet ertussen.`, 'letop')}
 </section>
 
 <section>
@@ -67,9 +86,11 @@ export default function () {
 
   return { pad:'/praktijkkosten/', html: pagina({
     pad:'/praktijkkosten/', titel:'Praktijkkosten', eyebrow:'Kostprijsonderzoek 2022 tegenover 2015',
-    h1:'Wat een huisartsenpraktijk kost, en waar dat naartoe is gegaan',
-    omschrijving:'De ontwikkeling van de praktijkkosten tussen 2015 en 2022, per praktijk en per 1.000 verzekerden.',
-    lede:`Praktijken zijn groter geworden, er werkt meer personeel, en er worden meer consulten geleverd.
-      De kosten stegen mee. Alleen bij de arbeidskosten van de praktijkhouder zelf ging het de andere kant op.`,
+    h1:'De praktijk werd duurder. De post voor de praktijkhouder daalde.',
+    omschrijving:'De ontwikkeling van de praktijkkosten tussen 2015 en 2022, per praktijk en per 1.000 verzekerden, met de noemer er telkens bij.',
+    lede:`Tussen 2015 en 2022 stegen de praktijkkosten per praktijk met ${pct(praktijk[3],1)}: personeel,
+      inhuur, huisvesting en overig. De arbeidskosten van de praktijkhouder daalden in diezelfde periode met
+      ${pct(Math.abs(arbeid[3]),1)}. De totale kosten per praktijk kwamen daarmee ${pct(totaal[3],1)} hoger uit.`,
+    status:[`Prijspeil definitief 2022`, `noemer: per praktijk`, `${p('praktijkkosten','kosten_per_praktijk_2022').status}`],
     body })};
 }
