@@ -2,7 +2,7 @@
    Bouwt dist/ uit src/. Geen afhankelijkheden, geen framework: node build.mjs.
    Elke pagina in src/pages/ exporteert een default-functie die HTML teruggeeft.
    =========================================================================== */
-import { readdirSync, readFileSync, mkdirSync, writeFileSync, cpSync, rmSync } from 'node:fs';
+import { readdirSync, readFileSync, mkdirSync, writeFileSync, cpSync, rmSync, existsSync } from 'node:fs';
 import { join, dirname } from 'node:path';
 
 const OUT = 'dist';
@@ -22,15 +22,29 @@ for (const f of ['favicon.svg', 'logo.svg', 'logo-mark.svg'])
   cpSync(join('src/assets', f), join(OUT, f));
 for (const f of readdirSync('src/assets').filter(f => f.endsWith('.js')))
   cpSync(join('src/assets', f), join(OUT, f));
+/* Deelkaarten. Worden apart gerenderd met npm run og en meegecommit, zodat de
+   build zelf geen browser nodig heeft. */
+cpSync('src/assets/og', join(OUT, 'og'), { recursive: true });
 
 /* pagina's */
 const paginas = readdirSync('src/pages').filter(f => f.endsWith('.mjs') && !f.startsWith('_')).sort();
+const zonderKaart = [];
 let n = 0;
 for (const bestand of paginas) {
   const mod = await import('./' + join('src/pages', bestand));
   const { pad, html } = await mod.default();
   schrijf(pad === '/' ? 'index.html' : pad.replace(/^\/|\/$/g, '') + '/index.html', html);
+  /* Een nieuwe pagina zonder deelkaart valt anders pas op zodra iemand hem
+     deelt en er een leeg vlak verschijnt. */
+  const kaart = (pad === '/' ? 'index' : pad.replace(/^\/|\/$/g, '').replace(/\//g, '-')) + '.png';
+  if (!existsSync(join('src/assets/og', kaart))) zonderKaart.push(`${pad} (verwacht og/${kaart})`);
   n++;
+}
+if (zonderKaart.length) {
+  console.error('\nDeelkaart ontbreekt voor:');
+  for (const x of zonderKaart) console.error('  ' + x);
+  console.error('\nDraai npm run og en commit de PNG mee.');
+  process.exit(1);
 }
 
 /* 404 */

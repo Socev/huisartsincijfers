@@ -69,6 +69,10 @@ export function inhoudsopgave(body) {
   return { body: nieuw, items };
 }
 
+/** Bestandsnaam van de deelkaart bij een pad. Gerenderd door scripts/og-kaarten.mjs. */
+export const kaartNaam = pad =>
+  (pad === '/' ? 'index' : pad.replace(/^\/|\/$/g, '').replace(/\//g, '-')) + '.png';
+
 /** Alle pagina's plat, voor de sitemap en voor het markeren van de actieve groep. */
 export const ALLE_PADEN = NAV.flatMap(n => n.kinderen ? n.kinderen.map(k => k.href) : [n.href]);
 
@@ -113,6 +117,14 @@ export function pagina({ pad, titel, omschrijving, eyebrow, h1, lede, body,
 <meta property="og:type" content="website">
 <meta property="og:locale" content="nl_NL">
 <meta property="og:url" content="${SITE.url}${pad}">
+<meta property="og:image" content="${SITE.url}/og/${kaartNaam(pad)}">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:site_name" content="${esc(SITE.naam)}">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="${esc(titel)}">
+<meta name="twitter:description" content="${esc(omschrijving ?? SITE.omschrijving)}">
+<meta name="twitter:image" content="${SITE.url}/og/${kaartNaam(pad)}">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="stylesheet" href="/styles/tokens.css">
 <link rel="stylesheet" href="/styles/site.css">
