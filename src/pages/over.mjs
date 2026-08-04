@@ -30,9 +30,9 @@ export default function () {
   <h2>Voorbehoud</h2>
   ${callout(`Dit is geen medisch, juridisch of financieel advies. Het is een verzameling openbare cijfers met
   bewerkingen erop. Wie er beslissingen op baseert, doet dat op eigen verantwoordelijkheid.`)}
-  <p>Wij zijn geen onafhankelijke partij: deze site wordt gemaakt door mensen die zelf in de huisartsenzorg
-  werken. Dat is precies de reden om elk getal herleidbaar te maken. U hoeft ons niet te geloven; u kunt het
-  narekenen.</p>
+  <p>De makers werken zelf in de huisartsenzorg. Die betrokkenheid wordt niet verborgen; zij is juist de reden
+  dat bron, berekening en interpretatie hier strikt van elkaar worden gescheiden. U hoeft ons niet te geloven —
+  u kunt het narekenen.</p>
   <h3>Wat wij niet doen</h3>
   <ul>
     <li>Wij publiceren geen cijfer waarvan wij de bron niet kunnen aanwijzen.</li>
@@ -58,18 +58,33 @@ export default function () {
 
 <section id="correcties">
   <h2>Een fout gevonden?</h2>
-  <p>Graag. Een verkeerd cijfer op deze site schaadt het punt dat de site probeert te maken, dus correcties zijn
-  welkom — ook als ze slecht uitkomen. Meld het via
-  <a href="https://github.com/Socev/huisartsincijfers/issues" rel="noopener">GitHub</a>, met vermelding van de pagina
-  en de bron waarop u zich baseert.</p>
+  <p>Graag. Een verkeerd cijfer op deze site schaadt het punt dat de site probeert te maken, dus correcties
+  zijn welkom — ook als ze slecht uitkomen. Meld het via
+  <a href="https://github.com/Socev/huisartsincijfers/issues" rel="noopener">GitHub</a>, met vermelding van de
+  pagina en de bron waarop u zich baseert.</p>
+  <p>Een melding valt in één van vier categorieën, en dat bepaalt wat ermee gebeurt:</p>
+  <ul>
+    <li><b>Data</b> — een cijfer wijkt af van de bron. Wij passen de datalaag aan; de hele site loopt mee.</li>
+    <li><b>Berekening</b> — de rekenstap deugt niet. Die staat in de tests, dus een correctie is meteen
+    afgedekt tegen terugkeer.</li>
+    <li><b>Tekst</b> — de uitleg wekt een verkeerde indruk terwijl het cijfer klopt.</li>
+    <li><b>Ontwerp</b> — iets is onleesbaar of misleidend weergegeven.</li>
+  </ul>
+  <p>Correcties gaan via een zichtbare wijziging in de
+  <a href="https://github.com/Socev/huisartsincijfers/commits/main" rel="noopener">wijzigingshistorie</a>; wij
+  verwijderen nooit stilzwijgend een cijfer. Blijft er tussen ons en de melder verschil van inzicht bestaan,
+  dan komt dat als openstaande vraag op de pagina zelf te staan in plaats van dat één van beide lezingen
+  ongemerkt wint.</p>
   <p class="small">Laatst bijgewerkt op ${datum(SITE.bijgewerkt)}.</p>
 </section>`;
 
   return { pad:'/over/', html: pagina({
     pad:'/over/', titel:'Over deze site', eyebrow:'Verantwoording en voorbehoud',
-    h1:'Wat dit is, en wat het niet is',
+    h1:'Openbare cijfers gebruiken om verborgen aannames zichtbaar te maken',
     omschrijving:'Hoe deze site met cijfers omgaat, welke statussen wij hanteren, en waar de grenzen liggen.',
-    lede:`Een site die anderen op hun cijfers aanspreekt, moet zelf boven twijfel staan. Daarom staat hier hoe
-      wij werken, wat wij niet doen, en waar de zwakke plekken zitten.`,
+    lede:`Belangrijke beleidskeuzes blijven vaak verborgen in definities, noemers en verdeelsleutels. Deze
+      site maakt die keuzes zichtbaar. Dat is niet hetzelfde als neutraliteit claimen: daarom is ieder
+      broncijfer herleidbaar, iedere eigen berekening gemarkeerd en iedere interpretatie als zodanig
+      herkenbaar. Hier staat hoe wij werken en waar de zwakke plekken zitten.`,
     body })};
 }
