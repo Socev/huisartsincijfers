@@ -9,7 +9,8 @@
     "deploy": "npm run build && wrangler deploy",
     "test": "node --test test/*.test.mjs",
     "data:sync": "node scripts/sync-cijfermeester.mjs",
-    "og": "node scripts/og-kaarten.mjs"
+    "og": "node scripts/og-kaarten.mjs",
+    "qa": "node scripts/qa-layout.mjs"
   },
   "devDependencies": {
     "wrangler": "^4.42.0"
