@@ -159,10 +159,16 @@ export default function () {
         ['Hidha 2025, schaal 9', eur0(kh25), '+' + pct(meer(kh25),1)],
         ['Hidha 2026 concept, schaal 9', eur0(kh26), '+' + pct(meer(kh26),1)]
       ]})}
-    <p class="small" style="margin-top:12px">Het model is inhoudelijk gecontroleerd en met accountants
-    geverifieerd. Het is nog niet als document gepubliceerd; zolang dat niet zo is, is dit het enige blok op
-    deze site dat u niet zelf kunt narekenen. De uitkomst is bovendien gevoelig voor uren, salaristrede,
-    uurtarief, pensioenkeuze en overige instellingen — verander één daarvan en het verschil verschuift.</p>`)}
+    <p class="small" style="margin-top:12px">De rekentool is openbaar. Hij wordt uitgegeven door
+    <a href="https://debevlogenhuisartsen.nl/nieuws/h6k67dpd983wa67-kwdef" rel="noopener">Vereniging De
+    Bevlogen Huisartsen</a> en in eigen vorm ook door de LHV als
+    <a href="https://lhv.waarneemapp.nl" rel="noopener">Inkomstentool</a>; de LHV heeft hem door haar
+    accountants laten doorrekenen. U hoeft onze uitkomst dus niet aan te nemen — vul de tool met uw eigen
+    aannames en kijk wat eruit komt.</p>
+    <p class="small">De uitkomst is gevoelig voor uren, salaristrede, uurtarief, pensioenkeuze en overige
+    instellingen: verander één daarvan en het verschil verschuift. De LHV-versie rekent bovendien vanuit het
+    <em>netto-inkomen van de huisarts</em>; de cijfers hierboven gaan over de <em>kosten voor de werkgever</em>.
+    Dat zijn twee verschillende vragen aan hetzelfde model.</p>`)}
 </section>`;
 
   return { pad:'/praktijkhouderschap/', html: pagina({

@@ -139,11 +139,18 @@
   "url": "https://www.lhv.nl/",
   "soort": "Collectieve arbeidsovereenkomst"
  },
- "zzp-hidha-model": {
-  "titel": "Rekenmodel ZZP_HIDHA 2025_2026 v2.1 — werkgeverskosten waarnemer tegenover hidha",
-  "uitgever": "huisartsincijfers.nl",
+ "bevlogen-rekentool": {
+  "titel": "Rekentool ZZP tegenover hidha, versie 2.1",
+  "uitgever": "Vereniging De Bevlogen Huisartsen",
   "datum": "2026",
-  "url": "https://github.com/Socev/huisartsincijfers",
-  "soort": "Eigen rekenmodel, gecontroleerd met accountants"
+  "url": "https://debevlogenhuisartsen.nl/nieuws/h6k67dpd983wa67-kwdef",
+  "soort": "Rekentool"
+ },
+ "lhv-inkomstentool": {
+  "titel": "LHV Inkomstentool — het financiële verschil tussen waarnemen en loondienst",
+  "uitgever": "Landelijke Huisartsen Vereniging",
+  "datum": "2026",
+  "url": "https://lhv.waarneemapp.nl",
+  "soort": "Rekentool, doorgerekend door de accountants van de LHV"
  }
 }
