@@ -27,8 +27,9 @@ export const NAV = [
     { href: '/inkomen/',        label: 'Inkomen en de norm' }
   ]},
   { label: 'Beroepsgroep', kinderen: [
-    { href: '/beroepsgroep/', label: 'Wie levert de zorg?' },
-    { href: '/werkdruk/',     label: 'Werkdruk en patiëntenstops' }
+    { href: '/beroepsgroep/',        label: 'Wie levert de zorg?' },
+    { href: '/praktijkhouderschap/', label: 'Wie draagt de praktijk?' },
+    { href: '/werkdruk/',            label: 'Werkdruk en patiëntenstops' }
   ]},
   { href: '/bronnen/', label: 'Bronnen' },
   { href: '/over/',    label: 'Over' }

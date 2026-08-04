@@ -1,128 +1,103 @@
 import { pagina } from '../lib/layout.mjs';
 import { w, p, data } from '../lib/data.mjs';
-import { panel, tile, callout, serieChart, dataTable, compareBars , anwNoot } from '../lib/components.mjs';
+import { panel, tile, callout, serieChart, dataTable, compareBars, anwNoot,
+         evidenceCard, methodDisclosure } from '../lib/components.mjs';
+import { werkweek } from '../lib/metrics.mjs';
 import { num, pct } from '../lib/format.mjs';
 
 export default function () {
   const R = data.beroepsgroep.reeksen, T = data.beroepsgroep.tabellen;
   const ww = R.werkweek.reeksen;
+  const u = werkweek();
+
+  /* De mutaties komen uit de reeks zelf, zodat de tekst meeloopt zodra de
+     beroepenregistratie wordt bijgewerkt. */
+  const F = R.functies;
+  const rij = naam => F.reeksen.find(s => new RegExp(naam, 'i').test(s.naam));
+  const bij = (serie, jaar) => serie.waarden[F.jaren.indexOf(jaar)];
+  const ph = rij('praktijkhouder'), hid = rij('in dienst');
+
+  const piekJaar = F.jaren[ph.waarden.indexOf(Math.max(...ph.waarden.filter(v => v != null)))];
+  const laatst   = [...F.jaren].reverse().find(j => bij(ph, j) != null);
+  const sindsPiek = bij(ph, laatst) / bij(ph, piekJaar) - 1;
+  const hidGroei  = bij(hid, laatst) / bij(hid, F.jaren[0]) - 1;
+
+  /* De splitsing tussen loondienst en waarneming komt uit het
+     kostprijsonderzoek; de Nivel-reeks telt beide in één categorie. */
+  const split = naam => T.hidha_split.rijen.find(r => new RegExp(naam, 'i').test(r[0]));
 
   const body = `
 <section>
-  <div class="grid c4">
-    ${tile({ waarde: num(w('beroepsgroep','praktijkhouders_2023')),
-      label:'praktijkhouders in 2023. In 2017 waren het er nog ' + num(w('beroepsgroep','praktijkhouders_piek')) + '.',
-      bron:'Nivel beroepenregistraties' })}
-    ${tile({ waarde: num(w('beroepsgroep','hidha_2023')),
-      label:'huisartsen in dienst en vaste waarnemers in 2023 — de sterkst groeiende groep',
-      bron:'Nivel beroepenregistraties' })}
-    ${tile({ waarde: num(w('beroepsgroep','praktijken_2024')),
-      label:'huisartsenpraktijken op 1 januari 2024. Tien jaar eerder waren het er ruim tweehonderd meer.',
-      bron:'Nivel beroepenregistraties' })}
-    ${tile({ waarde: num(w('beroepsgroep','sph_actief_2025')),
-      label:'actieve deelnemers bij het pensioenfonds voor huisartsen in 2025',
-      bron:'SPH jaarverslag 2025' })}
+  <div class="grid c3">
+    ${evidenceCard({
+      claim: `Praktijkhouders in ${laatst}`,
+      kern: num(bij(ph, laatst)),
+      bewijs: `personen. Het aantal piekte in ${piekJaar} op ${num(bij(ph, piekJaar))} en ligt nu
+        ${pct(Math.abs(sindsPiek), 1)} lager.`,
+      status: 'definitief', href: '/praktijkhouderschap/', hrefLabel: 'Wie draagt de praktijk?' })}
+    ${evidenceCard({
+      claim: 'Huisartsen in dienst en vaste waarnemers',
+      kern: '+' + pct(hidGroei, 0),
+      bewijs: `sinds ${F.jaren[0]}, van ${num(bij(hid, F.jaren[0]))} naar ${num(bij(hid, laatst))} personen.
+        Dit is de sterkst groeiende groep in de registratie.`,
+      status: 'definitief', href: '#waarneming', hrefLabel: 'Loondienst of waarneming?' })}
+    ${evidenceCard({
+      claim: 'Werkweek praktijkhouder',
+      kern: num(u.bruto, 1) + ' u',
+      bewijs: `per week, gemeten in 2024 — structureel meer dan elke andere functie. Exclusief de apart
+        bekostigde dienst is dat ${num(u.netto, 1)} uur.`,
+      status: 'definitief', href: '#uren', hrefLabel: 'Uren per functie' })}
   </div>
 </section>
 
-<section>
+<section id="functies">
   <h2>Het praktijkhouderschap krimpt, de rest groeit</h2>
-  <p class="sub">Het aantal praktijkhouders piekte in 2017 en daalt sindsdien licht. In dezelfde periode groeide
-  de groep huisartsen in dienst en vaste waarnemers sterk. Het totale aantal werkzame huisartsen nam toe;
-  de verdeling over functies verschoof.</p>
+  <p class="sub">Het aantal praktijkhouders piekte in ${piekJaar} en daalt sindsdien licht. In dezelfde periode
+  groeide de groep huisartsen in dienst en vaste waarnemers sterk. Het totale aantal werkzame huisartsen nam
+  toe; de verdeling over functies verschoof.</p>
   ${panel(serieChart(R.functies, { fmt: num, hoogte: 320, yNul: true }))}
-  ${callout(`Deze verschuiving is precies wat de NZa als verklaring noemt voor de gedaalde arbeidskosten van de
-  praktijkhouder in de tariefonderbouwing: er zijn gemiddeld minder praktijkhouders per praktijk, en meer
-  huisartsen in loondienst of waarneming. <a href="/praktijkkosten/">Wat dat met de kosten deed</a>.`)}
+  ${callout(`De NZa noemt de veranderde personele samenstelling als verklaring voor de lagere
+  praktijkhouderinzet per praktijk in de tariefonderbouwing. De registraties laten die groei van waarneming en
+  loondienst inderdaad zien. De aansluiting tussen personenregistraties en fte in de kostprijsberekening is
+  echter niet één op één: het eerste telt mensen, het tweede rekeneenheden.
+  <a href="/praktijkkosten/">Wat dat met de kosten deed</a>.`, 'letop')}
 </section>
 
-<section>
+<section id="waarneming">
   <h2>Loondienst of waarneming? Het is vooral waarneming</h2>
-  <p class="sub">De Nivel-reeks telt hidha's en vaste waarnemers in één categorie, waardoor niet te zien is welke
-  van de twee groeit. Het Praktijkkostenonderzoek splitst ze wél. Omgerekend naar landelijk niveau blijkt de
+  <p class="sub">De Nivel-reeks telt hidha's en vaste waarnemers in één categorie, waardoor niet te zien is
+  welke van de twee groeit. Het kostprijsonderzoek splitst ze wél. Omgerekend naar landelijk niveau blijkt de
   groei bijna helemaal uit waarneming te komen, niet uit loondienst.</p>
-  ${panel(dataTable(T.hidha_split, [null, num, num, v=>num(v,2), v=>num(v,2), v=>pct(v,0)]))}
   ${panel(compareBars({
     items:[
-      { label:'Huisarts in dienst bij een huisarts', waarde:0.11, serie:1 },
-      { label:'Incidenteel waarnemer', waarde:0.58, serie:3 },
-      { label:'Vaste waarnemer', waarde:0.69, serie:2 }
-    ], fmt:v=>pct(v,0), caption:'Groei van de landelijke inzet tussen 2015 en 2022, in fte.'
+      { label:'Huisarts in dienst bij een huisarts', waarde: split('in dienst')[5], serie:1 },
+      { label:'Incidenteel waarnemer',               waarde: split('incidenteel')[5], serie:3 },
+      { label:'Vaste waarnemer',                     waarde: split('vaste waarnemer')[5], serie:2 }
+    ], fmt: v => pct(v, 0), caption:'Groei van de landelijke inzet tussen 2015 en 2022, in fte.'
   }))}
-  ${callout(`De hidha-inzet groeide met ${pct(w('beroepsgroep','hidha_groei'),0)}; de inzet van vaste waarnemers
-  met ${pct(w('beroepsgroep','waarnemer_groei'),0)}. Wie zegt dat huisartsen massaal voor loondienst kiezen,
-  zegt dus iets anders dan de cijfers. De verschuiving gaat naar waarneming — een vorm zonder werkgeversband
-  en zonder praktijkverantwoordelijkheid.`)}
+  ${panel(dataTable(T.hidha_split, [null, num, num, v=>num(v,2), v=>num(v,2), v=>pct(v,0)]))}
+  ${callout(`De inzet van huisartsen in loondienst groeide met ${pct(w('beroepsgroep','hidha_groei'),0)}; die
+  van vaste waarnemers met ${pct(w('beroepsgroep','waarnemer_groei'),0)}. De verschuiving weg van het klassieke
+  praktijkhouderschap gaat dus vooral naar waarneming — een vorm zonder werkgeversband en zonder
+  praktijkverantwoordelijkheid — en niet naar loondienst.`, 'inzicht')}
 
-  <h3>De sprong van 2019 op 2020</h3>
-  <p class="sub">In de grafiek hierboven springt de categorie hidha's en vaste waarnemers met ruim vijftienhonderd
-  personen omhoog. Tegelijk daalt de categorie wisselende waarnemers met ruim zevenhonderd, terwijl het totaal
-  maar met ruim vijfhonderd toeneemt. Ongeveer de helft van de sprong is dus herindeling tussen twee categorieën,
-  geen instroom.</p>
-  ${panel(dataTable(T.herindeling, [null, num, num, v => (v>0?'+':'') + num(v)]))}
-
-  <h3>Het pensioenfonds telt ze wél apart</h3>
-  <p class="sub">De jaarverslagen van het pensioenfonds voor huisartsen splitsen het deelnemersbestand uit naar
-  type. Figuur 6 telt de directeur-grootaandeelhouders mee bij de huisartsen in dienstverband; figuur 7 splitst
-  ze apart. Dat onderscheid is wezenlijk: een dga bezit een praktijk en is geen werknemer. Hieronder staan ze
-  daarom los.</p>
-  ${panel(serieChart(R.sph_typen_index, { fmt: v => num(v,0), hoogte: 330 }))}
-  ${callout(`<strong>Waarom deze grafiek geindexeerd is.</strong> In absolute aantallen overheersen de twee
-  grote groepen en zie je de kleine groepen niet bewegen. Juist daar gebeurt het meeste: de
-  directeur-grootaandeelhouders groeien met ${pct(w('beroepsgroep','sph_dga_groei'),1)} in vier jaar en de
-  huisartsen in dienstverband met ${pct(w('beroepsgroep','sph_hidha_groei'),1)}. Dat is relevant voor de
-  kosten van een praktijk, want een hidha is duurder dan een waarnemer die per uur wordt ingehuurd — hij
-  brengt vakantie, scholing, doorbetaling bij ziekte en werkgeverslasten mee.
-  <a href="/praktijkkosten/">Wat dat doet met de personeelskosten</a>.`)}
-  ${panel(dataTable(T.sph_typen, [null, num, num, num, num, num, v=>pct(v,1)]))}
-  <p class="small">Vier bewegingen tegelijk, alle vier in dezelfde richting: weg van het klassieke
-  praktijkhouderschap. De vrijgevestigden dalen met ${pct(Math.abs(w('beroepsgroep','sph_vrijgevestigd_daling')),1)},
-  de waarnemers stijgen met ${pct(w('beroepsgroep','sph_waarnemend_groei'),1)} en zijn inmiddels de grootste
-  groep werkende huisartsen, de hidha's met ${pct(w('beroepsgroep','sph_hidha_groei'),1)} en de dga's met
-  ${pct(w('beroepsgroep','sph_dga_groei'),1)}. Dat bevestigt onafhankelijk wat het Praktijkkostenonderzoek
-  liet zien: de verschuiving gaat vooral naar waarneming.</p>
-
-  <h3>Hoeveel praktijkhouders zijn er dan?</h3>
-  <p class="sub">Deelname aan het pensioenfonds is voor praktijkhoudende huisartsen verplicht. Toch telt het
-  fonds er duidelijk minder dan het Nivel. Tel je de dga's bij de vrijgevestigden op, dan komt het fonds in
-  2023 op ${num(6541)} praktijkhouders, tegenover ${num(w('beroepsgroep','praktijkhouders_2023'))} bij het
-  Nivel. Dat scheelt ruim duizend mensen, en dat verschil is niet triviaal: het is de noemer onder bijna elke
-  berekening op deze site.</p>
-  ${panel(dataTable(T.telling_praktijkhouders, [null, num, null]))}
-  ${panel(dataTable(T.praktijkhouders_bronnen, [null, num, num, num]))}
-  ${callout(`<strong>Wat het verschil kán verklaren — en wat wij nog niet weten.</strong>
-  <b>Eén:</b> de rechtsvorm. Wie zijn praktijk via een bv voert, zit bij het fonds in de dga-regeling en niet
-  bij de vrijgevestigden; die groep groeide met ${pct(w('beroepsgroep','sph_dga_groei'),1)} en zit hierboven
-  al meegeteld. <b>Twee:</b> het eigendom zelf. Een praktijk kan eigendom zijn van een rechtspersoon of van
-  iemand die niet als huisarts meetelt; het Nivel registreert dan nog steeds een praktijkhoudend huisarts aan
-  die praktijk. <b>Drie:</b> deelnemers die in meer dan één regeling zitten, telt het fonds in het totaal maar
-  één keer mee. <b>Vier:</b> de peildata en de definitie van ‘verbonden aan een praktijk’ verschillen.
-  Welk deel van de ruim duizend door welke oorzaak komt, kunnen wij op dit moment niet vaststellen. Wij tonen
-  daarom beide tellingen en gebruiken de Nivel-reeks alleen waar die expliciet als noemer is bedoeld.`)}
+  ${methodDisclosure('De sprong van 2019 op 2020 is deels herindeling', `
+    <p class="small">In de reeks hierboven springt de categorie hidha's en vaste waarnemers met ruim
+    vijftienhonderd personen omhoog. Tegelijk daalt de categorie wisselende waarnemers met ruim zevenhonderd,
+    terwijl het totaal maar met ruim vijfhonderd toeneemt. Ongeveer de helft van de sprong is dus herindeling
+    tussen twee categorieën, geen instroom. Wie de reeks als trend leest, moet dat weten.</p>
+    ${dataTable(T.herindeling, [null, num, num, v => (v>0?'+':'') + num(v)])}`)}
 </section>
 
 <section>
   <h2>Meer huisartsen, minder praktijken</h2>
   <p class="sub">Het aantal werkzame huisartsen groeide met ongeveer een kwart, terwijl het aantal praktijken
-  licht kromp. Praktijken zijn dus groter geworden — in personeel én in patiënten.</p>
+  licht kromp. Praktijken zijn dus groter geworden — in personeel én in patiënten.
+  <a href="/praktijkhouderschap/">Wat dat voor het praktijkhouderschap betekent</a>.</p>
   ${panel(serieChart(R.totaal, { fmt: num, hoogte: 300, yNul: true }))}
 </section>
 
-<section>
-  <h2>De solopraktijk is bijna verdwenen</h2>
-  <p class="sub">In 2012 werkte bijna een kwart van de huisartsen solo; in 2024 nog zes procent. Twee derde
-  werkt nu in een groepspraktijk.</p>
-  ${panel(serieChart(R.praktijkvorm, { fmt: v => num(v,0) + '%', hoogte: 300, yNul: true }))}
-</section>
-
-<section>
-  <h2>Deelnemers van het pensioenfonds</h2>
-  <p class="sub">Het pensioenfonds voor huisartsen telt alle huisartsen die pensioen opbouwen, ongeacht functie.
-  Dat maakt het een onafhankelijke tweede meting naast de beroepenregistratie.</p>
-  ${panel(serieChart(R.sph, { fmt: num, hoogte: 300, yNul: true }))}
-</section>
-
-<section>
+<section id="uren">
   <h2>Wie werkt hoeveel uur?</h2>
   <p class="sub">Alle functies zijn meer gaan werken, maar de praktijkhouder werkt structureel het meest —
   en het verschil met de andere functies is tussen 2013 en 2024 nauwelijks kleiner geworden.</p>
@@ -132,16 +107,18 @@ export default function () {
     fmt: v => num(v,1), eenheid:' u', caption:'Gewerkte uren per week in 2024, met de eerdere metingen in de toelichting.'
   }))}
   ${panel(serieChart(R.werkweek, { fmt: v => num(v,1), hoogte: 280 }))}
-  ${anwNoot(55.7, 2.6, { kort:true })}
+  ${anwNoot(u.bruto, u.anw, { kort:true })}
   <p class="small" style="margin-top:12px">De werkweek van de praktijkhouder is de noemer onder het uurbedrag
   op de <a href="/arbeidskosten/">pagina over arbeidskosten</a>.</p>
 </section>`;
 
   return { pad:'/beroepsgroep/', html: pagina({
-    pad:'/beroepsgroep/', titel:'De beroepsgroep', eyebrow:'Aantallen, functies en arbeidsduur',
-    h1:'Wie levert de huisartsenzorg, en met hoeveel zijn ze?',
-    omschrijving:'Praktijkhouders, huisartsen in dienst, waarnemers en praktijken tussen 2012 en 2025, met de gewerkte uren per functie.',
-    lede:`Het aantal huisartsen groeit, het aantal praktijkhouders niet. Deze pagina brengt de
-      beroepenregistratie van het Nivel en de jaarverslagen van het pensioenfonds bij elkaar.`,
+    pad:'/beroepsgroep/', titel:'De beroepsgroep', eyebrow:'Functies en arbeidsmarkt',
+    h1:'Meer huisartsen, maar niet meer praktijkhouders',
+    omschrijving:'Praktijkhouders, huisartsen in dienst en waarnemers tussen 2012 en 2025, met de gewerkte uren per functie.',
+    lede:`Het totale aantal werkzame huisartsen groeit. Het aantal praktijkhouders piekte in ${piekJaar} en
+      daalt sindsdien licht. De groei zit vooral in waarneming en in mindere mate in loondienst.`,
+    status:[`Nivel-beroepenregistratie tot en met ${laatst}`, `herziene reeks`,
+            `uren gemeten in 2013, 2018 en 2024`],
     body })};
 }
