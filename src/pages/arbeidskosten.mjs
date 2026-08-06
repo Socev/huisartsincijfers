@@ -124,20 +124,40 @@ export default function () {
 </section>
 
 <section id="kruiscontrole">
-  <h2>Twee wegen naar hetzelfde getal</h2>
-  <p class="sub">Een afleiding die je nergens tegen kunt houden, is een aanname. Daarom loopt er een tweede
-  weg naar dit cijfer, die niets met de eerste te maken heeft: de Cijfer-Meester leidt het af uit de
-  tariefdekking per duizend ingeschrevenen in de NZa-verantwoordingen, zonder de deling hierboven te
-  gebruiken. Als beide wegen op hetzelfde uitkomen, is dat een echte controle.</p>
+  <h2>Elk jaar dezelfde deling — alleen de deler veranderde</h2>
+  <p class="sub">De reeks loopt van 2018 tot en met 2026 en volgt overal dezelfde regel: ingeschreven
+  verzekerden gedeeld door het aantal patiënten dat bij één volledig vergoede arbeidsvergoeding hoort. Er
+  zit dus geen methodebreuk in de reeks. <b>Wat in 2025 veranderde is uitsluitend de deler</b>, en die ene
+  wijziging draagt de hele modelwissel.</p>
   ${panel(table({
-    cols:[{label:'Jaar'},{label:'Keten van deze site',r:true},{label:'Cijfer-Meester',r:true},{label:'Verschil',r:true}],
-    rows: H.routes.map(r => [String(r.jaar), num(r.eigen,1), num(r.extern,0),
-      (r.afwijking >= 0 ? '+' : '−') + pct(Math.abs(r.afwijking),2)])
+    cols:[{label:'Jaar'},{label:'Ingeschreven verzekerden',r:true},{label:'Patiënten per volledige vergoeding',r:true},
+          {label:'Uitkomst van de deling',r:true},{label:'Gepubliceerde reeks',r:true},{label:'Model'}],
+    rows: H.jaarReeks.map(r => {
+      const nieuwModel = r.jaar === 2025;
+      const b = t => nieuwModel ? '<b>'+t+'</b>' : t;
+      return [b(String(r.jaar)), b(num(r.ingeschrevenen,0)), b(num(r.deler,0)),
+              b(num(r.berekend,1)), b(num(r.gepubliceerd,0)),
+              `<span class="small">${esc(r.model)}</span>`];
+    })
   }))}
-  ${callout(`<strong>Ze liggen ${pct(H.grootsteAfwijking,2)} uit elkaar.</strong> Dat is geen toeval en ook
-  geen kunstje: de twee routes delen alleen het onderwerp, niet de rekenwijze. Een test in de broncode
-  faalt zodra het verschil boven een half procent komt, zodat een fout in de ene weg niet stilletjes kan
-  meelopen met de andere.`, 'inzicht')}
+  <p class="small">De deler tot en met 2024 is de normpraktijk uit het kostprijsmodel 2015; vanaf 2025 de
+  normpraktijk van het herziene model ná schoning. Beide staan in NZa-stukken. De reeks zelf staat nergens
+  als geheel gepubliceerd en wordt hier dus opnieuw uitgerekend — over alle negen jaren wijkt die
+  herberekening ten hoogste ${pct(H.grootsteAfwijking,3)} af van de reeks in de Cijfer-Meester.</p>
+  ${callout(`<strong>De deler sprong van ${num(H.delerOud,0)} naar ${num(H.delerNieuw,0)} patiënten:
+  ${pct(H.delerSprong,1)} omhoog.</strong> Andersom gelezen daalde het aantal vergoedingen per duizend
+  ingeschreven patiënten met ${pct(Math.abs(H.perDuizendVerschil),1)}. Dat is de modelwissel in één getal —
+  niet een lager normbedrag, maar minder normbedragen op dezelfde patiëntenpopulatie.
+  <a href="/modelwissel/">Wat er verder veranderde</a>.`, 'inzicht')}
+  ${callout(`<strong>Wat deze aansluiting wél en niet is.</strong> Voor 2025 en 2026 zet deze site de stap in
+  tweeën — delen door ${num(H.perFte,0)}, dan maal ${pct(H.aandeelBinnen100,2)} — waar de Cijfer-Meester in
+  één keer door ${num(H.delerNieuw,0)} deelt. Dat is dezelfde deling, anders afgerond: ${num(H.routes[0].eigen,1)}
+  tegenover ${num(H.routes[0].extern,0)}, een verschil van ${pct(Math.abs(H.routes[0].afwijking),2)}.
+  Reken het dus niet aan als onafhankelijke bevestiging — het is een afrondingsverschil. De waarde is
+  bescheiden maar echt: een tikfout of een omgekeerde bewerking in één van de twee weergaven valt hierdoor
+  op, en een test in de broncode faalt zodra het verschil oploopt. Een tweede, werkelijk onafhankelijke
+  meting van dit getal bestaat niet. Wie het wil controleren, controleert de twee invoeren hierboven.`,
+  'methode')}
 </section>
 
 <section id="gevoeligheid">
@@ -161,9 +181,10 @@ export default function () {
   ${pct(1 - w('modelwissel','fte_p1000_2022') / w('modelwissel','fte_p1000_2015'), 1)} af, een orde van
   grootte meer. Maar het betekent wel dat ${num(k.binnen100,0)} moet worden gelezen als een afleiding met
   een marge, niet als een meting. Zo staat hij overal op de site ook gemarkeerd.`, 'letop')}
-  <p class="small">Nog iets om te weten bij de reeks 2018-2026: tot en met 2024 komen de aantallen
-  rechtstreeks uit de Cijfer-Meester, vanaf 2025 uit de keten hierboven. Die knip is de modelwissel — vóór
-  2025 bestond deze rekenwijze nog niet. <a href="/modelwissel/">Wat er toen veranderde</a>.</p>
+  <p class="small">Deze tabel varieert de deler van het huidige model. Wat de <em>oude</em> deler deed staat
+  hierboven: bij ${num(H.delerOud,0)} patiënten per vergoeding hadden er in ${k.jaar} ruim achtduizend
+  vergoedingen in de tarieven gezeten, tegen ${num(k.binnen100,0)} nu. Geen enkele variatie binnen het
+  huidige model komt in de buurt van dat verschil.</p>
 </section>
 
 <section id="personen-naar-fte">

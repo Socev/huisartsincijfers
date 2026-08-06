@@ -149,36 +149,63 @@ export function nacKeten(jaar = 2025) {
  * Waar het aantal nac's vandaan komt, en hoe zeker dat is.
  *
  * Het aantal nac's in de tarieven is het meest geciteerde getal op deze site en
- * tegelijk een afleiding, geen meting. Twee dingen horen daar zichtbaar bij.
+ * tegelijk een afleiding, geen meting. De hele reeks 2018-2026 volgt één regel:
  *
- * Ten eerste een controle. Er lopen twee onafhankelijke wegen naar dit getal:
- * de keten van deze site (ingeschrevenen ÷ patiënten per fte, daarna geschoond)
- * en de reeks `nacs_in_tarieven_nl` uit de Cijfer-Meester, die langs de
- * tariefdekking per duizend ingeschrevenen is afgeleid. Als die twee ver uit
- * elkaar lopen klopt er iets niet. Een test bewaakt dat het verschil onder een
- * half procent blijft; deze functie maakt het verschil ook zichtbaar.
+ *     ingeschreven verzekerden ÷ patiënten per volledig vergoede nac
  *
- * Ten tweede de gevoeligheid. De deling op patiënten per fte doet al het werk,
- * en dat getal is een NZa-keuze van 2.650. Wie wil weten hoe hard de uitkomst
- * is, moet kunnen zien wat er bij 2.600 of 2.700 gebeurt.
+ * Er is dus geen breuk in de methode tussen de oude en de nieuwe jaren. Wat in
+ * 2025 veranderde is uitsluitend de deler: van 2.095 (normpraktijk in het
+ * kostprijsmodel 2015) naar 2.972 (model 2022, ná schoning). Dat ene getal
+ * draagt de hele modelwissel.
+ *
+ * Let op wat de aansluiting met de Cijfer-Meester wél en niet is. De site zet
+ * de stap in tweeën — ÷ 2.650, dan × het aandeel binnen de 100% — en de
+ * Cijfer-Meester in één keer, ÷ 2.972. Dat is dezelfde deling, anders afgerond.
+ * Het verschil van een halve promille is dus een afrondingsverschil en geen
+ * onafhankelijke bevestiging. De waarde ervan is beperkt maar reëel: hij vangt
+ * een tikfout of een omgekeerde bewerking in één van de twee weergaven.
  */
-export function nacHerkomst(jaren = [2025, 2026], varianten = [2500, 2600, 2650, 2700, 2800]) {
+export function nacHerkomst(varianten = [2500, 2600, 2650, 2700, 2800]) {
   const b100 = w('nac', 'binnen_100');
   const tg   = w('nac', 'tarief_gereguleerd');
   const pf   = w('nac', 'patienten_per_fte');
 
-  const routes = jaren.map(jaar => {
-    const k = nacKeten(jaar);
-    const ander = cm('nacs_in_tarieven_nl', jaar);
-    return { jaar, eigen: k.binnen100, extern: ander.waarde,
-             afwijking: k.binnen100 / ander.waarde - 1,
-             statusEigen: k.status.binnen100, statusExtern: ander.status,
-             ingeschrevenen: k.ingeschrevenen, bruto: k.brutoNac };
+  /* De deler per jaar, zoals hij in de stukken staat: tot en met 2024 de
+     normpraktijk uit het model 2015, daarna de normpraktijk van het herziene
+     model ná schoning. Beide zijn gepubliceerd; de reeks eronder is nergens als
+     geheel gepubliceerd en wordt hier dus opnieuw uitgerekend. */
+  const delerVan = jaar => jaar <= 2024
+    ? { waarde: cmw('normpraktijk_ptn', jaar), model: 'kostprijsmodel 2015',
+        herkomst: 'normpraktijk', status: cm('normpraktijk_ptn', jaar).status }
+    : { waarde: w('modelwissel', 'normpraktijk_2022'), model: 'kostprijsmodel 2022, ná schoning',
+        herkomst: 'normpraktijk', status: p('modelwissel', 'normpraktijk_2022').status };
+
+  const reeksJaren = reeks('ingeschrevenen_nl').jaren;
+  const jaarReeks = reeksJaren.map(jaar => {
+    const ing    = cm('ingeschrevenen_nl', jaar);
+    const deler  = delerVan(jaar);
+    const berekend = ing.waarde / deler.waarde;
+    const gepubliceerd = cm('nacs_in_tarieven_nl', jaar);
+    return { jaar, ingeschrevenen: ing.waarde, statusIngeschrevenen: ing.status,
+             deler: deler.waarde, model: deler.model,
+             berekend, gepubliceerd: gepubliceerd.waarde,
+             statusGepubliceerd: gepubliceerd.status,
+             afwijking: berekend / gepubliceerd.waarde - 1,
+             perDuizend: 1000 / deler.waarde };
   });
 
-  /* De gevoeligheid rekenen we op het eerste jaar; de vorm is voor elk jaar
-     gelijk, en twee tabellen naast elkaar leest niemand. */
-  const basis = nacKeten(jaren[0]);
+  /* De aansluiting van de eigen keten op de gepubliceerde reeks, voor de twee
+     jaren waarvoor de site die keten zelf loopt. */
+  const routes = [2025, 2026].map(jaar => {
+    const k = nacKeten(jaar);
+    const g = cm('nacs_in_tarieven_nl', jaar);
+    return { jaar, eigen: k.binnen100, extern: g.waarde,
+             eigenDeler: k.perFte / b100, externDeler: k.ingeschrevenen / g.waarde,
+             afwijking: k.binnen100 / g.waarde - 1,
+             statusEigen: k.status.binnen100, statusExtern: g.status };
+  });
+
+  const basis = nacKeten(2025);
   const gevoeligheid = varianten.map(v => ({
     perFte: v, gehanteerd: v === pf,
     bruto: basis.ingeschrevenen / v,
@@ -187,17 +214,14 @@ export function nacHerkomst(jaren = [2025, 2026], varianten = [2500, 2600, 2650,
     afwijking: (basis.ingeschrevenen / v) / basis.brutoNac - 1
   }));
 
-  /* De reeks 2018-2026 wisselt bij 2025 van route: tot en met 2024 komt hij uit
-     de Cijfer-Meester, daarna uit de keten hierboven. Dat is geen slordigheid
-     maar de modelwissel — vóór 2025 bestond deze keten nog niet. */
-  const reeksBron = JAREN_REEKS.map(j => ({
-    jaar: j, route: j >= 2025 ? 'keten van deze site' : 'Cijfer-Meester',
-    status: j >= 2025 ? nacKeten(j).status.binnen100 : cm('nacs_in_tarieven_nl', j).status
-  }));
+  const oud = jaarReeks.find(r => r.jaar === 2024), nieuw = jaarReeks.find(r => r.jaar === 2025);
 
   return { perFte: pf, aandeelBinnen100: b100, aandeelTariefGereguleerd: tg,
-           routes, gevoeligheid, reeksBron,
-           grootsteAfwijking: Math.max(...routes.map(r => Math.abs(r.afwijking))) };
+           jaarReeks, routes, gevoeligheid,
+           delerOud: oud.deler, delerNieuw: nieuw.deler,
+           delerSprong: nieuw.deler / oud.deler - 1,
+           perDuizendVerschil: nieuw.perDuizend / oud.perDuizend - 1,
+           grootsteAfwijking: Math.max(...jaarReeks.map(r => Math.abs(r.afwijking))) };
 }
 
 /**

@@ -267,18 +267,41 @@ test('de kolom vergoeding per uur is de nac van 2026 gedeeld door de uren per ve
 });
 
 /* ---------- herkomst van het aantal nac's ----------
-   De sectie /arbeidskosten/#kruiscontrole beweert dat twee onafhankelijke
-   routes op hetzelfde uitkomen. Die bewering staat of valt met deze test: als
-   iemand de deler of de schoning verandert en de Cijfer-Meester niet, dan hoort
-   de build te breken en niet de site stilletjes iets anders te beweren. */
+   De hele reeks 2018-2026 volgt één regel: ingeschrevenen gedeeld door het
+   aantal patiënten per volledig vergoede nac. Deze tests bewaken dat die regel
+   de gepubliceerde reeks reproduceert, dat de deler op precies één plek
+   verspringt, en dat de gevoeligheidstabel dezelfde keten gebruikt als de rest
+   van de site. */
 
-test('de twee routes naar het aantal nac\'s blijven binnen een half procent', () => {
+test('de deling reproduceert de gepubliceerde reeks over alle jaren', () => {
   const h = nacHerkomst();
-  assert.ok(h.routes.length >= 2);
-  for (const r of h.routes)
-    assert.ok(Math.abs(r.afwijking) < 0.005,
-      `${r.jaar}: eigen ${r.eigen.toFixed(1)} tegenover ${r.extern} uit de Cijfer-Meester`);
-  assert.ok(h.grootsteAfwijking < 0.005);
+  assert.equal(h.jaarReeks.length, 9);
+  for (const r of h.jaarReeks)
+    assert.ok(Math.abs(r.afwijking) < 0.001,
+      `${r.jaar}: ${r.ingeschrevenen} ÷ ${r.deler} = ${r.berekend.toFixed(1)}, gepubliceerd ${r.gepubliceerd}`);
+  assert.ok(h.grootsteAfwijking < 0.001);
+});
+
+test('de deler verspringt precies één keer, tussen 2024 en 2025', () => {
+  const h = nacHerkomst();
+  const delers = h.jaarReeks.map(r => r.deler);
+  const sprongen = delers.filter((d, i) => i && d !== delers[i-1]).length;
+  assert.equal(sprongen, 1, 'de reeks hoort maar één modelwissel te kennen');
+  assert.equal(h.jaarReeks.find(r => r.jaar === 2024).deler, h.delerOud);
+  assert.equal(h.jaarReeks.find(r => r.jaar === 2025).deler, h.delerNieuw);
+  assert.ok(h.delerNieuw > h.delerOud);
+  assert.equal(rond(h.perDuizendVerschil, 3), -0.295);
+});
+
+test('de eigen keten en de Cijfer-Meester zijn dezelfde deling, anders afgerond', () => {
+  const h = nacHerkomst();
+  for (const r of h.routes) {
+    /* Geen onafhankelijke bevestiging: beide komen neer op delen door bijna
+       hetzelfde getal. De test bewaakt dat, en niet meer dan dat. */
+    assert.ok(Math.abs(r.eigenDeler / r.externDeler - 1) < 0.005,
+      `${r.jaar}: eigen deler ${r.eigenDeler.toFixed(2)} tegenover ${r.externDeler.toFixed(2)}`);
+    assert.ok(Math.abs(r.afwijking) < 0.005);
+  }
 });
 
 test('de gevoeligheidstabel bevat de gehanteerde waarde en rekent met dezelfde keten', () => {
@@ -288,21 +311,11 @@ test('de gevoeligheidstabel bevat de gehanteerde waarde en rekent met dezelfde k
   assert.equal(gehanteerd[0].perFte, w('nac', 'patienten_per_fte'));
   assert.equal(rond(gehanteerd[0].afwijking, 6), 0);
 
-  /* De gehanteerde regel moet exact de keten reproduceren, anders staan er twee
-     rekenwijzen voor hetzelfde getal op een en dezelfde pagina. */
   const k = nacKeten(2025);
   assert.equal(rond(gehanteerd[0].bruto, 1), rond(k.brutoNac, 1));
   assert.equal(rond(gehanteerd[0].binnen100, 1), rond(k.binnen100, 1));
   assert.equal(rond(gehanteerd[0].gedekt, 1), rond(k.maxTarief, 1));
 
-  /* Een grovere deler geeft meer nac's, niet minder. */
   for (let i = 1; i < h.gevoeligheid.length; i++)
     assert.ok(h.gevoeligheid[i].binnen100 < h.gevoeligheid[i-1].binnen100);
-});
-
-test('de reeks wisselt bij 2025 van route, en dat staat zo geregistreerd', () => {
-  const r = nacHerkomst().reeksBron;
-  assert.equal(r.find(x => x.jaar === 2024).route, 'Cijfer-Meester');
-  assert.equal(r.find(x => x.jaar === 2025).route, 'keten van deze site');
-  assert.equal(r.find(x => x.jaar === 2026).route, 'keten van deze site');
 });
