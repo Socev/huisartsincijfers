@@ -1,11 +1,13 @@
 import { pagina } from '../lib/layout.mjs';
 import { w, p, data } from '../lib/data.mjs';
-import { panel, dataTable, tile, callout, lineChart } from '../lib/components.mjs';
+import { panel, dataTable, tile, callout, lineChart, bronLabel } from '../lib/components.mjs';
+import { nacPerUur } from '../lib/metrics.mjs';
 import { eur, eur0, num, pct } from '../lib/format.mjs';
 
 export default function () {
   const T = data.tarieven.tabellen;
   const V = T.indexatie_verantwoording.rijen, A = T.indexatie_addendum.rijen;
+  const NPU = nacPerUur(2026);
 
   const body = `
 <section>
@@ -76,9 +78,18 @@ export default function () {
   herijking van 2023 uitdrukkelijk op de arbeidsvergoeding van de praktijkhouder gebouwd. Sindsdien is die
   vergoeding herijkt — het dienstuurtarief niet.</p>
   ${panel(dataTable(T.anw_uurtarieven, [null, eur]))}
-  <p class="small">Let op wat u hier ziet: dit is een volledig tarief voor een uur dienst, inclusief alle
-  kosten van de post. Het is geen bedrag dat de huisarts als arbeidsvergoeding overhoudt, en dus ook geen
-  tegenhanger van het <a href="/nac/#doorgerekend">bedrag per gewerkt uur dat overdag in de kostprijs staat</a>.</p>
+  <p class="small">Dit uurtarief wordt één op één als brutobetaling aan de dienstdoende huisarts uitgekeerd.
+  Daar komen pensioen, arbeidsongeschiktheidsdekking en belasting nog uit. Het is dus een arbeidsvergoeding
+  per uur, en daarmee wél te leggen naast het
+  <a href="/nac/#doorgerekend">bedrag per gewerkt uur dat overdag in de kostprijs staat</a> — met dit
+  verschil: het dienstuurtarief wordt betaald, het overdagbedrag is een normatieve kostenpost in een
+  tariefberekening.</p>
+  ${callout(`<strong>Overdag ${eur(NPU.stappen[0].perUur)}, ’s avonds ${eur(T.anw_uurtarieven.rijen[0][1])}.</strong>
+  Voor elk gewerkt uur overdag rekent de NZa ${eur(NPU.stappen[0].perUur)} aan normatieve arbeid in de
+  kostprijs — en na de schoning is dat ${eur(NPU.stappen[1].perUur)}. Een uur avonddienst levert
+  ${eur(T.anw_uurtarieven.rijen[0][1])} bruto op, een uur in de nacht ${eur(T.anw_uurtarieven.rijen[2][1])}.
+  Dezelfde huisarts, twee onderbouwingen die inmiddels niets meer met elkaar te maken hebben — terwijl de
+  ene ooit uit de andere is afgeleid.`, 'inzicht')}
   <div class="panel">
     <p style="margin:0;font-style:italic;color:var(--text-secondary)">
     De onderbouwing van de ophoging is destijds gevonden “door aansluiting te zoeken bij de hoogte van de nac
@@ -92,6 +103,10 @@ export default function () {
   koppeling nu uitdrukkelijk niet meer (randnummers 450 en 451). Dezelfde redenering onderbouwde in 2023 een
   verhoging en onderbouwt in 2026 niets. <a href="/uren/#scope">Hoeveel dienst er in de werkweek zit</a>.`,
   'inzicht')}
+  <p class="small">De huisartsenpartijen hebben dit expliciet gevraagd. In de Eindrapportage staat dat zij
+  naast de drie opdrachten uit de uitspraak nog een aantal aanvullingen zagen, waaronder “herstel van de
+  koppeling van het anw-uurtarief met de nac”. De NZa heeft die afgewogen en “geconcludeerd hier grotendeels
+  niet in mee te gaan”. ${bronLabel({bron:'nza-eindrapportage-2026', vindplaats:'blz. 4, onder Scope van de uitspraak', status:'definitief'})}</p>
 </section>
 
 <section>
