@@ -146,6 +146,61 @@ export function nacKeten(jaar = 2025) {
 }
 
 /**
+ * Waar het aantal nac's vandaan komt, en hoe zeker dat is.
+ *
+ * Het aantal nac's in de tarieven is het meest geciteerde getal op deze site en
+ * tegelijk een afleiding, geen meting. Twee dingen horen daar zichtbaar bij.
+ *
+ * Ten eerste een controle. Er lopen twee onafhankelijke wegen naar dit getal:
+ * de keten van deze site (ingeschrevenen ÷ patiënten per fte, daarna geschoond)
+ * en de reeks `nacs_in_tarieven_nl` uit de Cijfer-Meester, die langs de
+ * tariefdekking per duizend ingeschrevenen is afgeleid. Als die twee ver uit
+ * elkaar lopen klopt er iets niet. Een test bewaakt dat het verschil onder een
+ * half procent blijft; deze functie maakt het verschil ook zichtbaar.
+ *
+ * Ten tweede de gevoeligheid. De deling op patiënten per fte doet al het werk,
+ * en dat getal is een NZa-keuze van 2.650. Wie wil weten hoe hard de uitkomst
+ * is, moet kunnen zien wat er bij 2.600 of 2.700 gebeurt.
+ */
+export function nacHerkomst(jaren = [2025, 2026], varianten = [2500, 2600, 2650, 2700, 2800]) {
+  const b100 = w('nac', 'binnen_100');
+  const tg   = w('nac', 'tarief_gereguleerd');
+  const pf   = w('nac', 'patienten_per_fte');
+
+  const routes = jaren.map(jaar => {
+    const k = nacKeten(jaar);
+    const ander = cm('nacs_in_tarieven_nl', jaar);
+    return { jaar, eigen: k.binnen100, extern: ander.waarde,
+             afwijking: k.binnen100 / ander.waarde - 1,
+             statusEigen: k.status.binnen100, statusExtern: ander.status,
+             ingeschrevenen: k.ingeschrevenen, bruto: k.brutoNac };
+  });
+
+  /* De gevoeligheid rekenen we op het eerste jaar; de vorm is voor elk jaar
+     gelijk, en twee tabellen naast elkaar leest niemand. */
+  const basis = nacKeten(jaren[0]);
+  const gevoeligheid = varianten.map(v => ({
+    perFte: v, gehanteerd: v === pf,
+    bruto: basis.ingeschrevenen / v,
+    binnen100: basis.ingeschrevenen / v * b100,
+    gedekt: basis.ingeschrevenen / v * b100 * tg,
+    afwijking: (basis.ingeschrevenen / v) / basis.brutoNac - 1
+  }));
+
+  /* De reeks 2018-2026 wisselt bij 2025 van route: tot en met 2024 komt hij uit
+     de Cijfer-Meester, daarna uit de keten hierboven. Dat is geen slordigheid
+     maar de modelwissel — vóór 2025 bestond deze keten nog niet. */
+  const reeksBron = JAREN_REEKS.map(j => ({
+    jaar: j, route: j >= 2025 ? 'keten van deze site' : 'Cijfer-Meester',
+    status: j >= 2025 ? nacKeten(j).status.binnen100 : cm('nacs_in_tarieven_nl', j).status
+  }));
+
+  return { perFte: pf, aandeelBinnen100: b100, aandeelTariefGereguleerd: tg,
+           routes, gevoeligheid, reeksBron,
+           grootsteAfwijking: Math.max(...routes.map(r => Math.abs(r.afwijking))) };
+}
+
+/**
  * Wat er van de arbeidsvergoeding per gewerkt uur overblijft.
  *
  * De NZa zet in bijlage 6 twee getallen tegenover elkaar: een voltijd werkende

@@ -8,7 +8,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { data, w, alleParameters, bronnen } from '../src/lib/data.mjs';
-import { nacKeten, nacPerUur, werkweek, uurbedragen, uurbedrag, uurbedragVerschil, statusUit, cmw } from '../src/lib/metrics.mjs';
+import { nacKeten, nacPerUur, nacHerkomst, werkweek, uurbedragen, uurbedrag, uurbedragVerschil, statusUit, cmw } from '../src/lib/metrics.mjs';
 
 const rond = (v, n = 0) => +v.toFixed(n);
 
@@ -264,4 +264,45 @@ test('de kolom vergoeding per uur is de nac van 2026 gedeeld door de uren per ve
   const nac = w('nac', 'nac_2026');
   for (const k of data.uren.tabellen.voltijd_groot.rijen)
     assert.equal(rond(nac / k[3], 2), k[4], `rij ${k[0]}`);
+});
+
+/* ---------- herkomst van het aantal nac's ----------
+   De sectie /arbeidskosten/#kruiscontrole beweert dat twee onafhankelijke
+   routes op hetzelfde uitkomen. Die bewering staat of valt met deze test: als
+   iemand de deler of de schoning verandert en de Cijfer-Meester niet, dan hoort
+   de build te breken en niet de site stilletjes iets anders te beweren. */
+
+test('de twee routes naar het aantal nac\'s blijven binnen een half procent', () => {
+  const h = nacHerkomst();
+  assert.ok(h.routes.length >= 2);
+  for (const r of h.routes)
+    assert.ok(Math.abs(r.afwijking) < 0.005,
+      `${r.jaar}: eigen ${r.eigen.toFixed(1)} tegenover ${r.extern} uit de Cijfer-Meester`);
+  assert.ok(h.grootsteAfwijking < 0.005);
+});
+
+test('de gevoeligheidstabel bevat de gehanteerde waarde en rekent met dezelfde keten', () => {
+  const h = nacHerkomst();
+  const gehanteerd = h.gevoeligheid.filter(g => g.gehanteerd);
+  assert.equal(gehanteerd.length, 1, 'precies een regel hoort als gehanteerd te zijn gemarkeerd');
+  assert.equal(gehanteerd[0].perFte, w('nac', 'patienten_per_fte'));
+  assert.equal(rond(gehanteerd[0].afwijking, 6), 0);
+
+  /* De gehanteerde regel moet exact de keten reproduceren, anders staan er twee
+     rekenwijzen voor hetzelfde getal op een en dezelfde pagina. */
+  const k = nacKeten(2025);
+  assert.equal(rond(gehanteerd[0].bruto, 1), rond(k.brutoNac, 1));
+  assert.equal(rond(gehanteerd[0].binnen100, 1), rond(k.binnen100, 1));
+  assert.equal(rond(gehanteerd[0].gedekt, 1), rond(k.maxTarief, 1));
+
+  /* Een grovere deler geeft meer nac's, niet minder. */
+  for (let i = 1; i < h.gevoeligheid.length; i++)
+    assert.ok(h.gevoeligheid[i].binnen100 < h.gevoeligheid[i-1].binnen100);
+});
+
+test('de reeks wisselt bij 2025 van route, en dat staat zo geregistreerd', () => {
+  const r = nacHerkomst().reeksBron;
+  assert.equal(r.find(x => x.jaar === 2024).route, 'Cijfer-Meester');
+  assert.equal(r.find(x => x.jaar === 2025).route, 'keten van deze site');
+  assert.equal(r.find(x => x.jaar === 2026).route, 'keten van deze site');
 });

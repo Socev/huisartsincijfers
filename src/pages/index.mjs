@@ -27,7 +27,8 @@ export default function () {
               status: k.status.binnen100 },
     ratio: `Dat is <b>${num(k.nacPerPersoon, 2)}</b> normatieve arbeidskostencomponent per praktijkhouder.
       Het verschil ontstaat niet doordat praktijkhouders gemiddeld te weinig werken, maar doordat uren boven
-      de grens niet extra meetellen en er na de fte-telling nog kosten worden geschoond.`
+      de grens niet extra meetellen en er na de fte-telling nog kosten worden geschoond.
+      <a href="/arbeidskosten/#herkomst">Hoe dat aantal is berekend, en hoe hard het is</a>.`
   })}
 </section>
 

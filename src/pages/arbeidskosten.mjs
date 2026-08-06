@@ -3,7 +3,7 @@ import { w, p, data } from '../lib/data.mjs';
 import { stackedBar, table, panel, callout, dataTable, bronLabel, tile, compareBars, anwNoot,
          heroNumber, statContrast, causalChain, evidenceCard, begrippenBalk,
          methodDisclosure } from '../lib/components.mjs';
-import { nacKeten, werkweek } from '../lib/metrics.mjs';
+import { nacKeten, werkweek, nacHerkomst } from '../lib/metrics.mjs';
 import { eur, eur0, num, pct, mln, esc } from '../lib/format.mjs';
 
 /* Fte's krijgen twee decimalen, bedragen geen — anders leest 171.977,00 als onzin. */
@@ -21,6 +21,7 @@ export default function () {
   };
   const c25 = cascade(2025), c26 = cascade(2026);
   const k = nacKeten(2025), u = werkweek();
+  const H = nacHerkomst();
 
   /* De verdeling over dekkingsbronnen, per gewerkt uur. Stond eerst op de
      homepage; die vertelt nu één verhaal en verwijst hierheen. */
@@ -96,6 +97,73 @@ export default function () {
         De rest wordt verondersteld elders te worden verdiend.`,
       status: 'afgeleid', href: '#schoning', hrefLabel: 'Naar de schoning' })}
   </div>
+</section>
+
+<section id="herkomst">
+  <h2>Waar dat aantal vandaan komt</h2>
+  <p class="sub">Het aantal arbeidsvergoedingen in de tarieven is het meest geciteerde cijfer op deze site.
+  Het is <b>geen telling maar een deling</b>: het aantal ingeschreven verzekerden gedeeld door het aantal
+  patiënten dat de NZa aan één voltijdplaats toerekent. Dat is precies hoe de NZa zelf rekent — de
+  fte-telling volgt de patiëntengrondslag, niet het aantal huisartsen. Hieronder staan de twee getallen die
+  die deling maken, een controle langs een tweede weg, en wat er gebeurt als de deler anders was gekozen.</p>
+
+  ${panel(table({
+    cols:[{label:'Wat er in de deling gaat'},{label:'Waarde',r:true},{label:'Waar het vandaan komt'},{label:'Status'}],
+    rows:[
+      ['Ingeschreven verzekerden, ' + k.jaar, num(k.ingeschrevenen,0),
+       'Vektis-verzekerdejaren, doorgetrokken naar ' + k.jaar, `<span class="badge ${esc(p('nac','ingeschrevenen_2025').status)}">${esc(p('nac','ingeschrevenen_2025').status)}</span>`],
+      ['Ingeschrevenen per fte praktijkhoudend huisarts', num(H.perFte,0),
+       'NZa Verantwoordingsdocument, Tabel 36, invalshoek 2', `<span class="badge ${esc(p('nac','patienten_per_fte').status)}">${esc(p('nac','patienten_per_fte').status)}</span>`],
+      ['<b>Vergoedingen vóór schoning</b>', '<b>'+num(k.brutoNac,0)+'</b>',
+       num(k.ingeschrevenen,0) + ' ÷ ' + num(H.perFte,0), `<span class="badge ${esc(k.status.brutoNac)}">${esc(k.status.brutoNac)}</span>`]
+    ]
+  }))}
+  <p class="small">Van die uitkomst blijft ${pct(H.aandeelBinnen100,2)} binnen de honderd procent, en daarvan
+  is ${pct(H.aandeelTariefGereguleerd,1)} tariefgereguleerd. <a href="#personen-naar-fte">Die twee stappen
+  staan hieronder uitgewerkt</a>.</p>
+</section>
+
+<section id="kruiscontrole">
+  <h2>Twee wegen naar hetzelfde getal</h2>
+  <p class="sub">Een afleiding die je nergens tegen kunt houden, is een aanname. Daarom loopt er een tweede
+  weg naar dit cijfer, die niets met de eerste te maken heeft: de Cijfer-Meester leidt het af uit de
+  tariefdekking per duizend ingeschrevenen in de NZa-verantwoordingen, zonder de deling hierboven te
+  gebruiken. Als beide wegen op hetzelfde uitkomen, is dat een echte controle.</p>
+  ${panel(table({
+    cols:[{label:'Jaar'},{label:'Keten van deze site',r:true},{label:'Cijfer-Meester',r:true},{label:'Verschil',r:true}],
+    rows: H.routes.map(r => [String(r.jaar), num(r.eigen,1), num(r.extern,0),
+      (r.afwijking >= 0 ? '+' : '−') + pct(Math.abs(r.afwijking),2)])
+  }))}
+  ${callout(`<strong>Ze liggen ${pct(H.grootsteAfwijking,2)} uit elkaar.</strong> Dat is geen toeval en ook
+  geen kunstje: de twee routes delen alleen het onderwerp, niet de rekenwijze. Een test in de broncode
+  faalt zodra het verschil boven een half procent komt, zodat een fout in de ene weg niet stilletjes kan
+  meelopen met de andere.`, 'inzicht')}
+</section>
+
+<section id="gevoeligheid">
+  <h2>Hoe hard is dat getal?</h2>
+  <p class="sub">Alle onzekerheid zit in dezelfde deler. De ${num(H.perFte,0)} patiënten per voltijdplaats is
+  een uitkomst van het kostprijsonderzoek, geen natuurconstante. Hieronder staat wat er met de hele keten
+  gebeurt als die anders was uitgevallen. De middelste regel is wat de site hanteert.</p>
+  ${panel(table({
+    cols:[{label:'Ingeschrevenen per fte'},{label:'Vóór schoning',r:true},{label:'Binnen de 100%',r:true},
+          {label:'Gedekt door maximumtarieven',r:true},{label:'Verschil met de gehanteerde waarde',r:true}],
+    rows: H.gevoeligheid.map(g => {
+      const b = t => g.gehanteerd ? '<b>'+t+'</b>' : t;
+      return [b(num(g.perFte,0) + (g.gehanteerd ? ' — gehanteerd' : '')), b(num(g.bruto,0)),
+              b(num(g.binnen100,0)), b(num(g.gedekt,0)),
+              b(g.afwijking === 0 ? '—' : (g.afwijking > 0 ? '+' : '−') + pct(Math.abs(g.afwijking),1))];
+    })
+  }))}
+  ${callout(`<strong>Vijftig patiënten per voltijdplaats verzetten het getal met
+  ${pct(Math.abs(H.gevoeligheid.find(g => g.perFte === H.perFte - 50)?.afwijking ?? 0), 1)}.</strong>
+  Dat maakt de conclusies op deze site niet anders: de modelwissel van 2025 haalde er
+  ${pct(1 - w('modelwissel','fte_p1000_2022') / w('modelwissel','fte_p1000_2015'), 1)} af, een orde van
+  grootte meer. Maar het betekent wel dat ${num(k.binnen100,0)} moet worden gelezen als een afleiding met
+  een marge, niet als een meting. Zo staat hij overal op de site ook gemarkeerd.`, 'letop')}
+  <p class="small">Nog iets om te weten bij de reeks 2018-2026: tot en met 2024 komen de aantallen
+  rechtstreeks uit de Cijfer-Meester, vanaf 2025 uit de keten hierboven. Die knip is de modelwissel — vóór
+  2025 bestond deze rekenwijze nog niet. <a href="/modelwissel/">Wat er toen veranderde</a>.</p>
 </section>
 
 <section id="personen-naar-fte">

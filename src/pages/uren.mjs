@@ -81,7 +81,7 @@ export default function () {
       { label:'Praktijkhoudend huisartsen (personen)', waarde:k.personen, serie:1, nadruk:true,
         toelichting:'Mensen, geen rekeneenheden. Het pensioenfonds telt er ruim duizend minder.' },
       { label:`Nac's vóór schoning (rekeneenheden)`, waarde:k.brutoNac, serie:3,
-        toelichting:`Ingeschreven verzekerden gedeeld door ${num(k.perFte)} per fte`,
+        toelichting:`Ingeschreven verzekerden gedeeld door ${num(k.perFte)} per fte — zie de herkomst op de arbeidskostenpagina`,
         reden:'deeltijd en de aftopping van de werktijdfactor op 1,0' },
       { label:`Nac's binnen de 100%`, waarde:k.binnen100, serie:4,
         toelichting:'Na schoning buiten de honderd procent en de correctie poh-ggz', reden:'schoning op omzet' },
@@ -96,7 +96,8 @@ export default function () {
   Nivel en geeft er ${num(u.uitgevraagd,1)} op in het kostprijsonderzoek. Toch komen ruim
   zevenduizend van hen samen niet verder dan ${num(k.maxTarief,0)} volledig door tarieven gedekte
   arbeidskostencomponenten. <strong>Het verschil zit niet in te weinig werken, maar in twee rekenregels:
-  de aftopping en de schoning.</strong> <a href="/arbeidskosten/">Die keten staat hier uitgewerkt</a>.`)}
+  de aftopping en de schoning.</strong> <a href="/arbeidskosten/#herkomst">Waar dat aantal precies vandaan komt,
+  met de controle en de marge erbij</a>.`)}
 </section>
 
 <section>
