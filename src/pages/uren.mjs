@@ -9,6 +9,7 @@ export default function () {
   const T = data.uren.tabellen;
   const u = werkweek();
   const k = nacKeten(2025);
+  const G = T.voltijd_groot;
   const inScope = T.nivel_taken.rijen.filter(r => r[2] === 'ja').reduce((s,r)=>s+r[1],0);
   const buiten  = T.nivel_taken.rijen.filter(r => r[2] === 'nee').reduce((s,r)=>s+r[1],0);
 
@@ -137,6 +138,29 @@ export default function () {
   40 maal 52 (cao hidha), en de werkelijke loonkosten staan gewoon in de boeken. Voor de praktijkhouder geldt
   36 uur maal 46 weken, en dan afgetopt. <strong>De praktijkhouder is de enige in de praktijk wiens extra uren
   nergens in de kostprijs terechtkomen.</strong>`)}
+</section>
+
+<section id="honderd-voltijders">
+  <h2>Hoe dat uitpakt, in een tabel van de NZa zelf</h2>
+  <p class="sub">Om aan te tonen dát er niets weglekt, publiceerde de NZa een technische bijlage waarin zij
+  honderd voltijd werkende praktijkhouders uit de grootste praktijken op een rij zet, gesorteerd van de
+  kortste naar de langste werkweek. Zij deelt ze in vier groepen van vijfentwintig. <b>Alle vier de groepen
+  krijgen precies vijfentwintig volledige arbeidsvergoedingen ingerekend</b> — één per persoon. Het enige
+  wat tussen de groepen verschilt, is hoeveel uur ze werken.</p>
+  ${panel(compareBars({
+    items: G.rijen.slice(0, 4).map((r, i) => ({
+      label: r[0], waarde: r[3], serie: i === 3 ? 2 : i === 0 ? 3 : 1,
+      toelichting: `${num(r[1],0)} uur samen, ${num(r[2])} volledige vergoedingen — dat is ${eur(r[4])} per gewerkt uur.`
+    })),
+    fmt: v => num(v,1), eenheid:' uur per vergoeding',
+    caption:'Uren die één volledige arbeidsvergoeding moeten dragen, per groep van 25 voltijd werkende praktijkhouders.'
+  }))}
+  ${callout(`<strong>De groep met de langste werkweken werkt ${pct(G.rijen[3][3]/G.rijen[0][3]-1,0)} meer uren
+  dan de groep met de kortste, en krijgt exact evenveel betaald.</strong> Omgerekend zakt de arbeidsvergoeding
+  van ${eur(G.rijen[0][4])} naar ${eur(G.rijen[3][4])} per gewerkt uur — binnen dezelfde groep, die de NZa
+  allemaal ‘voltijd werkend’ noemt. Dit is de aftopping, zichtbaar in de bijlage waarmee de NZa het bezwaar
+  van het College van Beroep juist wilde weerleggen.`, 'inzicht')}
+  ${panel(dataTable(T.voltijd_groot, [null, v=>num(v,0), num, v=>num(v,1), eur]))}
 </section>
 
 <section>

@@ -325,6 +325,58 @@
      ""
     ]
    ]
+  },
+  "voltijd_groot": {
+   "label": "Honderd voltijd werkende praktijkhouders in de grootste praktijken, in vier groepen van vijfentwintig",
+   "bron": "nza-bijlage7-2026",
+   "vindplaats": "slide 27, met het bedrag per uur op prijspeil 2026 erbij gerekend",
+   "status": "definitief",
+   "eenheid": "uur/jaar",
+   "kolommen": [
+    "Groep van 25 voltijders",
+    "Uren per jaar, samen",
+    "Volledige vergoedingen",
+    "Uren per vergoeding",
+    "Vergoeding per gewerkt uur"
+   ],
+   "rijen": [
+    [
+     "Kwart 1 — de kortste werkweken",
+     44769.6,
+     25,
+     1790.8,
+     122.56
+    ],
+    [
+     "Kwart 2",
+     49423.0,
+     25,
+     1976.9,
+     111.02
+    ],
+    [
+     "Kwart 3",
+     56176.8,
+     25,
+     2247.1,
+     97.67
+    ],
+    [
+     "Kwart 4 — de langste werkweken",
+     68962.4,
+     25,
+     2758.5,
+     79.56
+    ],
+    [
+     "Alle honderd samen",
+     219331.8,
+     100,
+     2193.3,
+     100.07
+    ]
+   ],
+   "toelichting": "Alle vier de groepen tellen even veel mensen en krijgen even veel volledige arbeidsvergoedingen ingerekend. Het enige wat verschilt is het aantal uren dat zij werken. De laatste kolom is de nac van 2026 (€ 219.479) gedeeld door de uren per vergoeding; die kolom staat niet in het NZa-stuk. Dit is de enige subpopulatie waarvoor de NZa deze verdeling publiceert."
   }
  }
 }

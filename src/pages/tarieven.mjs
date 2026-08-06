@@ -1,7 +1,7 @@
 import { pagina } from '../lib/layout.mjs';
 import { w, p, data } from '../lib/data.mjs';
 import { panel, dataTable, tile, callout, lineChart } from '../lib/components.mjs';
-import { eur, num, pct } from '../lib/format.mjs';
+import { eur, eur0, num, pct } from '../lib/format.mjs';
 
 export default function () {
   const T = data.tarieven.tabellen;
@@ -68,11 +68,30 @@ export default function () {
   <p class="sub">Niet elk gereguleerd tarief hangt aan de drie basisprestaties. Wat daar los van staat, deelt
   ook niet in de bijstelling — hoe de onderbouwing ervan ooit ook tot stand kwam.</p>
   ${panel(dataTable(T.niet_meegestegen, null))}
-  ${callout(`<strong>Het anw-uurtarief is ooit juist wél op de nac gebouwd.</strong> Bij de herijking per 2023
-  is de ophoging van het dienstuurtarief onderbouwd door “aansluiting te zoeken bij de hoogte van de nac voor
-  huisartseigenaren zoals deze in 2022 gold”. Nu de nac fors is herijkt, legt de NZa die koppeling uitdrukkelijk
-  niet meer: de dienstuurtarieven zijn sindsdien een vaste norm die alleen nog wordt geïndexeerd. De
-  onderbouwing werkt dus één kant op. <a href="/uren/#anw">Wat dat betekent voor de dienst</a>.`)}
+</section>
+
+<section id="anw">
+  <h2>De dienst op de post: de koppeling werkt één kant op</h2>
+  <p class="sub">Een uur dienst op de huisartsenpost kent een eigen maximumtarief. Dat tarief is bij de
+  herijking van 2023 uitdrukkelijk op de arbeidsvergoeding van de praktijkhouder gebouwd. Sindsdien is die
+  vergoeding herijkt — het dienstuurtarief niet.</p>
+  ${panel(dataTable(T.anw_uurtarieven, [null, eur]))}
+  <p class="small">Let op wat u hier ziet: dit is een volledig tarief voor een uur dienst, inclusief alle
+  kosten van de post. Het is geen bedrag dat de huisarts als arbeidsvergoeding overhoudt, en dus ook geen
+  tegenhanger van het <a href="/nac/#doorgerekend">bedrag per gewerkt uur dat overdag in de kostprijs staat</a>.</p>
+  <div class="panel">
+    <p style="margin:0;font-style:italic;color:var(--text-secondary)">
+    De onderbouwing van de ophoging is destijds gevonden “door aansluiting te zoeken bij de hoogte van de nac
+    voor huisartseigenaren zoals deze in 2022 gold”.</p>
+    <p class="bron" style="margin:10px 0 0">NZa, (herziene) beslissing op bezwaar 30 juni 2026, randnummer 448</p>
+  </div>
+  ${callout(`<strong>Heen wél, terug niet.</strong> In 2022 stond de arbeidsvergoeding per fte op
+  ${eur0(w('tarieven','nac_2022_oud'))}. Op datzelfde prijspeil komt de herijking van Berenschot uit op
+  ${eur0(w('tarieven','nac_2022_herijkt'))} — ${pct(w('tarieven','nac_2022_herijkt')/w('tarieven','nac_2022_oud')-1,1)}
+  hoger. Het dienstuurtarief dat op de oude waarde is gebouwd, is sindsdien alleen geïndexeerd; de NZa legt de
+  koppeling nu uitdrukkelijk niet meer (randnummers 450 en 451). Dezelfde redenering onderbouwde in 2023 een
+  verhoging en onderbouwt in 2026 niets. <a href="/uren/#scope">Hoeveel dienst er in de werkweek zit</a>.`,
+  'inzicht')}
 </section>
 
 <section>

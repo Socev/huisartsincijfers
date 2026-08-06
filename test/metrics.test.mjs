@@ -8,7 +8,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { data, w, alleParameters, bronnen } from '../src/lib/data.mjs';
-import { nacKeten, werkweek, uurbedragen, uurbedrag, uurbedragVerschil, statusUit, cmw } from '../src/lib/metrics.mjs';
+import { nacKeten, nacPerUur, werkweek, uurbedragen, uurbedrag, uurbedragVerschil, statusUit, cmw } from '../src/lib/metrics.mjs';
 
 const rond = (v, n = 0) => +v.toFixed(n);
 
@@ -209,4 +209,59 @@ test('de mutatie van de totale praktijkkosten is niet die van de post praktijkko
   assert.equal(rond(praktijk[3], 3), 0.462);
   assert.equal(rond(arbeid[3], 3), -0.103);
   assert.equal(rond(totaal[1] / totaal[2] - 1, 3), rond(totaal[3], 3));
+});
+
+/* ---------- de arbeidsvergoeding per gewerkt uur na schoning ----------
+   Twee valkuilen. Ten eerste: het derde getal ontstaat door bééde aandelen,
+   niet alleen door het tariefgereguleerde deel — 2.125,4 ÷ 74,4% geeft 2.856,7
+   en dat is niet wat er staat. Ten tweede moet de reeks van de site dezelfde
+   ketenvolgorde aanhouden als nacKeten(), anders bestaan er twee routes naar
+   hetzelfde getal. */
+
+test('de uren per volledige vergoeding lopen van 2.125,4 via 2.383,8 naar 3.204,0', () => {
+  const n = nacPerUur(2026);
+  const [in_, na, max] = n.stappen;
+  assert.equal(rond(in_.uren, 1), 2125.4);
+  assert.equal(rond(na.uren, 1), 2383.8);
+  assert.equal(rond(max.uren, 1), 3204.0);
+  assert.equal(rond(na.uren, 1), rond(in_.uren / w('nac', 'binnen_100'), 1));
+  assert.equal(rond(max.uren, 1),
+    rond(in_.uren / (w('nac', 'binnen_100') * w('nac', 'tarief_gereguleerd')), 1));
+  assert.notEqual(rond(max.uren, 1), rond(in_.uren / w('nac', 'tarief_gereguleerd'), 1));
+});
+
+test('het bedrag per uur is de nac maal dezelfde aandelen, gedeeld door 2.125,4', () => {
+  const n = nacPerUur(2026);
+  assert.equal(n.nac, 219479);
+  assert.equal(rond(n.stappen[0].perUur, 2), 103.26);
+  assert.equal(rond(n.stappen[1].perUur, 2), 92.07);
+  assert.equal(rond(n.stappen[2].perUur, 2), 68.50);
+  /* Bedrag per uur maal uren per vergoeding is in elke stap weer één hele nac:
+     de twee kolommen zijn twee lezingen van dezelfde breuk, geen los rekenwerk. */
+  for (const s of n.stappen) assert.equal(rond(s.perUur * s.uren, 0), n.nac);
+});
+
+test('de vergoeding ná schoning ligt boven de jaarinzet die de NZa zelf het ijkpunt noemt', () => {
+  const n = nacPerUur(2026);
+  assert.ok(n.stappen[1].uren > w('nacopbouw', 'uren_voltijd_gemeten'),
+    'de kern van de redenering op /nac/#doorgerekend valt weg als dit niet meer klopt');
+});
+
+/* ---------- de honderd voltijders uit bijlage 7 ----------
+   Overgenomen uit een gepubliceerde tabel. De vier kwarten moeten optellen tot
+   de totalen die de NZa er zelf onder zet, anders is er een tikfout gemaakt. */
+
+test('de vier groepen van 25 tellen op tot de gepubliceerde totalen', () => {
+  const r = data.uren.tabellen.voltijd_groot.rijen;
+  const kwarten = r.slice(0, 4), totaal = r[4];
+  assert.equal(rond(kwarten.reduce((s, x) => s + x[1], 0), 1), totaal[1]);
+  assert.equal(kwarten.reduce((s, x) => s + x[2], 0), totaal[2]);
+  assert.equal(rond(totaal[1] / totaal[2], 1), totaal[3]);
+  for (const k of kwarten) assert.equal(rond(k[1] / k[2], 1), k[3]);
+});
+
+test('de kolom vergoeding per uur is de nac van 2026 gedeeld door de uren per vergoeding', () => {
+  const nac = w('nac', 'nac_2026');
+  for (const k of data.uren.tabellen.voltijd_groot.rijen)
+    assert.equal(rond(nac / k[3], 2), k[4], `rij ${k[0]}`);
 });

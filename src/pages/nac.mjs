@@ -1,7 +1,8 @@
 import { pagina } from '../lib/layout.mjs';
 import { w, p, data } from '../lib/data.mjs';
-import { panel, tile, callout, dataTable, compareBars, bronLabel,
+import { panel, tile, callout, dataTable, compareBars, bronLabel, trechter,
          statContrast, methodDisclosure } from '../lib/components.mjs';
+import { nacPerUur } from '../lib/metrics.mjs';
 import { eur, eur0, num, pct } from '../lib/format.mjs';
 
 /* Een citaat uit een NZa-document. Letterlijk, met vindplaats erbij, zodat de
@@ -18,6 +19,7 @@ export default function () {
   const uIn = w('nacopbouw','uren_ingerekend'), uGe = w('nacopbouw','uren_voltijd_gemeten'),
         uRe = w('nacopbouw','uren_rekeneenheid');
   const R = data.nacopbouw.reeksen.nac.reeksen[0];
+  const N = nacPerUur(2026);
 
   const body = `
 <section id="openbaarheid">
@@ -126,7 +128,7 @@ export default function () {
   volledige nac krijgt toegerekend. Die keuze noemt zij zelf beleidsmatig.</p>
   ${citaat(`“Het is ten behoeve van het berekenen en vaststellen van de tarieven een puur beleidsmatige keuze
   van de NZa geweest om al een volledige nac toe te rekenen bij een gemiddelde werkweek van 36 uur (en 46
-  weken per jaar).”`, 'NZa, (herziene) beslissing op bezwaar 30 juni 2026, bijlage 6, geciteerd in randnummer 428')}
+  weken per jaar).”`, 'NZa, Eindrapportage herbeoordelingstraject 13 mei 2026, bijlage 6, blz. 46 — ook geciteerd in de beslissing op bezwaar, randnummer 428')}
   ${panel(dataTable(T.uren_varianten, [null, v=>num(v,1), eur, null]))}
   ${panel(compareBars({
     items:[
@@ -146,6 +148,39 @@ export default function () {
   die vraagt alleen naar zorg verlenen, praktijk managen en apotheek. Bestuurswerk, extern overleg, nascholing
   en de dienst op de huisartsenpost zitten er niet in. <a href="/uren/">Hoe groot dat verschil is, staat op de
   pagina over uren</a>; <a href="/arbeidskosten/#rekentool">met de rekentool kunt u het zelf verschuiven</a>.`)}
+</section>
+
+<section id="doorgerekend">
+  <h2>Daarna gaat er nog twee keer iets af — van het bedrag, niet van de uren</h2>
+  <p class="sub">De getallen hierboven staan allebei op de arbeidsvergoeding zoals die de kostprijsberekening
+  binnenkomt. Wat er daarna mee gebeurt, staat in dezelfde eindrapportage. Het makkelijkst te volgen is het
+  in euro’s: <b>hoeveel arbeidsvergoeding er in de tariefberekening staat tegenover één gewerkt uur van de
+  praktijkhouder.</b></p>
+  ${panel(trechter({
+    stappen: N.stappen.map((s, i) => ({
+      label: s.label, waarde: s.perUur, serie: i === 0 ? 3 : i === 1 ? 4 : 2, nadruk: i !== 1,
+      toelichting: s.uitleg,
+      reden: i ? s.regel : null
+    })),
+    fmt: eur, eenheid:' per uur',
+    caption:`Arbeidsvergoeding per gewerkt uur van de praktijkhouder, prijspeil 2026. Uitgangspunt is
+      ${eur0(N.nac)} per volledige vergoeding en de ${num(N.urenIngerekend,1)} uur waarvoor de NZa er één inrekent.`
+  }))}
+  ${callout(`<strong>De eerste stap haalt er ${pct(1-N.aandeelBinnen100,2)} van de arbeidskosten uit</strong> —
+  werk dat volgens de NZa elders wordt betaald, zoals de griepprik en keuringen. Dat is verdedigbaar. Alleen:
+  de urenuitvraag vraagt niet apart naar dat werk, dus er gaat wel geld af en geen tijd. Geschoond wordt er
+  op omzet, niet op uren. <a href="/arbeidskosten/#schoning">Waar die ${pct(1-N.aandeelBinnen100,2)} vandaan
+  komt</a>.`, 'inzicht')}
+  <p class="small">Wie hetzelfde liever in uren leest: er wordt één volledige vergoeding ingerekend per
+  ${num(N.stappen[0].uren,1)} gewerkte uren, maar ná de schoning blijft er nog één over per
+  <b>${num(N.stappen[1].uren,1)} uur</b>, en per ${num(N.stappen[2].uren,1)} uur nog één die in een prestatie
+  met een maximumtarief zit. Dat middelste getal ligt boven de ${num(uGe,1)} uur die de NZa zelf het ijkpunt
+  noemt.</p>
+  ${callout(`<strong>Wat bijlage 6 wél en niet aantoont.</strong> De NZa beantwoordt de vraag: krijgt ieder
+  gewerkt uur een deel van een arbeidsvergoeding toegerekend? Het antwoord daarop is ja, en die rekensom klopt —
+  wij hebben hem nagerekend. Zij beantwoordt niet de vraag hoeveel van die vergoeding per gewerkt uur ook
+  daadwerkelijk in de tarieven terechtkomt. Dat is een ander getal, omdat de twee stappen hierboven wel het
+  bedrag verkleinen en niet de uren. Geen rekenfout dus, maar een andere vraag.`, 'methode')}
 </section>
 
 <section>

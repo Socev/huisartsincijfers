@@ -81,6 +81,22 @@
    "bron": "eigen-berekening",
    "vindplaats": "addendum 17,20 tegenover verantwoordingsdocument 17,51",
    "status": "afgeleid"
+  },
+  "nac_2022_oud": {
+   "waarde": 154048,
+   "label": "Arbeidsvergoeding per fte zoals die in 2022 gold, vóór de herijking",
+   "eenheid": "euro",
+   "bron": "nza-indexatie",
+   "vindplaats": "reeks normbedrag per fte, prijspeil 2022",
+   "status": "definitief"
+  },
+  "nac_2022_herijkt": {
+   "waarde": 172387,
+   "label": "Arbeidsvergoeding per fte op hetzelfde prijspeil 2022, na de herijking",
+   "eenheid": "euro",
+   "bron": "nza-verantwoording-2025",
+   "vindplaats": "par. 5.1, uitkomst Berenschot",
+   "status": "definitief"
   }
  },
  "tabellen": {
@@ -298,6 +314,32 @@
      "Aparte onderbouwing; de correctie poh-ggz loopt via de arbeidskosten van de praktijkhouder"
     ]
    ]
+  },
+  "anw_uurtarieven": {
+   "label": "Dienstuurtarieven huisartsenpost, prijspeil voorcalculatorisch 2026",
+   "bron": "nza-bob-2026",
+   "vindplaats": "randnummer 454",
+   "status": "definitief",
+   "eenheid": "euro",
+   "kolommen": [
+    "Soort dienst",
+    "Maximumtarief per uur"
+   ],
+   "rijen": [
+    [
+     "Avond",
+     119.01
+    ],
+    [
+     "Weekend",
+     137.32
+    ],
+    [
+     "Nacht en feestdag",
+     155.63
+    ]
+   ],
+   "toelichting": "Maximumtarieven per uur dienst, prijspeil voorcalculatorisch 2026."
   }
  }
 }

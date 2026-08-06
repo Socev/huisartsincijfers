@@ -4,9 +4,10 @@
 
    Draaien:  npm run build && npm run qa
 
-   Ontwikkelgereedschap: heeft Playwright nodig, de gewone build niet. Zet
-   CHROMIUM_PAD als de browser ergens anders staat dan waar Playwright hem
-   verwacht.
+   Ontwikkelgereedschap: heeft Playwright nodig, de gewone build niet. Playwright
+   staat bewust niet in package.json: dan zou elke productiebuild hem ophalen.
+   Installeer hem los met  npm i --no-save playwright  en zet CHROMIUM_PAD als de
+   browser ergens anders staat dan waar Playwright hem verwacht.
 
    Wat het controleert:
      - horizontale overloop van het document;

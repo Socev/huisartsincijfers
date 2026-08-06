@@ -145,8 +145,51 @@ export function nacKeten(jaar = 2025) {
   };
 }
 
+/**
+ * Wat er van de arbeidsvergoeding per gewerkt uur overblijft.
+ *
+ * De NZa zet in bijlage 6 twee getallen tegenover elkaar: een voltijd werkende
+ * praktijkhouder maakt 2.357,7 uur per jaar, en in de kostprijzen zit al een
+ * volledige vergoeding per 2.125,4 gewerkte uren. Beide staan op de vergoeding
+ * zóals die de kostprijsberekening binnenkomt — vóór schoning.
+ *
+ * Daarna gaat er nog twee keer iets af van het bedrag, en geen enkel uur van de
+ * teller. Dat is dezelfde asymmetrie als op /arbeidskosten/#schoning: er wordt
+ * geschoond op omzet, niet op tijd. Deze functie rekent die twee stappen door,
+ * zodat de site ze niet als los ingetypt getal hoeft te dragen.
+ */
+export function nacPerUur(jaar = 2026) {
+  const uren = w('nacopbouw', 'uren_ingerekend');
+  const nac  = cm('nac', jaar);
+  const b100 = w('nac', 'binnen_100');
+  const tg   = w('nac', 'tarief_gereguleerd');
+
+  const sIn  = statusUit(p('nacopbouw', 'uren_ingerekend').status, nac.status);
+  const sNa  = statusUit(sIn, p('nac', 'binnen_100').status);
+  const sMax = statusUit(sNa, p('nac', 'tarief_gereguleerd').status);
+
+  return {
+    jaar, nac: nac.waarde, urenIngerekend: uren, aandeelBinnen100: b100, aandeelTariefGereguleerd: tg,
+    stappen: [
+      { sleutel:'ingerekend', perUur: nac.waarde / uren, uren, status: sIn,
+        label:'Zoals de NZa het presenteert',
+        regel:`${fmtGetal(nac.waarde)} euro per volledige vergoeding, gedeeld door ${fmtUur(uren)} uur`,
+        uitleg:`Voor iedere ${fmtUur(uren)} gewerkte uren rekent de NZa één volledige arbeidsvergoeding in de kostprijs. Dit is het getal waarmee zij aantoont dat er geen uren weglekken.` },
+      { sleutel:'geschoond', perUur: nac.waarde * b100 / uren, uren: uren / b100, status: sNa,
+        label:'Wat er na de schoning in de kostprijs blijft staan',
+        regel:`× ${fmtPct(b100)} van de arbeidskosten blijft binnen de 100%`,
+        uitleg:'Van het bedrag gaat een deel weer uit de berekening omdat dat werk elders wordt betaald. Van de uren gaat niets af: de uitvraag splitst dat werk niet apart uit.' },
+      { sleutel:'maximumtarief', perUur: nac.waarde * b100 * tg / uren, uren: uren / (b100 * tg), status: sMax,
+        label:'Wat daarvan in een tarief met een vastgesteld maximum belandt',
+        regel:`× ${fmtPct(tg)} van de kosten binnen de 100% is tariefgereguleerd`,
+        uitleg:'De rest moet worden terugverdiend uit zorg waarvoor de NZa geen maximumtarief vaststelt — en dus ook geen kostendekking onderbouwt.' }
+    ]
+  };
+}
+
 /* Lokale formatteerhulpjes: metrics mag niet van format.mjs afhangen, anders
    ontstaat er een kringverwijzing zodra format ooit data nodig heeft. */
+const fmtUur   = n => n.toLocaleString('nl-NL', { minimumFractionDigits: 1, maximumFractionDigits: 1 });
 const fmtGetal = n => n.toLocaleString('nl-NL', { maximumFractionDigits: 0 });
 const fmtPct   = n => (n * 100).toLocaleString('nl-NL', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + '%';
 
@@ -390,7 +433,17 @@ export function afgeleideKerngetallen() {
     bij('Arbeidsvergoeding per gewerkt uur, 2024', jaarBedrag(2024), 'euro', u.status,
         'landelijk nac-bedrag gedeeld door de gewerkte uren van alle praktijkhouders, exclusief dienst'),
     bij('Arbeidsvergoeding per gewerkt uur, 2025', jaarBedrag(2025), 'euro', u.status, 'idem, op de grondslagen van 2025'),
-    bij('Arbeidsvergoeding per gewerkt uur, 2026', jaarBedrag(2026), 'euro', u.status, 'idem, op de grondslagen van 2026')
+    bij('Arbeidsvergoeding per gewerkt uur, 2026', jaarBedrag(2026), 'euro', u.status, 'idem, op de grondslagen van 2026'),
+    ...(() => { const n = nacPerUur(2026); return [
+      bij('Arbeidsvergoeding per ingerekend uur ná schoning, 2026', n.stappen[1].perUur, 'euro', n.stappen[1].status,
+          'nac maal het aandeel dat binnen de 100% blijft, gedeeld door de 2.125,4 uur waarvoor er één wordt ingerekend'),
+      bij('Uren per volledige vergoeding ná schoning', n.stappen[1].uren, 'uur/jaar', n.stappen[1].status,
+          '2.125,4 gedeeld door het aandeel dat binnen de 100% blijft'),
+      bij('Arbeidsvergoeding per ingerekend uur binnen een maximumtarief, 2026', n.stappen[2].perUur, 'euro', n.stappen[2].status,
+          'idem, en daarna maal het tariefgereguleerde aandeel'),
+      bij('Uren per volledige vergoeding binnen een maximumtarief', n.stappen[2].uren, 'uur/jaar', n.stappen[2].status,
+          '2.125,4 gedeeld door het product van beide aandelen')
+    ]; })()
   ];
 }
 
