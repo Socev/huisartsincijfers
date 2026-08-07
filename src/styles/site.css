@@ -320,6 +320,8 @@ details.tbl p,
 .callout.inzicht .rol{color:var(--insight)}
 .callout.letop{border-left-color:var(--warning)}
 .callout.letop .rol{color:var(--warning)}
+.callout.duiding{border-left-color:var(--text-primary);background:var(--surface-2)}
+.callout.duiding .rol{color:var(--text-primary)}
 .callout.methode{border-left-color:var(--method);background:var(--surface-2)}
 .callout.methode .rol{color:var(--text-muted)}
 
@@ -487,3 +489,19 @@ details.parsectie > summary i{font-style:normal;font-size:11.5px;font-weight:400
   tr{break-inside:avoid}
   @page{margin:16mm 14mm}
 }
+
+/* ---------- mobiele inhoudsopgave ----------
+   Zelfde sectielijst als de zijbalk, maar als uitklapblok onder de hero. Op
+   brede schermen neemt de zijbalk het over en verdwijnt dit blok. */
+.toc-mob{margin:6px 0 20px;border:1px solid var(--line);border-radius:8px;background:var(--surface-2)}
+.toc-mob summary{cursor:pointer;padding:10px 14px;font-size:12.5px;font-weight:600;
+  letter-spacing:.05em;text-transform:uppercase;color:var(--text-secondary);list-style:none}
+.toc-mob summary::-webkit-details-marker{display:none}
+.toc-mob summary::after{content:" ▾";color:var(--text-muted)}
+.toc-mob[open] summary::after{content:" ▴"}
+.toc-mob ol{list-style:none;margin:0;padding:2px 14px 12px}
+.toc-mob li{margin:0}
+.toc-mob a{display:block;padding:5px 0;font-size:13.5px;color:var(--text-secondary);text-decoration:none;
+  border-bottom:none}
+.toc-mob a:hover{color:var(--text-primary)}
+@media(min-width:1180px){.toc-mob{display:none}}

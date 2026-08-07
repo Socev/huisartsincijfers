@@ -86,7 +86,7 @@ const MARK = `<svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"
 </svg>`;
 
 export function pagina({ pad, titel, omschrijving, eyebrow, h1, lede, body,
-                         status, acties, proto = true }) {
+                         status, acties }) {
   /* De inhoudsopgave wordt uit de body zelf afgeleid; ontbrekende ankers worden
      onderweg aangevuld, zodat elke sectie aanspreekbaar is. */
   const toc = inhoudsopgave(body);
@@ -113,6 +113,7 @@ export function pagina({ pad, titel, omschrijving, eyebrow, h1, lede, body,
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>${esc(titel)} — ${esc(SITE.naam)}</title>
 <meta name="description" content="${esc(omschrijving ?? SITE.omschrijving)}">
+<link rel="canonical" href="${SITE.url}${pad}">
 <meta property="og:title" content="${esc(titel)}">
 <meta property="og:description" content="${esc(omschrijving ?? SITE.omschrijving)}">
 <meta property="og:type" content="website">
@@ -136,8 +137,6 @@ export function pagina({ pad, titel, omschrijving, eyebrow, h1, lede, body,
 </head>
 <body>
 <a class="skip" href="#inhoud">Naar de inhoud</a>
-${proto ? `<div class="proto">Deze site is in opbouw. De cijfers zijn gecontroleerd; de opzet is nog niet af. <a href="/over/">Wat dit wel en niet is</a></div>` : ''}
-
 <header class="site"><div class="wrap">
   <a class="logo" href="/">${MARK}<span class="wm">huisartsincijfers<i>.nl</i></span></a>
   <details class="drawer" id="drawer">
@@ -158,6 +157,9 @@ ${proto ? `<div class="proto">Deze site is in opbouw. De cijfers zijn gecontrole
       ${acties.secundair ? `<a class="knop-sec" href="${esc(acties.secundair.href)}">${esc(acties.secundair.label)}</a>` : ''}
     </div>` : ''}
   </div>
+  ${toc.items.length >= 4 ? `<details class="toc-mob"><summary>Op deze pagina</summary>
+    <ol>${toc.items.map(i => `<li><a href="#${esc(i.id)}">${esc(i.tekst)}</a></li>`).join('')}</ol>
+  </details>` : ''}
   ${toc.items.length >= 4 ? `<nav class="opzij" aria-label="Op deze pagina">
     <b>Op deze pagina</b>
     <ol>${toc.items.map(i => `<li><a href="#${esc(i.id)}">${esc(i.tekst)}</a></li>`).join('')}</ol>
@@ -172,6 +174,8 @@ ${proto ? `<div class="proto">Deze site is in opbouw. De cijfers zijn gecontrole
       <a href="/arbeidskosten/">Arbeidskosten praktijkhouder</a>
       <a href="/uren/">Gewerkte uren en de fte-definitie</a>
       <a href="/uurtarief/">Arbeidsvergoeding per gewerkt uur</a>
+      <a href="/tarieven/">Basistarieven</a>
+      <a href="/praktijkhouderschap/">Praktijkhouderschap</a>
       <a href="/modelwissel/">De modelwissel van 2025</a>
       <a href="/beroepsgroep/">De beroepsgroep in aantallen</a>
       <a href="/inkomen/">Inkomen tegenover de norm</a>

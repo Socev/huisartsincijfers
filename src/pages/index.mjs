@@ -33,15 +33,20 @@ export default function () {
 </section>
 
 <section id="keten">
-  <h2>Waar de rekeneenheden onderweg verdwijnen</h2>
-  <p class="sub">Vier stappen, van mensen naar het deel dat een wettelijk maximumtarief achter zich heeft.
-  Bij elke pijl staat de rekenregel die de stap veroorzaakt.</p>
+  <h2>Hoe de arbeidskostencomponent over drie niveaus wordt verdeeld</h2>
+  <p class="sub">Van mensen naar rekeneenheden, in drie niveaus: wat de NZa <b>terecht acht</b>
+  (circa ${num(Math.round(k.brutoNac/100)*100)}), wat daarvan <b>in de basistarieven</b> wordt opgenomen
+  (circa ${num(Math.round(k.binnen100/100)*100)}), en wat daarvan <b>via NZa-maximumtarieven</b> te verdienen
+  is (circa ${num(Math.round(k.maxTarief/100)*100)}). Bij elke pijl staat de rekenregel die de stap
+  veroorzaakt.</p>
 
   ${panel(causalChain({ stappen: k.stappen, fmt: v => num(v, 0) }))}
 
-  ${callout(`De eerste stap telt geen mensen maar patiënten: het model deelt de ingeschreven verzekerden door
-    ${num(k.perFte)} per fte. Daarna gaat er nog ${pct(k.aandeelGeschoond, 2)} af. Wat overblijft is geen
-    salaris en geen uitbetaling — het is een kostenpost in een tariefberekening.
+  ${callout(`De eerste stap begint bij een telling: in het kostprijsonderzoek kwam de NZa, na aftopping van
+    de uren op 1,0 fte per persoon, uit op één voltijdsplaats per ${num(k.perFte)} patiënten. De landelijke
+    opschaling deelt de ingeschreven verzekerden door die gemeten verhouding. Daarna gaat er
+    ${pct(k.aandeelGeschoond, 2)} af — niet geschrapt, maar verplaatst naar andere bekostiging. Wat
+    overblijft is geen salaris en geen uitbetaling: het is een kostenpost in een tariefberekening.
     <a href="/arbeidskosten/">De volledige keten met alle tussenstappen</a>.`, 'letop')}
 </section>
 

@@ -13,6 +13,7 @@
    og:image. Dit is de enige plek op de site waar een bitmap nodig is.
    =========================================================================== */
 import { readdirSync, mkdirSync, writeFileSync, readFileSync } from 'node:fs';
+import { createHash } from 'node:crypto';
 import { join } from 'node:path';
 
 const UIT = 'src/assets/og';
@@ -80,6 +81,7 @@ async function main() {
   const pg = await ctx.newPage();
 
   let n = 0;
+  const manifest = {};
   for (const bestand of paginas) {
     const mod = await import('../' + join('src/pages', bestand));
     const { pad, html } = await mod.default();
@@ -97,8 +99,14 @@ async function main() {
     }), { waitUntil: 'load' });
 
     await pg.screenshot({ path: join(UIT, slug(pad) + '.png') });
+    /* Vingerafdruk van wat er op de kaart staat, zodat de build kan zien of
+       een latere kopwijziging de kaart heeft verouderd. */
+    manifest[slug(pad)] = createHash('sha1')
+      .update([eyebrow, kop, oms].map(t => t.replace(/<[^>]+>/g, '').replace(/\s+/g, ' ').trim()).join('\u0001'))
+      .digest('hex').slice(0, 12);
     n++;
   }
+  writeFileSync(join(UIT, 'manifest.json'), JSON.stringify(manifest, null, 1) + '\n');
 
   await browser.close();
   console.log(`Deelkaarten gerenderd: ${n} in ${UIT}/`);

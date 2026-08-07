@@ -117,7 +117,7 @@ export default function () {
   eigen telling en verhoudingsgetal in Nederland verdiend te worden. Daarná berekent de NZa welk deel
   daarvan uit welke geldstroom moet komen: ${pct(H.aandeelBinnen100,2)} blijft binnen de honderd procent,
   en daarvan is ${pct(H.aandeelTariefGereguleerd,1)} tariefgereguleerd.
-  <a href="#personen-naar-fte">Die twee stappen staan hieronder uitgewerkt</a>.`, 'inzicht')}
+  <a href="#personen-naar-fte">Die twee stappen staan hieronder uitgewerkt</a>.`, 'duiding')}
 </section>
 
 <section id="kruiscontrole">
@@ -177,7 +177,7 @@ export default function () {
   kunnen verdienen. Vanaf 2025 is het een uitspraak over wat is: kennelijk werk je per 2.650 patiënten één
   voltijdsplaats, dus zoveel wordt er vergoed. De normpraktijk werd een constateringspraktijk — en daarmee
   verschoof ook wie er iets moet uitleggen. Een norm kun je ter discussie stellen; een constatering
-  bevestigt zichzelf, inclusief alles wat er in de meting scheef zit.`, 'inzicht')}
+  bevestigt zichzelf, inclusief alles wat er in de meting scheef zit.`, 'duiding')}
   <p class="small">De volledige vindplaatsen: PKO 2015, tabellen 14, 33 en 34; PKO 2022, tabellen 4.2.1.2
   en 4.2.6.1 en bijlagen 8.2 en 8.6.7; verantwoording herziening tariefonderbouwing 2025. Het raamwerk dat
   hierop rekent staat op <a href="/uurtarief/">de uurtarief-pagina</a>: drie niveaus per gewerkt uur, naast

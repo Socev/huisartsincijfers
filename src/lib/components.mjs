@@ -48,7 +48,7 @@ export const heroNumber = (n, uitleg) =>
    inzicht = de hoofdconclusie · letop = risico op verkeerde lezing ·
    methode = technische noot. Kleur is nooit de enige drager: elke rol draagt
    ook een woordlabel, zodat de betekenis overkomt zonder kleurwaarneming. */
-const ROLLEN = { inzicht: 'Inzicht', letop: 'Let op', methode: 'Methode' };
+const ROLLEN = { inzicht: 'Inzicht', letop: 'Let op', methode: 'Methode', duiding: 'Onze duiding' };
 
 export const callout = (html, rol) => {
   const label = ROLLEN[rol];

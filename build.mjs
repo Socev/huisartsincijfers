@@ -4,6 +4,7 @@
    =========================================================================== */
 import { readdirSync, readFileSync, mkdirSync, writeFileSync, cpSync, rmSync, existsSync } from 'node:fs';
 import { join, dirname } from 'node:path';
+import { createHash } from 'node:crypto';
 
 const OUT = 'dist';
 rmSync(OUT, { recursive: true, force: true });
@@ -40,6 +41,35 @@ for (const bestand of paginas) {
   if (!existsSync(join('src/assets/og', kaart))) zonderKaart.push(`${pad} (verwacht og/${kaart})`);
   n++;
 }
+/* ---------------------------------------------------------------------------
+   Versheid van de deelkaarten. De kaart toont eyebrow, kop en omschrijving van
+   het moment waarop hij gerenderd is; wie daarna de kop wijzigt zonder npm run
+   og te draaien, deelt een kaart die iets anders beweert dan de pagina. Het
+   manifest bevat per pagina een vingerafdruk van die drie velden.
+   --------------------------------------------------------------------------- */
+const verouderd = [];
+try {
+  const manifest = JSON.parse(readFileSync('src/assets/og/manifest.json', 'utf8'));
+  for (const bestand of paginas) {
+    const mod = await import('./' + join('src/pages', bestand));
+    const { pad, html } = await mod.default();
+    const kop     = (html.match(/<h1[^>]*>([\s\S]*?)<\/h1>/) || [])[1] ?? '';
+    const eyebrow = (html.match(/<p class="eyebrow">([\s\S]*?)<\/p>/) || [])[1] ?? 'Bekostiging van de huisartsenzorg';
+    const oms     = (html.match(/<meta name="description" content="([^"]*)"/) || [])[1] ?? '';
+    const sl = (pad === '/' ? 'index' : pad.replace(/^\/|\/$/g, '').replace(/\//g, '-'));
+    const hash = createHash('sha1')
+      .update([eyebrow, kop, oms].map(t => t.replace(/<[^>]+>/g, '').replace(/\s+/g, ' ').trim()).join('\u0001'))
+      .digest('hex').slice(0, 12);
+    if (manifest[sl] && manifest[sl] !== hash) verouderd.push(pad);
+  }
+} catch { /* geen manifest: de ontbreekt-controle hieronder vangt nieuwe pagina's al */ }
+if (verouderd.length) {
+  console.error('\nDeelkaart is verouderd (kop of omschrijving gewijzigd) voor:');
+  for (const x of verouderd) console.error('  ' + x);
+  console.error('\nDraai npm run og en commit de PNG en het manifest mee.');
+  process.exit(1);
+}
+
 if (zonderKaart.length) {
   console.error('\nDeelkaart ontbreekt voor:');
   for (const x of zonderKaart) console.error('  ' + x);
@@ -96,6 +126,34 @@ if (verdacht.length) {
   console.error(`\nOnmogelijke percentages gevonden (boven ${DREMPEL}%):`);
   for (const v of [...new Set(verdacht)].slice(0, 20)) console.error('  ' + v);
   console.error('\nWaarschijnlijk is pct() toegepast op een reeks die al in procenten staat.');
+  process.exit(1);
+}
+
+/* ---------------------------------------------------------------------------
+   Verboden synoniemen. Een nac is geen salaris, uitkering of uitbetaling; die
+   woorden in de buurt van "nac" zijn vrijwel altijd een redactionele fout —
+   behalve in de ontkenning ("geen salaris"), die juist de uitleg is.
+   --------------------------------------------------------------------------- */
+const synoniemFouten = [];
+const loopSynoniemen = (map) => {
+  for (const naam of readdirSync(map, { withFileTypes: true })) {
+    const pad = join(map, naam.name);
+    if (naam.isDirectory()) loopSynoniemen(pad);
+    else if (naam.name.endsWith('.html')) {
+      const tekst = readFileSync(pad, 'utf8')
+        .replace(/<(script|style)[\s\S]*?<\/\1>/gi, ' ').replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ');
+      for (const m of tekst.matchAll(/\bnac[^.!?]{0,60}?\b(salaris|uitkering|uitbetaling)\b|\b(salaris|uitkering|uitbetaling)\b[^.!?]{0,60}?\bnac\b/gi)) {
+        const frag = m[0];
+        if (/geen\s+(salaris|uitkering|uitbetaling)/i.test(frag)) continue;
+        synoniemFouten.push(`${pad}: …${frag}…`);
+      }
+    }
+  }
+};
+loopSynoniemen(OUT);
+if (synoniemFouten.length) {
+  console.error('\nVerboden nac-synoniem gevonden (nac is geen salaris/uitkering/uitbetaling):');
+  for (const v of [...new Set(synoniemFouten)].slice(0, 10)) console.error('  ' + v);
   process.exit(1);
 }
 
