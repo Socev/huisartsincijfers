@@ -130,7 +130,7 @@ export function nacKeten(jaar = 2025) {
         label:'nac\'s vóór schoning', eenheidKort:'rekeneenheden',
         status: sBruto, anchor:'/arbeidskosten/#personen-naar-fte',
         regel:`${fmtGetal(ingeschrevenen)} ingeschreven verzekerden ÷ ${fmtGetal(perFte)} per fte`,
-        oorzaak:'De fte-telling volgt de patiëntengrondslag, niet het aantal personen. De werktijdfactor is bovendien afgetopt op 1,0.' },
+        oorzaak:'De NZa telde in het kostprijsonderzoek 2.650 patiënten per voltijdsplaats; dit is de landelijke opschaling van dat getelde verhoudingsgetal. De werktijdfactor is daarbij afgetopt op 1,0.' },
       { sleutel:'binnen', waarde: binnen100, eenheid:'nac',
         label:'nac\'s binnen de 100%', eenheidKort:'na kostentoerekening',
         status: sBinnen, anchor:'/arbeidskosten/#schoning',

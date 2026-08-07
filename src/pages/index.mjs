@@ -2,7 +2,7 @@ import { pagina } from '../lib/layout.mjs';
 import { w, data } from '../lib/data.mjs';
 import { nacKeten, werkweek, uurbedragVerschil } from '../lib/metrics.mjs';
 import { tile, callout, panel, statContrast, causalChain,
-         evidenceCard, begrippenBalk } from '../lib/components.mjs';
+         evidenceCard } from '../lib/components.mjs';
 import { eur, num, pct, uur } from '../lib/format.mjs';
 
 export default function () {
@@ -36,13 +36,6 @@ export default function () {
   <h2>Waar de rekeneenheden onderweg verdwijnen</h2>
   <p class="sub">Vier stappen, van mensen naar het deel dat een wettelijk maximumtarief achter zich heeft.
   Bij elke pijl staat de rekenregel die de stap veroorzaakt.</p>
-
-  ${begrippenBalk([
-    { term: 'Personen',            uitleg: 'mensen' },
-    { term: `Nac's vóór schoning`, uitleg: 'rekeneenheden' },
-    { term: 'Binnen 100%',         uitleg: 'na kostentoerekening' },
-    { term: 'Maximumtarieven',     uitleg: 'wettelijk gereguleerd deel' }
-  ])}
 
   ${panel(causalChain({ stappen: k.stappen, fmt: v => num(v, 0) }))}
 

@@ -1,7 +1,7 @@
 import { pagina } from '../lib/layout.mjs';
 import { w, p, data } from '../lib/data.mjs';
 import { stackedBar, table, panel, callout, dataTable, bronLabel, tile, compareBars, anwNoot,
-         heroNumber, statContrast, causalChain, evidenceCard, begrippenBalk,
+         heroNumber, statContrast, causalChain, evidenceCard,
          methodDisclosure } from '../lib/components.mjs';
 import { nacKeten, werkweek, nacHerkomst } from '../lib/metrics.mjs';
 import { eur, eur0, num, pct, mln, esc } from '../lib/format.mjs';
@@ -57,13 +57,6 @@ export default function () {
   <h2>De vier stappen, met de rekenregel per stap</h2>
   <p class="sub">Let op de eenheden: alleen de eerste stap telt mensen. Alles daarna zijn rekeneenheden in een
   kostprijsmodel. Bij elke pijl staat de regel die de stap veroorzaakt, en de reden waarom die regel bestaat.</p>
-
-  ${begrippenBalk([
-    { term: 'Personen',            uitleg: 'mensen' },
-    { term: `Nac's vóór schoning`, uitleg: 'rekeneenheden' },
-    { term: 'Binnen 100%',         uitleg: 'na kostentoerekening' },
-    { term: 'Maximumtarieven',     uitleg: 'wettelijk gereguleerd deel' }
-  ])}
 
   ${panel(causalChain({ stappen: k.stappen, fmt: v => num(v, 0) }))}
 
