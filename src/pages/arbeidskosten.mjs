@@ -102,25 +102,29 @@ export default function () {
 <section id="herkomst">
   <h2>Waar dat aantal vandaan komt</h2>
   <p class="sub">Het aantal arbeidsvergoedingen in de tarieven is het meest geciteerde cijfer op deze site.
-  Het is <b>geen telling maar een deling</b>: het aantal ingeschreven verzekerden gedeeld door het aantal
-  patiënten dat de NZa aan één voltijdplaats toerekent. Dat is precies hoe de NZa zelf rekent — de
-  fte-telling volgt de patiëntengrondslag, niet het aantal huisartsen. Hieronder staan de twee getallen die
-  die deling maken, een controle langs een tweede weg, en wat er gebeurt als de deler anders was gekozen.</p>
+  Het begint als <b>telling</b>: de NZa telde in het kostprijsonderzoek 2022 de voltijdsplaatsen van
+  praktijkhouders in de onderzoeksgroep — urenopgave door 36 gedeeld, afgetopt op 1,0 — en stelde vast per
+  hoeveel patiënten er één voltijdsplaats werkzaam is: ${num(H.perFte,0)}. De landelijke vertaling is
+  vervolgens een deling: alle ingeschreven verzekerden gedeeld door dat verhoudingsgetal. Zo rekent de NZa
+  het aantal getelde voltijdsplaatsen op naar heel Nederland, en zo staat het hieronder.</p>
 
   ${panel(table({
-    cols:[{label:'Wat er in de deling gaat'},{label:'Waarde',r:true},{label:'Waar het vandaan komt'},{label:'Status'}],
+    cols:[{label:'Stap'},{label:'Waarde',r:true},{label:'Waar het vandaan komt'},{label:'Status'}],
     rows:[
+      ['Geteld: patiënten per fte praktijkhoudend huisarts', num(H.perFte,0),
+       'Kostprijsonderzoek 2022; NZa Verantwoordingsdocument, Tabel 36, invalshoek 2', `<span class="badge ${esc(p('nac','patienten_per_fte').status)}">${esc(p('nac','patienten_per_fte').status)}</span>`],
       ['Ingeschreven verzekerden, ' + k.jaar, num(k.ingeschrevenen,0),
        'Vektis-verzekerdejaren, doorgetrokken naar ' + k.jaar, `<span class="badge ${esc(p('nac','ingeschrevenen_2025').status)}">${esc(p('nac','ingeschrevenen_2025').status)}</span>`],
-      ['Ingeschrevenen per fte praktijkhoudend huisarts', num(H.perFte,0),
-       'NZa Verantwoordingsdocument, Tabel 36, invalshoek 2', `<span class="badge ${esc(p('nac','patienten_per_fte').status)}">${esc(p('nac','patienten_per_fte').status)}</span>`],
-      ['<b>Vergoedingen vóór schoning</b>', '<b>'+num(k.brutoNac,0)+'</b>',
+      ['<b>Vergoedingen vóór schoning, landelijk</b>', '<b>'+num(k.brutoNac,0)+'</b>',
        num(k.ingeschrevenen,0) + ' ÷ ' + num(H.perFte,0), `<span class="badge ${esc(k.status.brutoNac)}">${esc(k.status.brutoNac)}</span>`]
     ]
   }))}
-  <p class="small">Van die uitkomst blijft ${pct(H.aandeelBinnen100,2)} binnen de honderd procent, en daarvan
-  is ${pct(H.aandeelTariefGereguleerd,1)} tariefgereguleerd. <a href="#personen-naar-fte">Die twee stappen
-  staan hieronder uitgewerkt</a>.</p>
+  ${callout(`<strong>Die ${num(k.brutoNac,0)} is wat de NZa de Nederlandse praktijkhoudend huisarts waard
+  vindt voor álle geleverde arbeid</strong> — zoveel volledige arbeidsvergoedingen horen er volgens haar
+  eigen telling en verhoudingsgetal in Nederland verdiend te worden. Daarná berekent de NZa welk deel
+  daarvan uit welke geldstroom moet komen: ${pct(H.aandeelBinnen100,2)} blijft binnen de honderd procent,
+  en daarvan is ${pct(H.aandeelTariefGereguleerd,1)} tariefgereguleerd.
+  <a href="#personen-naar-fte">Die twee stappen staan hieronder uitgewerkt</a>.`, 'inzicht')}
 </section>
 
 <section id="kruiscontrole">
@@ -175,6 +179,12 @@ export default function () {
   <a href="/uren/">Wat daar over te zeggen valt</a>. Na de schoning van
   ${pct(w('nac','schoning_buiten_100') + w('nac','correctie_poh_ggz'),2)} wordt de deler in de tarieven
   ${num(2650/0.8916,0)} — de rekenkundige tegenhanger van de oude 2.095.`, 'methode')}
+  ${callout(`<strong>Met de modelwissel is de norm dus losgelaten.</strong> Tot en met 2024 was de
+  normpraktijk een uitspraak over wat hoort: per 2.095 patiënten hoor je één volledige arbeidsvergoeding te
+  kunnen verdienen. Vanaf 2025 is het een uitspraak over wat is: kennelijk werk je per 2.650 patiënten één
+  voltijdsplaats, dus zoveel wordt er vergoed. De normpraktijk werd een constateringspraktijk — en daarmee
+  verschoof ook wie er iets moet uitleggen. Een norm kun je ter discussie stellen; een constatering
+  bevestigt zichzelf, inclusief alles wat er in de meting scheef zit.`, 'inzicht')}
   <p class="small">De volledige vindplaatsen: PKO 2015, tabellen 14, 33 en 34; PKO 2022, tabellen 4.2.1.2
   en 4.2.6.1 en bijlagen 8.2 en 8.6.7; verantwoording herziening tariefonderbouwing 2025. Het raamwerk dat
   hierop rekent staat op <a href="/uurtarief/">de uurtarief-pagina</a>: drie niveaus per gewerkt uur, naast
