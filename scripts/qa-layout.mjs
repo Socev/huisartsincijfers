@@ -24,7 +24,7 @@ import { createServer } from 'node:http';
 import { readFile } from 'node:fs/promises';
 import { join, extname } from 'node:path';
 
-const PADEN = ['/', '/rondleiding/', '/arbeidskosten/', '/uren/', '/uurtarief/', '/modelwissel/', '/beroepsgroep/',
+const PADEN = ['/', '/rondleiding/', '/huisarts-zijn/', '/arbeidskosten/', '/uren/', '/uurtarief/', '/modelwissel/', '/beroepsgroep/',
                '/praktijkhouderschap/', '/inkomen/', '/werkdruk/', '/praktijkkosten/', '/tarieven/',
                '/omzet/', '/nac/', '/bronnen/', '/over/'];
 const MATEN = [[390, 'mobiel'], [768, 'tablet'], [1280, 'desktop'], [1600, 'breed']];

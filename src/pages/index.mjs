@@ -1,8 +1,7 @@
 import { pagina } from '../lib/layout.mjs';
 import { w, data } from '../lib/data.mjs';
 import { nacKeten, werkweek, uurbedragVerschil } from '../lib/metrics.mjs';
-import { tile, callout, panel, statContrast, causalChain,
-         evidenceCard } from '../lib/components.mjs';
+import { tile, callout, statContrast, evidenceCard } from '../lib/components.mjs';
 import { eur, num, pct, uur } from '../lib/format.mjs';
 
 export default function () {
@@ -32,22 +31,28 @@ export default function () {
   })}
 </section>
 
+<section id="ingangen">
+  <h2>Drie manieren om te beginnen</h2>
+  <div class="grid c3">
+    ${tile({ waarde:'Het dagelijkse werk', href:'/huisarts-zijn/',
+      label:'Hoe ziet het werk van een huisarts eruit? De werkweek, de rollen, het inkomen en hoe het vak veranderde — in zes stappen.' })}
+    ${tile({ waarde:'De rekensom', href:'/rondleiding/',
+      label:'Hoe werkt de bekostiging? Volg de berekening van praktijkhouders naar de vergoeding per gewerkt uur — in zes stappen.' })}
+    ${tile({ waarde:'Cijfer controleren', href:'/bronnen/',
+      label:'Waar komt een getal vandaan? Zoek in alle bronnen, parameters en rekenstappen, elk met een status.' })}
+  </div>
+</section>
+
 <section id="keten">
   <h2>Hoe de arbeidskostencomponent over drie niveaus wordt verdeeld</h2>
   <p class="sub">Van mensen naar rekeneenheden, in drie niveaus: wat de NZa <b>terecht acht</b>
   (circa ${num(Math.round(k.brutoNac/100)*100)}), wat daarvan <b>in de basistarieven</b> wordt opgenomen
   (circa ${num(Math.round(k.binnen100/100)*100)}), en wat daarvan <b>via NZa-maximumtarieven</b> te verdienen
-  is (circa ${num(Math.round(k.maxTarief/100)*100)}). Bij elke pijl staat de rekenregel die de stap
-  veroorzaakt.</p>
-
-  ${panel(causalChain({ stappen: k.stappen, fmt: v => num(v, 0) }))}
-
-  ${callout(`De eerste stap begint bij een telling: in het kostprijsonderzoek kwam de NZa, na aftopping van
-    de uren op 1,0 fte per persoon, uit op één voltijdsplaats per ${num(k.perFte)} patiënten. De landelijke
-    opschaling deelt de ingeschreven verzekerden door die gemeten verhouding. Daarna gaat er
-    ${pct(k.aandeelGeschoond, 2)} af — niet geschrapt, maar verplaatst naar andere bekostiging. Wat
-    overblijft is geen salaris en geen uitbetaling: het is een kostenpost in een tariefberekening.
-    <a href="/arbeidskosten/">De volledige keten met alle tussenstappen</a>.`, 'letop')}
+  is (circa ${num(Math.round(k.maxTarief/100)*100)}).</p>
+  ${callout(`Het begint bij een telling: één voltijdsplaats per ${num(k.perFte)} patiënten. Daarna gaat er
+    ${pct(k.aandeelGeschoond, 2)} af — niet geschrapt, maar verplaatst naar andere bekostiging.
+    <a href="/rondleiding/">De rondleiding loopt er in zes stappen doorheen</a>;
+    <a href="/arbeidskosten/">de volledige keten met alle tussenstappen staat in het dossier</a>.`, 'letop')}
 </section>
 
 <section id="oorzaken">
@@ -60,7 +65,7 @@ export default function () {
       kern: pct(u.bovenCapAandeel, 0),
       bewijs: `van de eigenaren geeft meer dan ${num(u.cap)} uur per week op. Voor die groep ligt de opgave
         gemiddeld ${num(u.bovenCapUren, 1)} uur boven de grens, maar de werktijdfactor blijft 1,0.`,
-      status: 'afgeleid', href: '/uren/#aftopping' })}
+      status: 'afgeleid', href: '/uren/#de-aftopping-op-1-0-fte' })}
     ${evidenceCard({
       claim: 'De urenuitvraag is smaller dan de werkweek',
       kern: uur(u.nietUitgevraagd),
@@ -76,14 +81,6 @@ export default function () {
         ${pct(w('nac','correctie_poh_ggz'), 2)} naar de poh-ggz-module.`,
       status: 'afgeleid', href: '/arbeidskosten/#schoning' })}
   </div>
-</section>
-
-<section>
-  ${callout(`<b>Van de arbeidskostencomponent landt maar een deel in prestaties met een NZa-maximumtarief.</b>
-  De rest wordt verondersteld te worden verdiend uit vrij onderhandelbare zorg, uit de poh-ggz-module of uit
-  activiteiten buiten de tariefbeschikking. Hoe het normbedrag per gewerkt uur over die vier bronnen wordt
-  verdeeld, staat op de arbeidskostenpagina.
-  <a href="/arbeidskosten/#maximumtarieven">Bekijk de verdeling per gewerkt uur →</a>`, 'inzicht')}
 </section>
 
 <section>

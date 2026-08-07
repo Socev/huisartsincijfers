@@ -364,3 +364,14 @@ test('de rondleiding-configuratie geeft dezelfde getallen als de rekenlaag', asy
      vanaf liggen. */
   assert.ok(Math.abs(d.perFte / d.aandeelBinnen100 / d.delerNieuw - 1) < 0.001);
 });
+
+test('de weekbalk van de rondleiding telt op tot de gemeten werkweek', async () => {
+  const { huisartsZijn } = await import('../src/lib/verhaal.mjs');
+  const d = huisartsZijn();
+  const som = d.taken.rijen.reduce((s, r) => s + r[1], 0);
+  assert.equal(rond(som, 1), rond(d.werkweek.bruto, 1));
+  /* En de reeksen voor stap 5 bestaan en dekken dezelfde jaren. */
+  assert.equal(d.vak.huisartsen.waarden.length, d.vak.jaren.length);
+  assert.equal(d.vak.praktijkhouders.waarden.length, d.vak.jaren.length);
+  assert.equal(d.vak.praktijken.waarden.length, d.vak.jaren.length);
+});

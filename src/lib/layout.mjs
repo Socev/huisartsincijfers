@@ -14,7 +14,10 @@ export const SITE = {
    gegroepeerd naar de vraag die de lezer stelt — niet naar het onderwerp. */
 export const NAV = [
   { href: '/', label: 'Kerncijfers' },
-  { href: '/rondleiding/', label: 'Rondleiding' },
+  { label: 'Rondleiding', kinderen: [
+    { href: '/huisarts-zijn/', label: 'Hoe is het om huisarts te zijn?' },
+    { href: '/rondleiding/',   label: 'De rekensom in zes stappen' }
+  ]},
   { label: 'Nac en arbeid', kinderen: [
     { href: '/nac/',           label: 'Wat is de nac?' },
     { href: '/arbeidskosten/', label: 'Van praktijkhouders naar nac\'s' },
@@ -171,6 +174,7 @@ export function pagina({ pad, titel, omschrijving, eyebrow, h1, lede, body,
 <footer class="site"><div class="wrap">
   <div class="cols">
     <div><h4>Onderwerpen</h4>
+      <a href="/huisarts-zijn/">Hoe is het om huisarts te zijn?</a>
       <a href="/rondleiding/">De rekensom in zes stappen</a>
       <a href="/nac/">Opbouw van de normatieve arbeidskostencomponent</a>
       <a href="/arbeidskosten/">Arbeidskosten praktijkhouder</a>

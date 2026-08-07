@@ -12,39 +12,16 @@
    =========================================================================== */
 import { pagina } from '../lib/layout.mjs';
 import { rekensom } from '../lib/verhaal.mjs';
-import { panel, statContrast, meetlat, trechter, compareBars,
-         methodDisclosure, evidenceCard } from '../lib/components.mjs';
-import { esc, eur, num, pct } from '../lib/format.mjs';
+import { stap, stappenreeks, uitleg } from '../lib/stappen.mjs';
+import { statContrast, meetlat, trechter, compareBars,
+         evidenceCard } from '../lib/components.mjs';
+import { eur, num, pct } from '../lib/format.mjs';
 
 const rond100 = v => Math.round(v / 100) * 100;
-
-/* Eén stap: voortgang, kop, kerngetal, twee zinnen, Waarom?, Controleer dit,
-   en de knoppen Vorige en Verder. */
-function stap({ nr, totaal, id, kop, tekst, visual, waarom, controleer, laatste }) {
-  const vorige = nr > 1 ? `#stap-${nr - 1}` : null;
-  const verder = laatste ? '#verder' : `#stap-${nr + 1}`;
-  const checks = controleer.map(c =>
-    `<a href="${esc(c.href)}">${esc(c.label)}</a>`).join('<span class="sep"> · </span>');
-  return `
-<section id="${id}">
-  <p class="stapkop">Stap ${nr} van ${totaal}</p>
-  <h2>${kop}</h2>
-  <p class="sub">${tekst}</p>
-  ${panel(visual)}
-  ${methodDisclosure('Waarom?', waarom)}
-  <p class="controleer"><b>Controleer dit:</b> ${checks}</p>
-  <nav class="stapnav" aria-label="Stap ${nr} van ${totaal}: navigatie">
-    ${vorige ? `<a class="knop-sec" href="${vorige}">← Vorige stap</a>` : '<span class="leeg"></span>'}
-    <a class="knop" href="${verder}">${laatste ? 'Verder lezen ↓' : 'Verder →'}</a>
-  </nav>
-</section>`;
-}
 
 export default function () {
   const d = rekensom();
   const ww = d.werkweek;
-  const uitleg = (delen) => delen.map(([kop, tekst]) =>
-    `<p><b>${esc(kop)}.</b> ${tekst}</p>`).join('');
 
   const stappen = [
 
@@ -251,8 +228,7 @@ export default function () {
     }
   ];
 
-  const body = stappen.map((s, i) =>
-    stap({ ...s, nr: i + 1, totaal: stappen.length, laatste: i === stappen.length - 1 })).join('') + `
+  const body = stappenreeks(stappen) + `
 
 <section id="verder">
   <h2>Verder lezen</h2>
