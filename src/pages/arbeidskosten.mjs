@@ -160,31 +160,25 @@ export default function () {
   'methode')}
 </section>
 
-<section id="gevoeligheid">
-  <h2>Hoe hard is dat getal?</h2>
-  <p class="sub">Alle onzekerheid zit in dezelfde deler. De ${num(H.perFte,0)} patiënten per voltijdplaats is
-  een uitkomst van het kostprijsonderzoek, geen natuurconstante. Hieronder staat wat er met de hele keten
-  gebeurt als die anders was uitgevallen. De middelste regel is wat de site hanteert.</p>
-  ${panel(table({
-    cols:[{label:'Ingeschrevenen per fte'},{label:'Vóór schoning',r:true},{label:'Binnen de 100%',r:true},
-          {label:'Gedekt door maximumtarieven',r:true},{label:'Verschil met de gehanteerde waarde',r:true}],
-    rows: H.gevoeligheid.map(g => {
-      const b = t => g.gehanteerd ? '<b>'+t+'</b>' : t;
-      return [b(num(g.perFte,0) + (g.gehanteerd ? ' — gehanteerd' : '')), b(num(g.bruto,0)),
-              b(num(g.binnen100,0)), b(num(g.gedekt,0)),
-              b(g.afwijking === 0 ? '—' : (g.afwijking > 0 ? '+' : '−') + pct(Math.abs(g.afwijking),1))];
-    })
-  }))}
-  ${callout(`<strong>Vijftig patiënten per voltijdplaats verzetten het getal met
-  ${pct(Math.abs(H.gevoeligheid.find(g => g.perFte === H.perFte - 50)?.afwijking ?? 0), 1)}.</strong>
-  Dat maakt de conclusies op deze site niet anders: de modelwissel van 2025 haalde er
-  ${pct(1 - w('modelwissel','fte_p1000_2022') / w('modelwissel','fte_p1000_2015'), 1)} af, een orde van
-  grootte meer. Maar het betekent wel dat ${num(k.binnen100,0)} moet worden gelezen als een afleiding met
-  een marge, niet als een meting. Zo staat hij overal op de site ook gemarkeerd.`, 'letop')}
-  <p class="small">Deze tabel varieert de deler van het huidige model. Wat de <em>oude</em> deler deed staat
-  hierboven: bij ${num(H.delerOud,0)} patiënten per vergoeding hadden er in ${k.jaar} ruim achtduizend
-  vergoedingen in de tarieven gezeten, tegen ${num(k.binnen100,0)} nu. Geen enkele variatie binnen het
-  huidige model komt in de buurt van dat verschil.</p>
+<section id="delers">
+  <h2>Hoe hard zijn de delers?</h2>
+  <p class="sub">De hele reeks hangt aan twee getallen, en die zijn verschillend van aard.</p>
+  ${callout(`<strong>2.095 is een vastgestelde norm.</strong> De NZa legde hem per 2018 vast in de
+  beleidsregel huisartsenzorg en multidisciplinaire zorg, als derde stap in een reeks: 2.350 tot 2012,
+  2.168 vanaf 2013, 2.095 vanaf 2018. De onderbouwing is de meting uit het kostprijsonderzoek 2015
+  (tabel 14: 2.095 ingeschreven verzekerden per voltijds werkende praktijkhouder, betrouwbaarheid ± 120,
+  ofwel ± 5,7%). Norm en meting vielen daar dus samen.`, 'methode')}
+  ${callout(`<strong>2.650 is een constatering uit het kostprijsonderzoek 2022</strong> — 3.672 patiënten
+  per praktijk gedeeld door 1,39 voltijdsplaatsen, conform de verantwoording waarmee de tarieven 2025 zijn
+  vastgesteld (praktijkweging). Wie dit getal wil betwisten, heeft geen geschil met de deling maar met wat
+  eronder ligt: de urenuitvraag en de aftopping van de werktijdfactor op 1,0.
+  <a href="/uren/">Wat daar over te zeggen valt</a>. Na de schoning van
+  ${pct(w('nac','schoning_buiten_100') + w('nac','correctie_poh_ggz'),2)} wordt de deler in de tarieven
+  ${num(2650/0.8916,0)} — de rekenkundige tegenhanger van de oude 2.095.`, 'methode')}
+  <p class="small">De volledige vindplaatsen: PKO 2015, tabellen 14, 33 en 34; PKO 2022, tabellen 4.2.1.2
+  en 4.2.6.1 en bijlagen 8.2 en 8.6.7; verantwoording herziening tariefonderbouwing 2025. Het raamwerk dat
+  hierop rekent staat op <a href="/uurtarief/">de uurtarief-pagina</a>: drie niveaus per gewerkt uur, naast
+  de gerealiseerde winst.</p>
 </section>
 
 <section id="personen-naar-fte">

@@ -8,7 +8,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { data, w, alleParameters, bronnen } from '../src/lib/data.mjs';
-import { nacKeten, nacPerUur, nacHerkomst, werkweek, uurbedragen, uurbedrag, uurbedragVerschil, statusUit, cmw } from '../src/lib/metrics.mjs';
+import { nacKeten, nacPerUur, nacHerkomst, werkweek, uurbedragen, uurbedrag, uurbedragVerschil, statusUit, cmw, knikOntleding } from '../src/lib/metrics.mjs';
 
 const rond = (v, n = 0) => +v.toFixed(n);
 
@@ -304,18 +304,45 @@ test('de eigen keten en de Cijfer-Meester zijn dezelfde deling, anders afgerond'
   }
 });
 
-test('de gevoeligheidstabel bevat de gehanteerde waarde en rekent met dezelfde keten', () => {
-  const h = nacHerkomst();
-  const gehanteerd = h.gevoeligheid.filter(g => g.gehanteerd);
-  assert.equal(gehanteerd.length, 1, 'precies een regel hoort als gehanteerd te zijn gemarkeerd');
-  assert.equal(gehanteerd[0].perFte, w('nac', 'patienten_per_fte'));
-  assert.equal(rond(gehanteerd[0].afwijking, 6), 0);
+test('de drie niveaus zijn scope-zuiver en vallen samen waar dat hoort', () => {
+  const r = uurbedragen();
+  r.jaren.forEach((j, i) => {
+    if (j <= 2024) {
+      assert.equal(rond(r.terechtNacs[i], 1), rond(r.nacs[i], 1),
+        `${j}: zonder schoning horen niveau 1 en 2 samen te vallen`);
+    } else {
+      assert.ok(r.terechtNacs[i] > r.nacs[i], `${j}: de schoning hoort niveau 2 onder niveau 1 te leggen`);
+      assert.equal(rond(r.nacs[i] / r.terechtNacs[i], 4), rond(w('nac', 'binnen_100'), 4));
+    }
+    assert.ok(r.geregNacs[i] < r.nacs[i], `${j}: het gereguleerde deel is altijd kleiner dan het geheel`);
+    assert.equal(rond(r.geregNacs[i] / r.nacs[i], 4),
+                 rond(j <= 2024 ? w('modelwissel', 'aandeel_gereguleerd_2015') : w('nac', 'tarief_gereguleerd'), 4));
+  });
+});
 
-  const k = nacKeten(2025);
-  assert.equal(rond(gehanteerd[0].bruto, 1), rond(k.brutoNac, 1));
-  assert.equal(rond(gehanteerd[0].binnen100, 1), rond(k.binnen100, 1));
-  assert.equal(rond(gehanteerd[0].gedekt, 1), rond(k.maxTarief, 1));
+test('de knik-ontleding sluit: totaal = minder terecht geacht + verplaatst', () => {
+  const k = knikOntleding();
+  assert.ok(Math.abs(k.totaal - (k.minderTerecht + k.verplaatst)) < 1e-9);
+  assert.ok(k.totaal < -12 && k.totaal > -13.5, `knik ${k.totaal}`);
+  assert.ok(k.minderTerecht < 0 && k.verplaatst < 0);
+});
 
-  for (let i = 1; i < h.gevoeligheid.length; i++)
-    assert.ok(h.gevoeligheid[i].binnen100 < h.gevoeligheid[i-1].binnen100);
+test('de dekking van een hele nac telt in beide modellen op tot honderd procent', () => {
+  const t = data.modelwissel.tabellen.dekking_nac;
+  for (const kolom of [1, 2]) {
+    const som = t.rijen.reduce((s, rij) => s + rij[kolom], 0);
+    assert.ok(Math.abs(som - 1) < 0.001, `kolom ${kolom} telt op tot ${som}`);
+  }
+});
+
+test('de winst per gewerkt uur deelt door de volle werkweek en spoort met de controleversie', () => {
+  const r = uurbedragen();
+  const i23 = r.jaren.indexOf(2023);
+  /* Referentiewaarden uit analyse/nac-raamwerk.xlsx, blad Berekening. */
+  assert.equal(rond(r.winstGemPerUur[i23], 2), 69.14);
+  assert.equal(rond(r.winstMedPerUur[i23], 2), 64.25);
+  assert.equal(r.winstGemPerUur[r.jaren.indexOf(2024)], null, 'na 2023 is er geen winstcijfer');
+  /* De noemer is de bruto werkweek: gem. winst 2023 / (bruto x weken). */
+  assert.equal(rond(r.winstGemPerUur[i23] * r.werkweekBruto[i23] * 46, 0),
+               rond(173600, 0));
 });

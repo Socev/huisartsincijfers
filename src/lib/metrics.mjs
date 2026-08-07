@@ -165,7 +165,7 @@ export function nacKeten(jaar = 2025) {
  * onafhankelijke bevestiging. De waarde ervan is beperkt maar reëel: hij vangt
  * een tikfout of een omgekeerde bewerking in één van de twee weergaven.
  */
-export function nacHerkomst(varianten = [2500, 2600, 2650, 2700, 2800]) {
+export function nacHerkomst() {
   const b100 = w('nac', 'binnen_100');
   const tg   = w('nac', 'tarief_gereguleerd');
   const pf   = w('nac', 'patienten_per_fte');
@@ -205,19 +205,10 @@ export function nacHerkomst(varianten = [2500, 2600, 2650, 2700, 2800]) {
              statusEigen: k.status.binnen100, statusExtern: g.status };
   });
 
-  const basis = nacKeten(2025);
-  const gevoeligheid = varianten.map(v => ({
-    perFte: v, gehanteerd: v === pf,
-    bruto: basis.ingeschrevenen / v,
-    binnen100: basis.ingeschrevenen / v * b100,
-    gedekt: basis.ingeschrevenen / v * b100 * tg,
-    afwijking: (basis.ingeschrevenen / v) / basis.brutoNac - 1
-  }));
-
   const oud = jaarReeks.find(r => r.jaar === 2024), nieuw = jaarReeks.find(r => r.jaar === 2025);
 
   return { perFte: pf, aandeelBinnen100: b100, aandeelTariefGereguleerd: tg,
-           jaarReeks, routes, gevoeligheid,
+           jaarReeks, routes,
            delerOud: oud.deler, delerNieuw: nieuw.deler,
            delerSprong: nieuw.deler / oud.deler - 1,
            perDuizendVerschil: nieuw.perDuizend / oud.perDuizend - 1,
@@ -372,12 +363,42 @@ export function uurbedragen() {
   const reeel    = jaren.map((_, i) => defl[i] === null ? null : nominaal[i] * defl[i]);
   const fte36    = jaren.map((_, i) => ph[i] * netto[i] / capUren);
 
+  /* De drie scope-zuivere niveaus. Tot en met 2024 vallen niveau 1 en 2 samen:
+     het 2015-model kortte de nac niet voordat zij de honderd procent inging.
+     Vanaf 2025 is niveau 1 de ongeschoonde capaciteit (ingeschrevenen per
+     2.650) en niveau 2 de geschoonde reeks hierboven. Niveau 3 is op beide
+     modellen het deel dat uit de tariefgereguleerde omzet moet komen. */
+  const gereguleerdAandeel = jaren.map(j =>
+    j <= 2024 ? w('modelwissel', 'aandeel_gereguleerd_2015') : w('nac', 'tarief_gereguleerd'));
+  const terechtNacs = jaren.map((j, i) =>
+    j <= 2024 ? nacs[i] : cm('ingeschrevenen_nl', j).waarde / w('nac', 'patienten_per_fte'));
+  const terechtBedrag  = jaren.map((_, i) => terechtNacs[i] * norm[i]);
+  const geregNacs      = jaren.map((_, i) => nacs[i] * gereguleerdAandeel[i]);
+  const geregBedrag    = jaren.map((_, i) => geregNacs[i] * norm[i]);
+  const perUurTerecht  = jaren.map((_, i) => terechtBedrag[i] / uren[i]);
+  const perUurGereguleerd = jaren.map((_, i) => geregBedrag[i] / uren[i]);
+
+  /* De gerealiseerde winst per gewerkt uur. De teller is de CBS-winst van
+     zelfstandig ondernemers met personeel (beste benadering van het
+     praktijkhouderschap); de noemer is de VOLLE werkweek inclusief dienst,
+     want in de winst zitten ook de dienstinkomsten. De nac-lijnen delen
+     juist door de werkweek exclusief dienst; elk is intern consistent. */
+  const winstJaren = reeks('ha_winst_zelfst_mp_gem').jaren;
+  const winstPerUur = code => jaren.map((j, i) => {
+    const k = winstJaren.indexOf(j);
+    return k < 0 ? null : reeks(code).waarden[k] / (bruto[i] * wkn);
+  });
+  const winstGemPerUur = winstPerUur('ha_winst_zelfst_mp_gem');
+  const winstMedPerUur = winstPerUur('ha_winst_zelfst_mp_mediaan');
+
   const status = statusUit(...phRij.map(r => r.status), ...brutoRij.map(r => r.status),
                            ...normRij.map(r => r.status), ...nacsRij.map(r => r.status));
 
   return { jaren, praktijkhouders: ph, praktijkhoudersHerkomst: phRij,
-           werkweekBruto: bruto, werkweekNetto: netto,
+           werkweekBruto: bruto, werkweekNetto: netto, urenMln: uren.map(u => u / 1e6),
            nacs, normbedrag: norm, bedrag, nominaal, reeel, ureninzetFte36: fte36,
+           gereguleerdAandeel, terechtNacs, terechtBedrag, geregNacs, geregBedrag,
+           perUurTerecht, perUurGereguleerd, winstGemPerUur, winstMedPerUur,
            deflator: defl, werkweken: wkn, status };
 }
 
@@ -469,17 +490,67 @@ export function uurbedragSerie() {
 export function nacsSerie() {
   const r = uurbedragen();
   return {
-    label: 'Aantal nac\'s in de tarieven tegenover de ureninzet van de beroepsgroep',
+    label: 'Het aantal nac\'s per jaar, op drie niveaus',
     bron: 'eigen-berekening',
-    vindplaats: 'nac\'s afgeleid uit de NZa-verantwoordingen; ureninzet uit de praktijkhouders- en werkweekreeks',
+    vindplaats: 'afgeleid uit de NZa-verantwoordingen en de kostprijsonderzoeken 2015 en 2022',
     status: r.status, jaren: r.jaren,
-    breuk: { na: 2024, tekst: 'De daling is de overgang van een normpraktijk van 2.095 ingeschrevenen naar het ' +
-      'herziene model, niet een daling van de bekostiging als geheel.' },
+    breuk: { na: 2024, tekst: 'Tot en met 2024 vallen de bovenste twee lijnen samen: het model van 2015 ' +
+      'kortte de nac niet voordat zij de honderd procent inging. De schoning die de lijnen vanaf 2025 uit ' +
+      'elkaar trekt, is de modelwissel.' },
     reeksen: [
-      { naam: 'Nac\'s in de tarieven', waarden: r.nacs.map(v => Math.round(v)) },
-      { naam: 'Ureninzet praktijkhouders, omgerekend naar fte van 36 uur', waarden: r.ureninzetFte36.map(v => Math.round(v)) }
+      { naam: 'Terecht geacht door de NZa',        waarden: r.terechtNacs.map(v => Math.round(v)) },
+      { naam: 'In de basistarieven',               waarden: r.nacs.map(v => Math.round(v)) },
+      { naam: 'Waarvan uit gereguleerde tarieven', waarden: r.geregNacs.map(v => Math.round(v)) }
     ]
   };
+}
+
+/** De vier lijnen per gewerkt uur: de drie niveaus plus de gerealiseerde winst. */
+export function niveausUurSerie() {
+  const r = uurbedragen();
+  return {
+    label: 'Per gewerkt uur: wat het model inrekent en wat er gerealiseerd werd',
+    bron: 'eigen-berekening',
+    vindplaats: 'nac-niveaus gedeeld door de werkweek exclusief dienst; winst (CBS 84467NED) gedeeld door de volle werkweek',
+    status: r.status, jaren: r.jaren,
+    breuk: { na: 2024, tekst: 'Vanaf 2025 geldt het herziene kostprijsmodel. De winstreeks van het CBS loopt ' +
+      'tot en met 2023.' },
+    reeksen: [
+      { naam: 'Terecht geacht',                    waarden: r.perUurTerecht },
+      { naam: 'In de basistarieven',               waarden: r.nominaal },
+      { naam: 'Waarvan uit gereguleerde tarieven', waarden: r.perUurGereguleerd },
+      { naam: 'Gerealiseerde winst (gemiddeld)',   waarden: r.winstGemPerUur }
+    ]
+  };
+}
+
+/** De niveaus en de winst per gewerkt uur, als tabel. */
+export function niveausTabel() {
+  const r = uurbedragen();
+  return {
+    label: 'Per gewerkt uur, per jaar: de drie niveaus en de gerealiseerde winst',
+    bron: 'eigen-berekening',
+    vindplaats: 'zie de methodeverantwoording op deze pagina',
+    status: r.status, eenheid: 'euro',
+    kolommen: ['Jaar', 'Terecht geacht', 'In de basistarieven', 'Uit gereguleerde tarieven',
+               'Winst, gemiddeld', 'Winst, mediaan'],
+    rijen: r.jaren.map((j, i) => [j, r.perUurTerecht[i], r.nominaal[i], r.perUurGereguleerd[i],
+                                  r.winstGemPerUur[i], r.winstMedPerUur[i]]),
+    toelichting: 'De winst is de fiscale winst vóór belasting van zelfstandig ondernemers met personeel ' +
+      '(CBS 84467NED, tot en met 2023); praktijkhouders met een bv vallen buiten die reeks. De winst is ' +
+      'gedeeld door de volle werkweek inclusief dienst, omdat de dienstinkomsten in de winst zitten; de ' +
+      'nac-kolommen delen door de werkweek exclusief dienst, omdat de nac dat werk niet dekt.'
+  };
+}
+
+/** De knik van 2024 op 2025, ontleed in zijn twee delen. */
+export function knikOntleding() {
+  const r = uurbedragen();
+  const i24 = r.jaren.indexOf(2024), i25 = r.jaren.indexOf(2025);
+  const totaal       = r.nominaal[i25] - r.nominaal[i24];
+  const minderTerecht = r.perUurTerecht[i25] - r.nominaal[i24];
+  const verplaatst    = r.nominaal[i25] - r.perUurTerecht[i25];
+  return { totaal, minderTerecht, verplaatst, status: r.status };
 }
 
 /* ===========================================================================

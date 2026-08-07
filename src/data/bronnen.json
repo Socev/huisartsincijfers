@@ -166,5 +166,26 @@
   "datum": "2026",
   "url": "https://lhv.waarneemapp.nl",
   "soort": "Rekentool, doorgerekend door de accountants van de LHV"
+ },
+ "pko-2015": {
+  "titel": "Praktijkkostenonderzoek huisartsen 2015 — Feitenrapport",
+  "uitgever": "Nederlandse Zorgautoriteit",
+  "datum": "2017-07-01",
+  "url": "https://puc.overheid.nl/nza/",
+  "soort": "Kostprijsonderzoek"
+ },
+ "pko-2022": {
+  "titel": "Kostprijsonderzoek huisartsenzorg 2022",
+  "uitgever": "Nederlandse Zorgautoriteit",
+  "datum": "2024-07-01",
+  "url": "https://puc.overheid.nl/nza/",
+  "soort": "Kostprijsonderzoek"
+ },
+ "zorgenz-2017": {
+  "titel": "Normpraktijk huisarts verlaagd naar 2095 patiënten",
+  "uitgever": "ZorgenZ",
+  "datum": "2017-07-20",
+  "url": "https://zorgenz.nl/normpraktijk-huisarts-verlaagd-naar-2095-patienten/",
+  "soort": "Nieuwsbericht"
  }
 }
