@@ -141,7 +141,7 @@ export default function () {
       stap hoe dat ontstaat.`,
     status: [`Prijspeil ${k.jaar}`, `praktijkhouders: ${k.status.personen}`,
              `nac's: eigen berekening uit gepubliceerde NZa-grondslagen`],
-    acties: { primair:   { href:'/arbeidskosten/', label:'Bekijk de volledige rekensom' },
+    acties: { primair:   { href:'/rondleiding/', label:'Volg de rekensom in zes stappen' },
               secundair: { href:'/bronnen/#afgeleid', label:'Controleer de bronnen en rekenstappen' } },
     body })};
 }

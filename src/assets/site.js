@@ -154,3 +154,30 @@
 
   secties.forEach(function (s) { waarnemer.observe(s); });
 })();
+
+/* Rondleiding: pijltoetsen als optionele navigatie tussen de stappen. De
+   knoppen en de URL-hash werken zonder dit script; dit is alleen gemak. */
+(function () {
+  var stappen = [].slice.call(document.querySelectorAll('section[id^="stap-"]'));
+  if (stappen.length < 2) return;
+  function huidige() {
+    var mid = window.innerHeight / 2, best = 0, afstand = Infinity;
+    stappen.forEach(function (s, i) {
+      var r = s.getBoundingClientRect();
+      var d = Math.abs(r.top + Math.min(r.height, window.innerHeight) / 2 - mid);
+      if (d < afstand) { afstand = d; best = i; }
+    });
+    return best;
+  }
+  document.addEventListener('keydown', function (e) {
+    if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return;
+    var t = e.target;
+    if (t && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA' || t.tagName === 'SELECT' || t.isContentEditable)) return;
+    var i = huidige() + (e.key === 'ArrowRight' ? 1 : -1);
+    if (i < 0 || i >= stappen.length) return;
+    e.preventDefault();
+    var rustig = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    stappen[i].scrollIntoView({ behavior: rustig ? 'auto' : 'smooth', block: 'start' });
+    history.replaceState(null, '', '#' + stappen[i].id);
+  });
+})();

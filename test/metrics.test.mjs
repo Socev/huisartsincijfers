@@ -346,3 +346,21 @@ test('de winst per gewerkt uur deelt door de volle werkweek en spoort met de con
   assert.equal(rond(r.winstGemPerUur[i23] * r.werkweekBruto[i23] * 46, 0),
                rond(173600, 0));
 });
+
+/* ---------- de rondleiding rekent niet zelf ---------- */
+
+test('de rondleiding-configuratie geeft dezelfde getallen als de rekenlaag', async () => {
+  const { rekensom } = await import('../src/lib/verhaal.mjs');
+  const d = rekensom();
+  const k = nacKeten(2025), u = uurbedragen(), knik = knikOntleding();
+  assert.equal(d.personen, k.personen);
+  assert.equal(d.brutoNac, k.brutoNac);
+  assert.equal(d.binnen100, k.binnen100);
+  assert.equal(d.maxTarief, k.maxTarief);
+  assert.equal(d.uurBasis2025, u.nominaal[u.jaren.indexOf(2025)]);
+  assert.equal(d.knik.totaal, knik.totaal);
+  /* De effectieve deler is de gepubliceerde normpraktijk ná schoning; de eigen
+     keten (2.650 ÷ aandeel binnen de 100%) mag daar hooguit een afronding
+     vanaf liggen. */
+  assert.ok(Math.abs(d.perFte / d.aandeelBinnen100 / d.delerNieuw - 1) < 0.001);
+});
